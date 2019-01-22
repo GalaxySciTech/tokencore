@@ -1,0 +1,13 @@
+.gradle/
+build/
+.settings/
+.project
+.classpath
+*.class
+.idea
+*.iml
+/local.properties
+.DS_Store
+/build
+/*/out/
+out
