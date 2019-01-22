@@ -78,7 +78,7 @@ public class Identity {
     this.keystore = new IdentityKeystore(metadata, mnemonicCodes, password);
     addWallet(deriveEthereumWallet(mnemonicCodes, password));
     addWallet(deriveBitcoinWallet(mnemonicCodes, password, segWit));
-    addWallet(deriveLitecoinWallet(mnemonicCodes, password, segWit));
+    addWallet(deriveEOSWallet(mnemonicCodes, password));
     currentIdentity = this;
   }
 
