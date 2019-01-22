@@ -22,12 +22,12 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'//ADD
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
     }
 }
 
 dependencies {
-    
+
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
     compile 'org.bitcoinj:bitcoinj-core:0.14.3'
     testCompile 'junit:junit:4.12'
