@@ -78,7 +78,7 @@ public class Identity {
     this.keystore = new IdentityKeystore(metadata, mnemonicCodes, password);
     addWallet(deriveEthereumWallet(mnemonicCodes, password));
     addWallet(deriveBitcoinWallet(mnemonicCodes, password, segWit));
-    addWallet(deriveEOSWallet(mnemonicCodes, password));
+//    addWallet(deriveEOSWallet(mnemonicCodes, password));
     currentIdentity = this;
   }
 
@@ -125,7 +125,7 @@ public class Identity {
     return this.keystore.decryptMnemonic(password);
   }
 
-  public void addWallet(Wallet wallet) {
+  private void addWallet(Wallet wallet) {
     this.keystore.getWalletIDs().add(wallet.getId());
     this.wallets.add(wallet);
     flush();
@@ -157,11 +157,41 @@ public class Identity {
         case ChainType.ETHEREUM:
           wallet = deriveEthereumWallet(mnemonics, password);
           break;
+        case ChainType.LITECOIN:
+          wallet = deriveLitecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
+          break;
         case ChainType.EOS:
           wallet = deriveEOSWallet(mnemonics, password);
           break;
           default:
             throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
+      }
+      addWallet(wallet);
+      wallets.add(wallet);
+    }
+
+    return wallets;
+  }
+
+  public List<Wallet> deriveWalletsByMnemonics(List<String> chainTypes, String password,List<String> mnemonics) {
+    List<Wallet> wallets = new ArrayList<>();
+    for (String chainType : chainTypes) {
+      Wallet wallet;
+      switch (chainType) {
+        case ChainType.BITCOIN:
+          wallet = deriveBitcoinWallet(mnemonics, password, this.getMetadata().getSegWit());
+          break;
+        case ChainType.ETHEREUM:
+          wallet = deriveEthereumWallet(mnemonics, password);
+          break;
+        case ChainType.LITECOIN:
+          wallet = deriveLitecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
+          break;
+        case ChainType.EOS:
+          wallet = deriveEOSWallet(mnemonics, password);
+          break;
+        default:
+          throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
       }
       addWallet(wallet);
       wallets.add(wallet);
@@ -195,7 +225,7 @@ public class Identity {
     }
   }
 
-  public Wallet deriveBitcoinWallet(List<String> mnemonicCodes, String password, String segWit) {
+  private Wallet deriveBitcoinWallet(List<String> mnemonicCodes, String password, String segWit) {
     Metadata walletMetadata = new Metadata();
     walletMetadata.setChainType(ChainType.BITCOIN);
     walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
@@ -214,7 +244,7 @@ public class Identity {
     return WalletManager.createWallet(keystore);
   }
 
-  public Wallet deriveLitecoinWallet(List<String> mnemonicCodes, String password, String segWit) {
+  private Wallet deriveLitecoinWallet(List<String> mnemonics, String password, String segWit) {
     Metadata walletMetadata = new Metadata();
     walletMetadata.setChainType(ChainType.LITECOIN);
     walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
@@ -223,11 +253,11 @@ public class Identity {
     walletMetadata.setName("LTC");
     walletMetadata.setSegWit(segWit);
     String path= BIP44Util.LITECOIN_MAINNET_PATH ;
-    IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonicCodes, path);
+    IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonics, path);
     return WalletManager.createWallet(keystore);
   }
 
-  public Wallet deriveEthereumWallet(List<String> mnemonics, String password) {
+  private Wallet deriveEthereumWallet(List<String> mnemonics, String password) {
     Metadata walletMetadata = new Metadata();
     walletMetadata.setChainType(ChainType.ETHEREUM);
     walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
@@ -237,7 +267,7 @@ public class Identity {
     return WalletManager.createWallet(keystore);
   }
 
-  public Wallet deriveEOSWallet(List<String> mnemonics, String password) {
+  private Wallet deriveEOSWallet(List<String> mnemonics, String password) {
     Metadata metadata = new Metadata();
     metadata.setChainType(ChainType.EOS);
     metadata.setPasswordHint(this.getMetadata().getPasswordHint());
