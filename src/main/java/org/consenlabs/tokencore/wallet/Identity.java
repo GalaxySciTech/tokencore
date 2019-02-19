@@ -125,7 +125,7 @@ public class Identity {
     return this.keystore.decryptMnemonic(password);
   }
 
-  private void addWallet(Wallet wallet) {
+  public void addWallet(Wallet wallet) {
     this.keystore.getWalletIDs().add(wallet.getId());
     this.wallets.add(wallet);
     flush();
