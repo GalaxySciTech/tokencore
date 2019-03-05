@@ -27,6 +27,7 @@ public class EOSTransaction implements TransactionSigner {
     private String quantity;
     private String memo;
     private SignParam signParam;
+    private String contractAccount;
 
     public EOSTransaction(byte[] txBuf) {
         this.txBuf = txBuf;
@@ -36,12 +37,13 @@ public class EOSTransaction implements TransactionSigner {
         this.txsToSign = txsToSign;
     }
 
-    public EOSTransaction(SignParam signParam, String from, String to, String quantity, String memo) {
+    public EOSTransaction(SignParam signParam,String contractAccount, String from, String to, String quantity, String memo) {
         this.from = from;
         this.to = to;
         this.quantity = quantity;
         this.memo = memo;
         this.signParam = signParam;
+        this.contractAccount=contractAccount;
     }
 
     public TxSignResult signTransaction(String password, Wallet wallet) {
@@ -49,7 +51,7 @@ public class EOSTransaction implements TransactionSigner {
         String priKey = NumericUtil.bytesToHex(wallet.decryptPrvKeyFor(pubKey, password));
         OfflineSign sign = new OfflineSign();
         try {
-            String content = sign.transfer(signParam, priKey, "eosio.token",
+            String content = sign.transfer(signParam, priKey, contractAccount,
                     from, to, quantity, memo);
             return new TxSignResult(content, "");
         } catch (Exception e) {
