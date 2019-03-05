@@ -1,5 +1,9 @@
 package org.consenlabs.tokencore.wallet.transaction;
 
+import io.eblock.eos4j.ese.Action;
+import io.eblock.eos4j.ese.DataParam;
+import io.eblock.eos4j.ese.DataType;
+import io.eblock.eos4j.utils.ByteUtils;
 import org.consenlabs.tokencore.foundation.crypto.Hash;
 import org.consenlabs.tokencore.foundation.utils.ByteUtil;
 import org.consenlabs.tokencore.foundation.utils.NumericUtil;
@@ -21,6 +25,18 @@ public class EOSTransaction implements TransactionSigner {
 
   public EOSTransaction(List<ToSignObj> txsToSign) {
     this.txsToSign = txsToSign;
+  }
+
+  public EOSTransaction(String from, String to, String quantity, String memo){
+    DataParam[] datas = new DataParam[] { new DataParam(from, DataType.name, Action.transfer),
+            new DataParam(to, DataType.name, Action.transfer),
+            new DataParam(quantity, DataType.asset, Action.transfer),
+            new DataParam(memo, DataType.string, Action.transfer), };
+    byte[] allbyte = new byte[] {};
+    for (DataParam value : datas) {
+      allbyte = ByteUtils.concat(allbyte, value.seria());
+    }
+    this.txBuf=allbyte;
   }
 
 
