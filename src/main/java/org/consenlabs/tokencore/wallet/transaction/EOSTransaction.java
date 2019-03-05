@@ -44,17 +44,19 @@ public class EOSTransaction implements TransactionSigner {
         this.signParam = signParam;
     }
 
-    public TxSignResult signTransaction(String password, Wallet wallet, String pubKey) {
-        String wif = NumericUtil.bytesToHex(wallet.decryptPrvKeyFor(pubKey, password));
+    public TxSignResult signTransaction(String password, Wallet wallet) {
+        String pubKey=wallet.getKeyPathPrivates().get(0).getPublicKey();
+        String priKey = NumericUtil.bytesToHex(wallet.decryptPrvKeyFor(pubKey, password));
         OfflineSign sign = new OfflineSign();
         try {
-            String content = sign.transfer(signParam, wif, "eosio.token",
-                    from, to, quantity, "");
+            String content = sign.transfer(signParam, priKey, "eosio.token",
+                    from, to, quantity, memo);
             return new TxSignResult(content, "");
         } catch (Exception e) {
-            throw new TokenException(e.getMessage(), e);
+            throw new TokenException(String.format("签名失败 原因:%s",e.getMessage()));
         }
     }
+
 
     @Deprecated
     @Override
