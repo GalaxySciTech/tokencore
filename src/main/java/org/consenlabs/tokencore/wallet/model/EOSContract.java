@@ -6,6 +6,6 @@ package org.consenlabs.tokencore.wallet.model;
  */
 public class EOSContract {
 
-    public static final String transfer="eosio.token";
+    public static final String TRANSFER="eosio.token";
 
 }
