@@ -21,6 +21,9 @@ public class MetaUtil {
             case ChainType.BITCOIN:
                 network = metadata.isMainNet() ? MainNetParams.get() : TestNet3Params.get();
                 break;
+            case ChainType.USDT:
+                network = metadata.isMainNet() ? MainNetParams.get() : TestNet3Params.get();
+                break;
         }
         return network;
     }

@@ -5,6 +5,7 @@ public class ChainType {
   public final static String BITCOIN = "BITCOIN";
   public final static String EOS = "EOS";
   public final static String LITECOIN = "LITECOIN";
+  public final static String USDT = "USDT";
 
 
   public static void validate(String type) {
