@@ -33,6 +33,10 @@ public class TxSignResult {
     this.txHash = txHash;
   }
 
+  public TxSignResult(){
+
+  }
+
   public TxSignResult(String signedTx, String txHash) {
     this.signedTx = signedTx;
     this.txHash = txHash;
