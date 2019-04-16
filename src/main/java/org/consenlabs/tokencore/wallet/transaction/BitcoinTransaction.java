@@ -114,6 +114,10 @@ public class BitcoinTransaction implements TransactionSigner {
 
 
     public static class UTXO {
+
+        public UTXO(){
+
+        }
         private String txHash;
         private int vout;
         private long amount;
