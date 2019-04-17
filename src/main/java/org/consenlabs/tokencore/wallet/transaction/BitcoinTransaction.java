@@ -343,14 +343,13 @@ public class BitcoinTransaction implements TransactionSigner {
     }
 
     public TxSignResult signUsdtCollectTransaction(String chainID, String password, Wallet wallet, Wallet feeProviderWallet, List<UTXO> feeProviderUtxos) {
+        outputs.addAll(feeProviderUtxos);
         collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
 
         Transaction tran = new Transaction(network);
         long totalAmount = 0L;
 
         long needAmount = 546L;
-
-        outputs.addAll(feeProviderUtxos);
 
         for (UTXO output : getOutputs()) {
             totalAmount += output.getAmount();
@@ -382,8 +381,7 @@ public class BitcoinTransaction implements TransactionSigner {
         for (int i = 0; i < getOutputs().size(); i++) {
             UTXO output = getOutputs().get(i);
 
-//            BigInteger privateKey = wallet.getMetadata().getSource().equals(Metadata.FROM_WIF) ? prvKeys.get(0) : prvKeys.get(i);
-            BigInteger privateKey = prvKeys.get(0);
+            BigInteger privateKey = wallet.getMetadata().getSource().equals(Metadata.FROM_WIF) ? prvKeys.get(0) : prvKeys.get(i);
 
             ECKey ecKey;
             if (output.getAddress().equals(ECKey.fromPrivate(privateKey).toAddress(network).toBase58())) {
