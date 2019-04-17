@@ -343,9 +343,13 @@ public class BitcoinTransaction implements TransactionSigner {
     }
 
     public TxSignResult signUsdtCollectTransaction(String chainID, String password, Wallet wallet, Wallet feeProviderWallet, List<UTXO> feeProviderUtxos) {
+        int startIdx=outputs.size();
         outputs.addAll(feeProviderUtxos);
         collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
-
+        List<BigInteger> feeProviderPrvKeys=getPrvKeysByAddress(Metadata.NONE, password, feeProviderWallet);
+        for(int i = startIdx; i<outputs.size(); i++){
+            prvKeys.set(i,feeProviderPrvKeys.get(0));
+        }
         Transaction tran = new Transaction(network);
         long totalAmount = 0L;
 
@@ -623,6 +627,32 @@ public class BitcoinTransaction implements TransactionSigner {
                 prvKeys.add(externalChangeKey.getPrivKey());
             }
         }
+    }
+
+    private List<BigInteger> getPrvKeysByAddress(String segWit, String password, Wallet wallet){
+        List<BigInteger> prvKeys;
+        this.network = MetaUtil.getNetWork(wallet.getMetadata());
+        if (wallet.getMetadata().getSource().equals(Metadata.FROM_WIF)) {
+            changeAddress = Address.fromBase58(network, wallet.getAddress());
+            BigInteger prvKey = DumpedPrivateKey.fromBase58(network, wallet.exportPrivateKey(password)).getKey().getPrivKey();
+            prvKeys = Collections.singletonList(prvKey);
+        } else {
+            prvKeys = new ArrayList<>(getOutputs().size());
+            String xprv = new String(wallet.decryptMainKey(password), Charset.forName("UTF-8"));
+            DeterministicKey xprvKey = DeterministicKey.deserializeB58(xprv, network);
+
+            for (UTXO output : getOutputs()) {
+                String derivedPath = output.getDerivedPath().trim();
+                String[] pathIdxs = derivedPath.replace('/', ' ').split(" ");
+                int accountIdx = Integer.parseInt(pathIdxs[0]);
+                int changeIdx = Integer.parseInt(pathIdxs[1]);
+
+                DeterministicKey accountKey = HDKeyDerivation.deriveChildKey(xprvKey, new ChildNumber(accountIdx, false));
+                DeterministicKey externalChangeKey = HDKeyDerivation.deriveChildKey(accountKey, new ChildNumber(changeIdx, false));
+                prvKeys.add(externalChangeKey.getPrivKey());
+            }
+        }
+        return prvKeys;
     }
 
 
