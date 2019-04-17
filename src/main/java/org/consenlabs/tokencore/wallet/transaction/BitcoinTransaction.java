@@ -115,9 +115,10 @@ public class BitcoinTransaction implements TransactionSigner {
 
     public static class UTXO {
 
-        public UTXO(){
+        public UTXO() {
 
         }
+
         private String txHash;
         private int vout;
         private long amount;
@@ -381,7 +382,9 @@ public class BitcoinTransaction implements TransactionSigner {
         for (int i = 0; i < getOutputs().size(); i++) {
             UTXO output = getOutputs().get(i);
 
-            BigInteger privateKey = wallet.getMetadata().getSource().equals(Metadata.FROM_WIF) ? prvKeys.get(0) : prvKeys.get(i);
+//            BigInteger privateKey = wallet.getMetadata().getSource().equals(Metadata.FROM_WIF) ? prvKeys.get(0) : prvKeys.get(i);
+            BigInteger privateKey = prvKeys.get(0);
+
             ECKey ecKey;
             if (output.getAddress().equals(ECKey.fromPrivate(privateKey).toAddress(network).toBase58())) {
                 ecKey = ECKey.fromPrivate(privateKey);
