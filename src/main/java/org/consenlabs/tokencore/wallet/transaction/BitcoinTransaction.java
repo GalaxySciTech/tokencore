@@ -363,11 +363,12 @@ public class BitcoinTransaction implements TransactionSigner {
             throw new TokenException(Messages.INSUFFICIENT_FUNDS);
         }
 
+        String usdtHex = "6a146f6d6e69" + String.format("%016x", 31) + String.format("%016x", amount);
+        tran.addOutput(Coin.valueOf(0L), new Script(Utils.HEX.decode(usdtHex)));
+
         //add send to output
         tran.addOutput(Coin.valueOf(needAmount), Address.fromBase58(network, getTo()));
 
-        String usdtHex = "6a146f6d6e69" + String.format("%016x", 31) + String.format("%016x", amount);
-        tran.addOutput(Coin.valueOf(0L), new Script(Utils.HEX.decode(usdtHex)));
 
         //归零地址指向手续费提供方
         changeAddress = Address.fromBase58(network, feeProviderWallet.getAddress());
@@ -376,6 +377,9 @@ public class BitcoinTransaction implements TransactionSigner {
         if (changeAmount >= DUST_THRESHOLD) {
             tran.addOutput(Coin.valueOf(changeAmount), changeAddress);
         }
+
+
+
 
         for (UTXO output : getOutputs()) {
             tran.addInput(Sha256Hash.wrap(output.getTxHash()), output.getVout(), new Script(NumericUtil.hexToBytes(output.getScriptPubKey())));
