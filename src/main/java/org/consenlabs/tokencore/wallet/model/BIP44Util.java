@@ -12,6 +12,7 @@ public class BIP44Util {
   public final static String BITCOIN_SEGWIT_MAIN_PATH = "m/49'/0'/0'";
   public final static String BITCOIN_SEGWIT_TESTNET_PATH = "m/49'/1'/0'";
   public final static String LITECOIN_MAINNET_PATH = "m/44'/2'/0'";
+  public final static String DASH_MAINNET_PATH = "m/44'/5'/0'";
   public final static String ETHEREUM_PATH = "m/44'/60'/0'/0/0";
   public final static String EOS_PATH = "m/44'/194'";
   public final static String EOS_SLIP48 = "m/48'/4'/0'/0'/0',m/48'/4'/1'/0'/0'";

@@ -196,6 +196,9 @@ public class Identity {
                 case ChainType.EOS:
                     wallet = deriveEOSWallet(mnemonics, password);
                     break;
+                case ChainType.DASH:
+                    wallet = deriveDashWallet(mnemonics, password, this.getMetadata().getSegWit());
+                    break;
                 default:
                     throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
             }
@@ -278,6 +281,19 @@ public class Identity {
         walletMetadata.setName("LTC");
         walletMetadata.setSegWit(segWit);
         String path = BIP44Util.LITECOIN_MAINNET_PATH;
+        IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonics, path);
+        return WalletManager.createWallet(keystore);
+    }
+
+    private Wallet deriveDashWallet(List<String> mnemonics, String password, String segWit) {
+        Metadata walletMetadata = new Metadata();
+        walletMetadata.setChainType(ChainType.DASH);
+        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
+        walletMetadata.setSource(this.getMetadata().getSource());
+        walletMetadata.setNetwork(this.getMetadata().getNetwork());
+        walletMetadata.setName("DASH");
+        walletMetadata.setSegWit(segWit);
+        String path = BIP44Util.DASH_MAINNET_PATH;
         IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonics, path);
         return WalletManager.createWallet(keystore);
     }

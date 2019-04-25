@@ -15,7 +15,7 @@ public class LitecoinMainNetParams extends AbstractBitcoinNetParams {
     public static final int MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE = 750;
     private static LitecoinMainNetParams instance;
 
-    public LitecoinMainNetParams() {
+    private LitecoinMainNetParams() {
         this.interval = 2016;
         this.targetTimespan = 1209600;
         this.maxTarget = Utils.decodeCompactBits(486604799L);

@@ -5,6 +5,7 @@ import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
 import org.consenlabs.tokencore.wallet.model.ChainType;
 import org.consenlabs.tokencore.wallet.model.Metadata;
+import org.consenlabs.tokencore.wallet.network.DashMainNetParams;
 import org.consenlabs.tokencore.wallet.network.LitecoinMainNetParams;
 
 /**
@@ -13,7 +14,7 @@ import org.consenlabs.tokencore.wallet.network.LitecoinMainNetParams;
 public class MetaUtil {
     public static NetworkParameters getNetWork(Metadata metadata) {
         NetworkParameters network = null;
-        if(metadata.getChainType()==null)return MainNetParams.get();
+        if (metadata.getChainType() == null) return MainNetParams.get();
         switch (metadata.getChainType()) {
             case ChainType.LITECOIN:
                 network = LitecoinMainNetParams.get();
@@ -23,6 +24,9 @@ public class MetaUtil {
                 break;
             case ChainType.USDT:
                 network = metadata.isMainNet() ? MainNetParams.get() : TestNet3Params.get();
+                break;
+            case ChainType.DASH:
+                network = DashMainNetParams.get();
                 break;
         }
         return network;
