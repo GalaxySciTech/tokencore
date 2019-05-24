@@ -49,6 +49,10 @@ public class WalletManager {
         return new Wallet(keystore);
     }
 
+    public static Hashtable<String, IMTKeystore> getKeyMap(){
+        return keystoreMap;
+    }
+
     public static void changePassword(String id, String oldPassword, String newPassword) {
         IMTKeystore keystore = mustFindKeystoreById(id);
         IMTKeystore newKeystore = (IMTKeystore) keystore.changePassword(oldPassword, newPassword);
