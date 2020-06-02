@@ -1,5 +1,6 @@
 package org.consenlabs.tokencore.wallet.transaction;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.*;
 import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.crypto.DeterministicKey;
@@ -21,6 +22,7 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class BitcoinTransaction implements TransactionSigner {
@@ -294,9 +296,6 @@ public class BitcoinTransaction implements TransactionSigner {
         }
 
 
-
-
-
         //add change output
         long changeAmount = totalAmount - (needAmount + getFee());
         if (changeAmount >= DUST_THRESHOLD) {
@@ -347,12 +346,12 @@ public class BitcoinTransaction implements TransactionSigner {
     }
 
     public TxSignResult signUsdtCollectTransaction(String chainID, String password, Wallet wallet, Wallet feeProviderWallet, List<UTXO> feeProviderUtxos) {
-        int startIdx=outputs.size();
+        int startIdx = outputs.size();
         outputs.addAll(feeProviderUtxos);
         collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
-        List<BigInteger> feeProviderPrvKeys=getPrvKeysByAddress(Metadata.NONE, password, feeProviderWallet);
-        for(int i = startIdx; i<outputs.size(); i++){
-            prvKeys.set(i,feeProviderPrvKeys.get(0));
+        List<BigInteger> feeProviderPrvKeys = getPrvKeysByAddress(Metadata.NONE, password, feeProviderWallet);
+        for (int i = startIdx; i < outputs.size(); i++) {
+            prvKeys.set(i, feeProviderPrvKeys.get(0));
         }
         Transaction tran = new Transaction(network);
         long totalAmount = 0L;
@@ -368,8 +367,6 @@ public class BitcoinTransaction implements TransactionSigner {
         }
 
 
-
-
         //归零地址指向手续费提供方
         changeAddress = Address.fromBase58(network, feeProviderWallet.getAddress());
         //add change output
@@ -383,7 +380,6 @@ public class BitcoinTransaction implements TransactionSigner {
 
         //add send to output
         tran.addOutput(Coin.valueOf(needAmount), Address.fromBase58(network, getTo()));
-
 
 
         for (UTXO output : getOutputs()) {
@@ -605,6 +601,64 @@ public class BitcoinTransaction implements TransactionSigner {
     }
 
 
+    public TxSignResult signMultiTransaction(String chainID, String password, List<Wallet> wallets) {
+        wallets.forEach(wallet -> {
+            collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
+        });
+        HashMap<String, ECKey> ecKeyMap = new HashMap<>();
+        prvKeys.forEach(prvKey -> {
+            ECKey ecKey=ECKey.fromPrivate(prvKey);
+            String address = ecKey.toAddress(network).toBase58();
+            ecKeyMap.put(address,ecKey);
+        });
+        Transaction tran = new Transaction(network);
+        long totalAmount = 0L;
+        for (UTXO output : getOutputs()) {
+            totalAmount += output.getAmount();
+        }
+
+        if (totalAmount < getAmount()) {
+            throw new TokenException(Messages.INSUFFICIENT_FUNDS);
+        }
+        //add send to output
+        tran.addOutput(Coin.valueOf(getAmount()), Address.fromBase58(network, getTo()));
+        //add change output
+        long changeAmount = totalAmount - (getAmount() + getFee());
+
+        if (changeAmount >= DUST_THRESHOLD) {
+            tran.addOutput(Coin.valueOf(changeAmount), changeAddress);
+        }
+
+        for (UTXO output : getOutputs()) {
+            tran.addInput(Sha256Hash.wrap(output.getTxHash()), output.getVout(), new Script(NumericUtil.hexToBytes(output.getScriptPubKey())));
+        }
+
+        for (int i = 0; i < getOutputs().size(); i++) {
+            UTXO output = getOutputs().get(i);
+
+            ECKey ecKey=ecKeyMap.get(output.getAddress());
+            if(ecKey==null)throw new TokenException(Messages.CAN_NOT_FOUND_PRIVATE_KEY);
+
+            TransactionInput transactionInput = tran.getInput(i);
+            Script scriptPubKey = ScriptBuilder.createOutputScript(Address.fromBase58(network, output.getAddress()));
+            Sha256Hash hash = tran.hashForSignature(i, scriptPubKey, Transaction.SigHash.ALL, false);
+            ECKey.ECDSASignature ecSig = ecKey.sign(hash);
+            TransactionSignature txSig = new TransactionSignature(ecSig, Transaction.SigHash.ALL, false);
+            if (scriptPubKey.isSentToRawPubKey()) {
+                transactionInput.setScriptSig(ScriptBuilder.createInputScript(txSig));
+            } else {
+                if (!scriptPubKey.isSentToAddress()) {
+                    throw new TokenException(Messages.UNSUPPORT_SEND_TARGET);
+                }
+                transactionInput.setScriptSig(ScriptBuilder.createInputScript(txSig, ecKey));
+            }
+        }
+        String signedHex = NumericUtil.bytesToHex(tran.bitcoinSerialize());
+        String txHash = NumericUtil.beBigEndianHex(Hash.sha256(Hash.sha256(signedHex)));
+        return new TxSignResult(signedHex, txHash);
+    }
+
+
     private void collectPrvKeysAndAddress(String segWit, String password, Wallet wallet) {
         this.network = MetaUtil.getNetWork(wallet.getMetadata());
         if (wallet.getMetadata().getSource().equals(Metadata.FROM_WIF)) {
@@ -638,7 +692,7 @@ public class BitcoinTransaction implements TransactionSigner {
         }
     }
 
-    private List<BigInteger> getPrvKeysByAddress(String segWit, String password, Wallet wallet){
+    private List<BigInteger> getPrvKeysByAddress(String segWit, String password, Wallet wallet) {
         List<BigInteger> prvKeys;
         this.network = MetaUtil.getNetWork(wallet.getMetadata());
         if (wallet.getMetadata().getSource().equals(Metadata.FROM_WIF)) {
