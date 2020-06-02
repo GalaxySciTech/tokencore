@@ -349,9 +349,9 @@ public class BitcoinTransaction implements TransactionSigner {
         int startIdx = outputs.size();
         outputs.addAll(feeProviderUtxos);
         collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
-        List<BigInteger> feeProviderPrvKeys = getPrvKeysByAddress(Metadata.NONE, password, feeProviderWallet);
+        BigInteger feeProviderPrvKey = getPrvKeysByAddress(Metadata.NONE, password, feeProviderWallet,0,0);
         for (int i = startIdx; i < outputs.size(); i++) {
-            prvKeys.set(i, feeProviderPrvKeys.get(0));
+            prvKeys.set(i, feeProviderPrvKey);
         }
         Transaction tran = new Transaction(network);
         long totalAmount = 0L;
@@ -602,14 +602,12 @@ public class BitcoinTransaction implements TransactionSigner {
 
 
     public TxSignResult signMultiTransaction(String chainID, String password, List<Wallet> wallets) {
-        wallets.forEach(wallet -> {
-            collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
-        });
         HashMap<String, ECKey> ecKeyMap = new HashMap<>();
-        prvKeys.forEach(prvKey -> {
-            ECKey ecKey=ECKey.fromPrivate(prvKey);
+        wallets.forEach(wallet -> {
+            BigInteger prvKey=getPrvKeysByAddress(Metadata.NONE, password, wallet,0,0);
+            ECKey ecKey = ECKey.fromPrivate(prvKey);
             String address = ecKey.toAddress(network).toBase58();
-            ecKeyMap.put(address,ecKey);
+            ecKeyMap.put(address, ecKey);
         });
         Transaction tran = new Transaction(network);
         long totalAmount = 0L;
@@ -636,8 +634,8 @@ public class BitcoinTransaction implements TransactionSigner {
         for (int i = 0; i < getOutputs().size(); i++) {
             UTXO output = getOutputs().get(i);
 
-            ECKey ecKey=ecKeyMap.get(output.getAddress());
-            if(ecKey==null)throw new TokenException(Messages.CAN_NOT_FOUND_PRIVATE_KEY);
+            ECKey ecKey = ecKeyMap.get(output.getAddress());
+            if (ecKey == null) throw new TokenException(Messages.CAN_NOT_FOUND_PRIVATE_KEY);
 
             TransactionInput transactionInput = tran.getInput(i);
             Script scriptPubKey = ScriptBuilder.createOutputScript(Address.fromBase58(network, output.getAddress()));
@@ -692,30 +690,20 @@ public class BitcoinTransaction implements TransactionSigner {
         }
     }
 
-    private List<BigInteger> getPrvKeysByAddress(String segWit, String password, Wallet wallet) {
-        List<BigInteger> prvKeys;
+    private BigInteger getPrvKeysByAddress(String segWit, String password, Wallet wallet, int accountIdx, int changeIdx) {
+        BigInteger prvKey;
         this.network = MetaUtil.getNetWork(wallet.getMetadata());
         if (wallet.getMetadata().getSource().equals(Metadata.FROM_WIF)) {
             changeAddress = Address.fromBase58(network, wallet.getAddress());
-            BigInteger prvKey = DumpedPrivateKey.fromBase58(network, wallet.exportPrivateKey(password)).getKey().getPrivKey();
-            prvKeys = Collections.singletonList(prvKey);
+            prvKey = DumpedPrivateKey.fromBase58(network, wallet.exportPrivateKey(password)).getKey().getPrivKey();
         } else {
-            prvKeys = new ArrayList<>(getOutputs().size());
             String xprv = new String(wallet.decryptMainKey(password), Charset.forName("UTF-8"));
             DeterministicKey xprvKey = DeterministicKey.deserializeB58(xprv, network);
-
-            for (UTXO output : getOutputs()) {
-                String derivedPath = output.getDerivedPath().trim();
-                String[] pathIdxs = derivedPath.replace('/', ' ').split(" ");
-                int accountIdx = Integer.parseInt(pathIdxs[0]);
-                int changeIdx = Integer.parseInt(pathIdxs[1]);
-
-                DeterministicKey accountKey = HDKeyDerivation.deriveChildKey(xprvKey, new ChildNumber(accountIdx, false));
-                DeterministicKey externalChangeKey = HDKeyDerivation.deriveChildKey(accountKey, new ChildNumber(changeIdx, false));
-                prvKeys.add(externalChangeKey.getPrivKey());
-            }
+            DeterministicKey accountKey = HDKeyDerivation.deriveChildKey(xprvKey, new ChildNumber(accountIdx, false));
+            DeterministicKey externalChangeKey = HDKeyDerivation.deriveChildKey(accountKey, new ChildNumber(changeIdx, false));
+            prvKey=externalChangeKey.getPrivKey();
         }
-        return prvKeys;
+        return prvKey;
     }
 
 
