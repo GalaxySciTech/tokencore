@@ -160,9 +160,6 @@ public class Identity {
                 case ChainType.LITECOIN:
                     wallet = deriveLitecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
                     break;
-                case ChainType.USDT:
-                    wallet = deriveUSDTWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
                 case ChainType.EOS:
                     wallet = deriveEOSWallet(mnemonics, password);
                     break;
@@ -186,9 +183,6 @@ public class Identity {
                     break;
                 case ChainType.ETHEREUM:
                     wallet = deriveEthereumWallet(mnemonics, password);
-                    break;
-                case ChainType.USDT:
-                    wallet = deriveUSDTWallet(mnemonics, password, this.getMetadata().getSegWit());
                     break;
                 case ChainType.LITECOIN:
                     wallet = deriveLitecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
@@ -241,25 +235,6 @@ public class Identity {
         walletMetadata.setSource(this.getMetadata().getSource());
         walletMetadata.setNetwork(this.getMetadata().getNetwork());
         walletMetadata.setName("BTC");
-        walletMetadata.setSegWit(segWit);
-        String path;
-        if (Metadata.P2WPKH.equals(segWit)) {
-            path = this.getMetadata().isMainNet() ? BIP44Util.BITCOIN_SEGWIT_MAIN_PATH : BIP44Util.BITCOIN_SEGWIT_TESTNET_PATH;
-        } else {
-            path = this.getMetadata().isMainNet() ? BIP44Util.BITCOIN_MAINNET_PATH : BIP44Util.BITCOIN_TESTNET_PATH;
-        }
-
-        IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonicCodes, path);
-        return WalletManager.createWallet(keystore);
-    }
-
-    private Wallet deriveUSDTWallet(List<String> mnemonicCodes, String password, String segWit) {
-        Metadata walletMetadata = new Metadata();
-        walletMetadata.setChainType(ChainType.USDT);
-        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
-        walletMetadata.setSource(this.getMetadata().getSource());
-        walletMetadata.setNetwork(this.getMetadata().getNetwork());
-        walletMetadata.setName("USDT");
         walletMetadata.setSegWit(segWit);
         String path;
         if (Metadata.P2WPKH.equals(segWit)) {
