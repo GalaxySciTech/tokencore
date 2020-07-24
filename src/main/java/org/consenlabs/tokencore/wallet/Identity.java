@@ -160,6 +160,18 @@ public class Identity {
                 case ChainType.LITECOIN:
                     wallet = deriveLitecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
                     break;
+                case ChainType.DOGECOIN:
+                    wallet = deriveDogecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
+                    break;
+                case ChainType.DASH:
+                    wallet = deriveDashWallet(mnemonics, password, this.getMetadata().getSegWit());
+                    break;
+                case ChainType.BITCOINSV:
+                    wallet = deriveBitcoinSVWallet(mnemonics, password, this.getMetadata().getSegWit());
+                    break;
+                case ChainType.BITCOINCASH:
+                    wallet = deriveBitcoinCASHWallet(mnemonics, password, this.getMetadata().getSegWit());
+                    break;
                 case ChainType.EOS:
                     wallet = deriveEOSWallet(mnemonics, password);
                     break;
@@ -187,12 +199,22 @@ public class Identity {
                 case ChainType.LITECOIN:
                     wallet = deriveLitecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
                     break;
-                case ChainType.EOS:
-                    wallet = deriveEOSWallet(mnemonics, password);
+                case ChainType.DOGECOIN:
+                    wallet = deriveDogecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
                     break;
                 case ChainType.DASH:
                     wallet = deriveDashWallet(mnemonics, password, this.getMetadata().getSegWit());
                     break;
+                case ChainType.BITCOINSV:
+                    wallet = deriveBitcoinSVWallet(mnemonics, password, this.getMetadata().getSegWit());
+                    break;
+                case ChainType.BITCOINCASH:
+                    wallet = deriveBitcoinCASHWallet(mnemonics, password, this.getMetadata().getSegWit());
+                    break;
+                case ChainType.EOS:
+                    wallet = deriveEOSWallet(mnemonics, password);
+                    break;
+
                 default:
                     throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
             }
@@ -269,6 +291,45 @@ public class Identity {
         walletMetadata.setName("DASH");
         walletMetadata.setSegWit(segWit);
         String path = BIP44Util.DASH_MAINNET_PATH;
+        IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonics, path);
+        return WalletManager.createWallet(keystore);
+    }
+
+    private Wallet deriveBitcoinSVWallet(List<String> mnemonics, String password, String segWit) {
+        Metadata walletMetadata = new Metadata();
+        walletMetadata.setChainType(ChainType.BITCOINSV);
+        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
+        walletMetadata.setSource(this.getMetadata().getSource());
+        walletMetadata.setNetwork(this.getMetadata().getNetwork());
+        walletMetadata.setName("BSV");
+        walletMetadata.setSegWit(segWit);
+        String path = BIP44Util.BITCOINSV_MAINNET_PATH;
+        IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonics, path);
+        return WalletManager.createWallet(keystore);
+    }
+
+    private Wallet deriveBitcoinCASHWallet(List<String> mnemonics, String password, String segWit) {
+        Metadata walletMetadata = new Metadata();
+        walletMetadata.setChainType(ChainType.BITCOINCASH);
+        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
+        walletMetadata.setSource(this.getMetadata().getSource());
+        walletMetadata.setNetwork(this.getMetadata().getNetwork());
+        walletMetadata.setName("BCH");
+        walletMetadata.setSegWit(segWit);
+        String path = BIP44Util.BITCOINCASH_MAINNET_PATH;
+        IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonics, path);
+        return WalletManager.createWallet(keystore);
+    }
+
+    private Wallet deriveDogecoinWallet(List<String> mnemonics, String password, String segWit) {
+        Metadata walletMetadata = new Metadata();
+        walletMetadata.setChainType(ChainType.DOGECOIN);
+        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
+        walletMetadata.setSource(this.getMetadata().getSource());
+        walletMetadata.setNetwork(this.getMetadata().getNetwork());
+        walletMetadata.setName("DOGE");
+        walletMetadata.setSegWit(segWit);
+        String path = BIP44Util.DOGECOIN_MAINNET_PATH;
         IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonics, path);
         return WalletManager.createWallet(keystore);
     }
