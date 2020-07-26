@@ -21,7 +21,7 @@ public class DogecoinMainNetParams extends AbstractBitcoinNetParams {
         this.targetTimespan = 1209600;
         this.maxTarget = Utils.decodeCompactBits(486604799L);
         this.dumpedPrivateKeyHeader = 176;
-        this.addressHeader = 0;
+        this.addressHeader = 30;
         this.p2shHeader = 16;
         this.acceptableAddressCodes = new int[]{this.addressHeader, this.p2shHeader};
         this.port = 8333;
