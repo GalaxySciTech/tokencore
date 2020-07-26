@@ -5,8 +5,7 @@ import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
 import org.consenlabs.tokencore.wallet.model.ChainType;
 import org.consenlabs.tokencore.wallet.model.Metadata;
-import org.consenlabs.tokencore.wallet.network.DashMainNetParams;
-import org.consenlabs.tokencore.wallet.network.LitecoinMainNetParams;
+import org.consenlabs.tokencore.wallet.network.*;
 
 /**
  * Created by pie on 2018/12/5 15: 32.
@@ -24,6 +23,15 @@ public class MetaUtil {
                 break;
             case ChainType.DASH:
                 network = DashMainNetParams.get();
+                break;
+            case ChainType.BITCOINCASH:
+                network = BitcoinCashMainNetParams.get();
+                break;
+            case ChainType.BITCOINSV:
+                network = BitcoinSvMainNetParams.get();
+                break;
+            case ChainType.DOGECOIN:
+                network = DogecoinMainNetParams.get();
                 break;
         }
         return network;
