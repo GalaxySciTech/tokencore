@@ -15,6 +15,7 @@ import org.consenlabs.tokencore.foundation.utils.NumericUtil;
 import org.consenlabs.tokencore.wallet.Wallet;
 import org.consenlabs.tokencore.wallet.model.Messages;
 import org.consenlabs.tokencore.wallet.model.Metadata;
+import org.consenlabs.tokencore.wallet.model.MultiTo;
 import org.consenlabs.tokencore.wallet.model.TokenException;
 
 import java.io.IOException;
@@ -62,43 +63,13 @@ public class BitcoinTransaction implements TransactionSigner {
         this.outputs = outputs;
         this.changeIdx = changeIdx;
         multiToList.forEach(multiTo -> {
-            multiToAmount+=multiTo.amount;
+            multiToAmount += multiTo.getAmount();
         });
 
         if (amount < DUST_THRESHOLD) {
             throw new TokenException(Messages.AMOUNT_LESS_THAN_MINIMUM);
         }
     }
-
-    public class MultiTo{
-
-        public MultiTo(String to, long amount) {
-            this.to = to;
-            this.amount = amount;
-        }
-
-        private String to;
-
-        private long amount;
-
-        public String getTo() {
-            return to;
-        }
-
-        public void setTo(String to) {
-            this.to = to;
-        }
-
-        public long getAmount() {
-            return amount;
-        }
-
-        public void setAmount(long amount) {
-            this.amount = amount;
-        }
-    }
-
-
 
     @Override
     public String toString() {
