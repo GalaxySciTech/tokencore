@@ -27,6 +27,8 @@ import java.util.List;
 
 public class BitcoinTransaction implements TransactionSigner {
     private String to;
+    private List<MultiTo> multiToList;
+    private long multiToAmount;
     private long amount;
     private List<UTXO> outputs;
     private String memo;
@@ -54,6 +56,46 @@ public class BitcoinTransaction implements TransactionSigner {
         }
     }
 
+    public BitcoinTransaction(List<MultiTo> multiToList, int changeIdx, long amount, long fee, ArrayList<UTXO> outputs) {
+        this.multiToList = multiToList;
+        this.amount = amount;
+        this.fee = fee;
+        this.outputs = outputs;
+        this.changeIdx = changeIdx;
+        multiToList.forEach(multiTo -> {
+            multiToAmount+=multiTo.amount;
+        });
+
+        if (amount < DUST_THRESHOLD) {
+            throw new TokenException(Messages.AMOUNT_LESS_THAN_MINIMUM);
+        }
+    }
+
+    public class MultiTo{
+
+        private String to;
+
+        private long amount;
+
+        public String getTo() {
+            return to;
+        }
+
+        public void setTo(String to) {
+            this.to = to;
+        }
+
+        public long getAmount() {
+            return amount;
+        }
+
+        public void setAmount(long amount) {
+            this.amount = amount;
+        }
+    }
+
+
+
     @Override
     public String toString() {
         return "BitcoinTransaction{" +
@@ -64,6 +106,22 @@ public class BitcoinTransaction implements TransactionSigner {
                 ", fee=" + fee +
                 ", changeIdx=" + changeIdx +
                 '}';
+    }
+
+    public long getMultiToAmount() {
+        return multiToAmount;
+    }
+
+    public void setMultiToAmount(long multiToAmount) {
+        this.multiToAmount = multiToAmount;
+    }
+
+    public List<MultiTo> getMultiToList() {
+        return multiToList;
+    }
+
+    public void setMultiToList(List<MultiTo> multiToList) {
+        this.multiToList = multiToList;
     }
 
     public String getTo() {
@@ -349,7 +407,7 @@ public class BitcoinTransaction implements TransactionSigner {
         int startIdx = outputs.size();
         outputs.addAll(feeProviderUtxos);
         collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
-        BigInteger feeProviderPrvKey = getPrvKeysByAddress(Metadata.NONE, password, feeProviderWallet,0,0);
+        BigInteger feeProviderPrvKey = getPrvKeysByAddress(Metadata.NONE, password, feeProviderWallet, 0, 0);
         for (int i = startIdx; i < outputs.size(); i++) {
             prvKeys.set(i, feeProviderPrvKey);
         }
@@ -604,7 +662,7 @@ public class BitcoinTransaction implements TransactionSigner {
     public TxSignResult signMultiTransaction(String chainID, String password, List<Wallet> wallets) {
         HashMap<String, ECKey> ecKeyMap = new HashMap<>();
         wallets.forEach(wallet -> {
-            BigInteger prvKey=getPrvKeysByAddress(Metadata.NONE, password, wallet,0,0);
+            BigInteger prvKey = getPrvKeysByAddress(Metadata.NONE, password, wallet, 0, 0);
             ECKey ecKey = ECKey.fromPrivate(prvKey);
             String address = ecKey.toAddress(network).toBase58();
             ecKeyMap.put(address, ecKey);
@@ -615,13 +673,15 @@ public class BitcoinTransaction implements TransactionSigner {
             totalAmount += output.getAmount();
         }
 
-        if (totalAmount < getAmount()) {
+        if (totalAmount < getMultiToAmount()) {
             throw new TokenException(Messages.INSUFFICIENT_FUNDS);
         }
-        //add send to output
-        tran.addOutput(Coin.valueOf(getAmount()), Address.fromBase58(network, getTo()));
+        //add send to output list
+        getMultiToList().forEach(multiTo -> {
+            tran.addOutput(Coin.valueOf(multiTo.getAmount()), Address.fromBase58(network, multiTo.getTo()));
+        });
         //add change output
-        long changeAmount = totalAmount - (getAmount() + getFee());
+        long changeAmount = totalAmount - (getMultiToAmount() + getFee());
 
         if (changeAmount >= DUST_THRESHOLD) {
             tran.addOutput(Coin.valueOf(changeAmount), changeAddress);
@@ -701,7 +761,7 @@ public class BitcoinTransaction implements TransactionSigner {
             DeterministicKey xprvKey = DeterministicKey.deserializeB58(xprv, network);
             DeterministicKey accountKey = HDKeyDerivation.deriveChildKey(xprvKey, new ChildNumber(accountIdx, false));
             DeterministicKey externalChangeKey = HDKeyDerivation.deriveChildKey(accountKey, new ChildNumber(changeIdx, false));
-            prvKey=externalChangeKey.getPrivKey();
+            prvKey = externalChangeKey.getPrivKey();
         }
         return prvKey;
     }
