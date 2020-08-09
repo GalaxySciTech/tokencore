@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/pai01234/tokencore)
+
 # tokencore
 
 #### 这只是一个数字货币的钱包后台组件
