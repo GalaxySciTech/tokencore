@@ -56,9 +56,8 @@ public class BitcoinTransaction implements TransactionSigner {
         }
     }
 
-    public BitcoinTransaction(List<MultiTo> multiToList, int changeIdx, long amount, long fee, ArrayList<UTXO> outputs) {
+    public BitcoinTransaction(List<MultiTo> multiToList, int changeIdx, long fee, ArrayList<UTXO> outputs) {
         this.multiToList = multiToList;
-        this.amount = amount;
         this.fee = fee;
         this.outputs = outputs;
         this.changeIdx = changeIdx;
