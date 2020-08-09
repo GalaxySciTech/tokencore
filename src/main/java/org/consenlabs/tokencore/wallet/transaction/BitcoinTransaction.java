@@ -72,6 +72,11 @@ public class BitcoinTransaction implements TransactionSigner {
 
     public class MultiTo{
 
+        public MultiTo(String to, long amount) {
+            this.to = to;
+            this.amount = amount;
+        }
+
         private String to;
 
         private long amount;
