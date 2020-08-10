@@ -63,12 +63,13 @@ public class BitcoinTransaction implements TransactionSigner {
         this.outputs = outputs;
         this.changeIdx = changeIdx;
         multiToList.forEach(multiTo -> {
+            if (multiTo.getAmount() < DUST_THRESHOLD) {
+                throw new TokenException(Messages.AMOUNT_LESS_THAN_MINIMUM);
+            }
             multiToAmount += multiTo.getAmount();
         });
 
-        if (amount < DUST_THRESHOLD) {
-            throw new TokenException(Messages.AMOUNT_LESS_THAN_MINIMUM);
-        }
+
     }
 
     @Override
