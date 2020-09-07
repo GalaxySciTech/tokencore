@@ -9,6 +9,7 @@ public class ChainType {
     public final static String BITCOINCASH = "BITCOINCASH";
     public final static String BITCOINSV = "BITCOINSV";
     public final static String DOGECOIN = "DOGECOIN";
+    public final static String TRON = "TRON";
 
 
     public static void validate(String type) {
@@ -19,7 +20,8 @@ public class ChainType {
                 !DASH.equals(type) &&
                 !BITCOINSV.equals(type) &&
                 !BITCOINCASH.equals(type) &&
-                !DOGECOIN.equals(type)) {
+                !DOGECOIN.equals(type) &&
+                !TRON.equals(type)) {
             throw new TokenException(Messages.WALLET_INVALID_TYPE);
         }
     }

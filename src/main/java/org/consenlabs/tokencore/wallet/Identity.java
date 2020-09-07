@@ -175,6 +175,9 @@ public class Identity {
                 case ChainType.EOS:
                     wallet = deriveEOSWallet(mnemonics, password);
                     break;
+                case ChainType.TRON:
+                    wallet = deriveTronWallet(mnemonics, password);
+                    break;
                 default:
                     throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
             }
@@ -214,7 +217,9 @@ public class Identity {
                 case ChainType.EOS:
                     wallet = deriveEOSWallet(mnemonics, password);
                     break;
-
+                case ChainType.TRON:
+                    wallet = deriveTronWallet(mnemonics, password);
+                    break;
                 default:
                     throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
             }
@@ -341,6 +346,16 @@ public class Identity {
         walletMetadata.setSource(this.getMetadata().getSource());
         walletMetadata.setName("ETH");
         IMTKeystore keystore = V3MnemonicKeystore.create(walletMetadata, password, mnemonics, BIP44Util.ETHEREUM_PATH);
+        return WalletManager.createWallet(keystore);
+    }
+
+    private Wallet deriveTronWallet(List<String> mnemonics, String password) {
+        Metadata walletMetadata = new Metadata();
+        walletMetadata.setChainType(ChainType.TRON);
+        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
+        walletMetadata.setSource(this.getMetadata().getSource());
+        walletMetadata.setName("TRX");
+        IMTKeystore keystore = V3MnemonicKeystore.create(walletMetadata, password, mnemonics, BIP44Util.TRON_PATH);
         return WalletManager.createWallet(keystore);
     }
 

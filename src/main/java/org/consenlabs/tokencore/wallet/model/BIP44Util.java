@@ -20,6 +20,7 @@ public class BIP44Util {
   public final static String EOS_PATH = "m/44'/194'";
   public final static String EOS_SLIP48 = "m/48'/4'/0'/0'/0',m/48'/4'/1'/0'/0'";
   public final static String EOS_LEDGER = "m/44'/194'/0'/0/0";
+  public final static String TRON_PATH ="m/44'/195'/0'/0/0";
 
 
   public static ImmutableList<ChildNumber> generatePath(String path) {
