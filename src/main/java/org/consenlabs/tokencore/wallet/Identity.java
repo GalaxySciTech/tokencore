@@ -164,7 +164,7 @@ public class Identity {
                     wallet = deriveDogecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
                     break;
                 case ChainType.DASH:
-                    wallet = deriveDogecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
+                    wallet = deriveDashWallet(mnemonics, password, this.getMetadata().getSegWit());
                     break;
                 case ChainType.BITCOINSV:
                     wallet = deriveBitcoinSVWallet(mnemonics, password, this.getMetadata().getSegWit());
