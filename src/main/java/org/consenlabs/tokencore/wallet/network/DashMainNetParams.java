@@ -20,7 +20,7 @@ public class DashMainNetParams extends AbstractBitcoinNetParams {
         this.interval = 2016;
         this.targetTimespan = 1209600;
         this.maxTarget = Utils.decodeCompactBits(486604799L);
-        this.dumpedPrivateKeyHeader = 176;
+        this.dumpedPrivateKeyHeader = 204;
         this.addressHeader = 76;
         this.p2shHeader = 16;
         this.acceptableAddressCodes = new int[]{this.addressHeader, this.p2shHeader};

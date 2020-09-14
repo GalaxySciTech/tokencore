@@ -13,6 +13,8 @@ public class LitecoinMainNetParams extends AbstractBitcoinNetParams {
     public static final int MAINNET_MAJORITY_WINDOW = 1000;
     public static final int MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED = 950;
     public static final int MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE = 750;
+    public static final int ADDRESS_HEADER_2 = 50;
+
     private static LitecoinMainNetParams instance;
 
     private LitecoinMainNetParams() {
@@ -22,7 +24,7 @@ public class LitecoinMainNetParams extends AbstractBitcoinNetParams {
         this.dumpedPrivateKeyHeader = 176;
         this.addressHeader = 48;
         this.p2shHeader = 5;
-        this.acceptableAddressCodes = new int[]{this.addressHeader, this.p2shHeader};
+        this.acceptableAddressCodes = new int[]{this.addressHeader, this.p2shHeader, ADDRESS_HEADER_2};
         this.port = 8333;
         this.packetMagic = 4190024921L;
         this.bip32HeaderPub = 76067358;

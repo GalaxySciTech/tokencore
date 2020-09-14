@@ -20,9 +20,9 @@ public class BitcoinSvMainNetParams extends AbstractBitcoinNetParams {
         this.interval = 2016;
         this.targetTimespan = 1209600;
         this.maxTarget = Utils.decodeCompactBits(486604799L);
-        this.dumpedPrivateKeyHeader = 176;
+        this.dumpedPrivateKeyHeader = 128;
         this.addressHeader = 0;
-        this.p2shHeader = 16;
+        this.p2shHeader = 5;
         this.acceptableAddressCodes = new int[]{this.addressHeader, this.p2shHeader};
         this.port = 8333;
         this.packetMagic = 4190024921L;
