@@ -313,6 +313,72 @@ public class BitcoinTransaction implements TransactionSigner {
         return new TxSignResult(signedHex, txHash);
     }
 
+    public TxSignResult signBitcoinCashTransaction(String chainID, String password, Wallet wallet) {
+        collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
+
+        Transaction tran = new Transaction(network);
+        //FORKID_VERSION
+        tran.setVersion(2);
+
+        byte SIGHASH_FORKID = (byte) 0x40;
+
+        long totalAmount = 0L;
+
+        for (UTXO output : getOutputs()) {
+            totalAmount += output.getAmount();
+        }
+
+        if (totalAmount < getAmount()) {
+            throw new TokenException(Messages.INSUFFICIENT_FUNDS);
+        }
+
+        //add send to output
+        tran.addOutput(Coin.valueOf(getAmount()), Address.fromBase58(network, getTo()));
+
+        //add change output
+        long changeAmount = totalAmount - (getAmount() + getFee());
+        if (changeAmount >= DUST_THRESHOLD) {
+            tran.addOutput(Coin.valueOf(changeAmount), changeAddress);
+        }
+
+        for (UTXO output : getOutputs()) {
+            tran.addInput(Sha256Hash.wrap(output.getTxHash()), output.getVout(), new Script(NumericUtil.hexToBytes(output.getScriptPubKey())));
+        }
+
+        for (int i = 0; i < getOutputs().size(); i++) {
+            UTXO output = getOutputs().get(i);
+
+            BigInteger privateKey = wallet.getMetadata().getSource().equals(Metadata.FROM_WIF) ? prvKeys.get(0) : prvKeys.get(i);
+            ECKey ecKey;
+            if (output.getAddress().equals(ECKey.fromPrivate(privateKey).toAddress(network).toBase58())) {
+                ecKey = ECKey.fromPrivate(privateKey);
+            } else if (output.getAddress().equals(ECKey.fromPrivate(privateKey, false).toAddress(network).toBase58())) {
+                ecKey = ECKey.fromPrivate(privateKey, false);
+            } else {
+                throw new TokenException(Messages.CAN_NOT_FOUND_PRIVATE_KEY);
+            }
+
+
+            TransactionInput transactionInput = tran.getInput(i);
+            Script scriptPubKey = ScriptBuilder.createOutputScript(Address.fromBase58(network, output.getAddress()));
+            Sha256Hash hash = tran.hashForSignature(i, scriptPubKey.getProgram(), SIGHASH_FORKID);
+            ECKey.ECDSASignature ecSig = ecKey.sign(hash);
+            TransactionSignature txSig = new TransactionSignature(ecSig.r, ecSig.s, SIGHASH_FORKID);
+            if (scriptPubKey.isSentToRawPubKey()) {
+                transactionInput.setScriptSig(ScriptBuilder.createInputScript(txSig));
+            } else {
+                if (!scriptPubKey.isSentToAddress()) {
+                    throw new TokenException(Messages.UNSUPPORT_SEND_TARGET);
+                }
+                transactionInput.setScriptSig(ScriptBuilder.createInputScript(txSig, ecKey));
+            }
+        }
+
+        String signedHex = NumericUtil.bytesToHex(tran.bitcoinSerialize());
+        String txHash = NumericUtil.beBigEndianHex(Hash.sha256(Hash.sha256(signedHex)));
+        return new TxSignResult(signedHex, txHash);
+    }
+
     public TxSignResult signUsdtTransaction(String chainID, String password, Wallet wallet) {
         collectPrvKeysAndAddress(Metadata.NONE, password, wallet);
 
