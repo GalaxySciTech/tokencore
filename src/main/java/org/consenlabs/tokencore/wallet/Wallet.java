@@ -88,7 +88,7 @@ public class Wallet {
       String xprv = new String(decryptMainKey(password), Charset.forName("UTF-8"));
       DeterministicKey xprvKey = DeterministicKey.deserializeB58(xprv, MetaUtil.getNetWork(keystore.getMetadata()));
       DeterministicKey accountKey = HDKeyDerivation.deriveChildKey(xprvKey, new ChildNumber(0, false));
-      DeterministicKey externalChangeKey = HDKeyDerivation.deriveChildKey(accountKey, new ChildNumber(1, false));
+      DeterministicKey externalChangeKey = HDKeyDerivation.deriveChildKey(accountKey, new ChildNumber(0, false));
       return NumericUtil.bigIntegerToHex(externalChangeKey.getPrivKey());
     }
     throw new TokenException(Messages.ILLEGAL_OPERATION);
