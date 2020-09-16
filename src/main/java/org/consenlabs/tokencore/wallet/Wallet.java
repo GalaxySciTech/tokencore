@@ -1,10 +1,15 @@
 package org.consenlabs.tokencore.wallet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bitcoinj.crypto.ChildNumber;
+import org.bitcoinj.crypto.DeterministicKey;
+import org.bitcoinj.crypto.HDKeyDerivation;
+import org.consenlabs.tokencore.foundation.utils.MetaUtil;
 import org.consenlabs.tokencore.foundation.utils.NumericUtil;
 import org.consenlabs.tokencore.wallet.keystore.*;
 import org.consenlabs.tokencore.wallet.model.*;
 
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 
@@ -79,6 +84,12 @@ public class Wallet {
       } else {
         return NumericUtil.bytesToHex(decrypted);
       }
+    }else if(keystore instanceof HDMnemonicKeystore){
+      String xprv = new String(decryptMainKey(password), Charset.forName("UTF-8"));
+      DeterministicKey xprvKey = DeterministicKey.deserializeB58(xprv, MetaUtil.getNetWork(keystore.getMetadata()));
+      DeterministicKey accountKey = HDKeyDerivation.deriveChildKey(xprvKey, new ChildNumber(0, false));
+      DeterministicKey externalChangeKey = HDKeyDerivation.deriveChildKey(accountKey, new ChildNumber(1, false));
+      return NumericUtil.bigIntegerToHex(externalChangeKey.getPrivKey());
     }
     throw new TokenException(Messages.ILLEGAL_OPERATION);
   }
