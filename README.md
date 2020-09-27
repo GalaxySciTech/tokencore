@@ -4,7 +4,7 @@
 <p align="center">
 
   <a href="https://travis-ci.org/pai01234/tokencore">
-    <img src="https://travis-ci.org/pai01234/tokencore.svg?branch=develop">
+    <img src="https://travis-ci.org/pai01234/tokencore.svg?branch=master">
   </a>
 
   <a href="https://github.com/pai01234/tokencore/issues">
