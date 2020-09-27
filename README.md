@@ -1,6 +1,6 @@
-<h1 align="center">
+<h0 align="center">
   tokencore
-</h1>
+</h0>
 <p align="center">
 
   <a href="https://travis-ci.org/pai01234/tokencore">
