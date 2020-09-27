@@ -22,7 +22,8 @@
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/pai01234/tokencore.svg">
   </a>
-  </p>
+</p>
+
 #### 初始化身份
 ```java
 try {
@@ -44,8 +45,10 @@ try {
             );
         }
 ```
+
 #### 生成钱包
-````java
+
+```java
 Identity identity = Identity.getCurrentIdentity()
 String password="123456";
 List<String> chainTypes=new ArrayList();
@@ -57,8 +60,10 @@ List<Wallet> wallets=identity.deriveWalletsByMnemonics(
             MnemonicUtil.randomMnemonicCodes()
         );
 
-````
+```
+
 #### 离线签名
+
 ```java
 String password="123456";
 String toAddress="dsadsadsadsa";
@@ -80,6 +85,7 @@ TxSignResult txSignResult= bitcoinTransaction.signTransaction(
             wallet
         );
 ```
+
 #### 注意：这只是一个数字货币的功能组件！！！只供学习使用，不提供完整的区块链业务功能，如果需要业务后台的往下看
 
 ### 区块链业务后台介绍：
