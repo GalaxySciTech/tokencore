@@ -1,6 +1,27 @@
-[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/pai01234/tokencore)
+<h1 align="center">
+  tokencore
+</h1>
+<p align="center">
 
-# tokencore
+  <a href="https://travis-ci.org/pai01234/tokencore">
+    <img src="https://travis-ci.org/pai01234/tokencore.svg?branch=develop">
+  </a>
+
+  <a href="https://github.com/pai01234/tokencore/issues">
+    <img src="https://img.shields.io/github/issues/pai01234/tokencore.svg">
+  </a>
+
+  <a href="https://github.com/pai01234/tokencore/pulls">
+    <img src="https://img.shields.io/github/issues-pr/pai01234/tokencore.svg">
+  </a>
+
+  <a href="https://github.com/pai01234/tokencore/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/pai01234/tokencore.svg">
+  </a>
+
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/pai01234/tokencore.svg">
+  </a>
 
 #### 注意：这只是一个数字货币的功能组件！！！只供学习使用，不提供完整的区块链业务功能，如果需要业务后台的往下看
 
