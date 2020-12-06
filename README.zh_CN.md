@@ -25,6 +25,10 @@
   
 </p>
 
+# README.md
+- en [English](README.md)
+- zh_CN [简体中文](README.zh_CN.md)
+
 # tokencore介绍
 
 ##### 区块链钱包后台核心组件，支持BTC,OMNI,ETH,ERC20,TRX,TRC20,BCH,BSV,DOGE,DASH,LTC
