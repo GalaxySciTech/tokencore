@@ -26,9 +26,9 @@
 </p>
 
 # README.md
--en [English](README_en.md)
+- en [English](README_en.md)
 
--zh_CN [Simplified Chinese](README.md)
+- zh_CN [Simplified Chinese](README.md)
 
 # tokencore introduction
 
@@ -119,11 +119,11 @@ TxSignResult txSignResult = bitcoinTransaction.signTransaction(
 
 
 #### Complete system architecture situation:
--Use springboot framework
--The language is java, kotlin
--Use rabbitmq message queue
--mysql cloud database
--xxl-job distributed timing task framework
+- Use springboot framework
+- The language is java, kotlin
+- Use rabbitmq message queue
+- mysql cloud database
+- xxl-job distributed timing task framework
 
 #### The entire system is developed by myself, and has run hundreds of millions of dollars in the production environment. It has sufficient reliability, scalability, and practicality, and can be used with confidence.
 
