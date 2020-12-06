@@ -27,6 +27,7 @@
 
 # README.md
 -en [English](README_en.md)
+
 -zh_CN [Simplified Chinese](README.md)
 
 # tokencore introduction
@@ -104,15 +105,15 @@ TxSignResult txSignResult = bitcoinTransaction.signTransaction(
 -#### The business backend is a more powerful business system constructed based on the functional components of the digital currency, which can obtain different public chain blockchain addresses at any time, and supports (BTC, OMNI, ETH, ERC20, TRX, TRC20) , BCH, BSV, DOGE, DASH, LTC) deposit and withdrawal functions
 
  
--##### This is the usage document of swagger-ui
+- ##### This is the usage document of swagger-ui
  ![](https://i.ibb.co/CK9VHpF/We-Chatff11cad89ae03d68aacde5f83c62d63a.png)
 
 
--##### This is the architecture diagram I use
+- ##### This is the architecture diagram I use
  ![](https://i.ibb.co/KrpJwDG/1590596278351.jpg)
 
 
--##### This is a screenshot of the database flow (to protect some privacy, code to watch)
+- ##### This is a screenshot of the database flow (to protect some privacy, code to watch)
 ![](https://i.ibb.co/3dR8tpn/1590596939623.jpg)
 
 
