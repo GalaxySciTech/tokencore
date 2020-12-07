@@ -25,10 +25,8 @@
   
 </p>
 
-# README.md
-- en [English](README_en.md)
-
-- zh_CN [Simplified Chinese](README.md)
+-en [English](README_en.md)
+-zh_CN [Simplified Chinese](README.md)
 
 # tokencore introduction
 
@@ -101,29 +99,20 @@ TxSignResult txSignResult = bitcoinTransaction.signTransaction(
 #### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions. If you need business backends, look down
 
 # The project described below is not open source and has nothing to do with this project
-### Blockchain server introduction:
-- #### The business backend is a more powerful business system constructed based on the functional components of the digital currency, which can obtain different public chain blockchain addresses at any time, and supports (BTC, OMNI, ETH, ERC20, TRX, TRC20) , BCH, BSV, DOGE, DASH, LTC) deposit and withdrawal functions
+### Blockchain java wallet introduction:
+-#### The business backend is a more powerful business system constructed based on the functional components of the digital currency, which can obtain different public chain blockchain addresses at any time, and supports (BTC, OMNI, ETH, ERC20, TRX, TRC20) , BCH, BSV, DOGE, DASH, LTC) deposit and withdrawal functions
 
- 
-- ##### This is the usage document of swagger-ui
- ![](https://i.ibb.co/CK9VHpF/We-Chatff11cad89ae03d68aacde5f83c62d63a.png)
-
-
-- ##### This is the architecture diagram I use
- ![](https://i.ibb.co/KrpJwDG/1590596278351.jpg)
-
-
-- ##### This is a screenshot of the database flow (to protect some privacy, code to watch)
-![](https://i.ibb.co/3dR8tpn/1590596939623.jpg)
-
-
+-###### Background management demo
+![](https://i.ibb.co/zb8LtyH/test.gif)
+-###### API interface demo
+![](https://i.ibb.co/ygDRVYM/test1.gif)
 
 #### Complete system architecture situation:
-- Use springboot framework
-- The language is java, kotlin
-- Use rabbitmq message queue
-- mysql cloud database
-- xxl-job distributed timing task framework
+-Use springboot framework
+-The language is java, kotlin
+-Use rabbitmq message queue
+-mysql cloud database
+-xxl-job distributed timing task framework
 
 #### The entire system is developed by myself, and has run hundreds of millions of dollars in the production environment. It has sufficient reliability, scalability, and practicality, and can be used with confidence.
 

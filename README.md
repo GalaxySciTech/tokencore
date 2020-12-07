@@ -99,22 +99,13 @@ TxSignResult txSignResult= bitcoinTransaction.signTransaction(
 #### 注意：这只是一个数字货币的功能组件！！！只供学习使用，不提供完整的区块链业务功能，如果需要业务后台的往下看
 
 # 以下介绍的项目不开源，并与本项目无关
-### 区块链server介绍：
+### 区块链java wallet介绍：
 - #### 业务后台是依据该数字货币的功能组件所构建出来的更强大的业务系统，可以随时获取不同公链区块链地址,并支持(BTC,OMNI,ETH,ERC20,TRX,TRC20,BCH,BSV,DOGE,DASH,LTC)的充归提功能
 
- 
-- ##### 这是swagger-ui的使用文档
- ![](https://i.ibb.co/CK9VHpF/We-Chatff11cad89ae03d68aacde5f83c62d63a.png)
-
-
-- ##### 这是我使用的架构图
- ![](https://i.ibb.co/KrpJwDG/1590596278351.jpg)
-
-
-- ##### 这是数据库流水截图（保护部分隐私，打码观看）
-![](https://i.ibb.co/3dR8tpn/1590596939623.jpg)
-
-
+- ###### 后台管理演示
+![](https://i.ibb.co/zb8LtyH/test.gif)
+- ###### API接口演示
+![](https://i.ibb.co/ygDRVYM/test1.gif)
 
 #### 全套系统架构情况：
 - 使用springboot框架
