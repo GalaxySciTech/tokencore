@@ -500,18 +500,19 @@ public class BitcoinTransaction implements TransactionSigner {
             // calc hash outputs
             stream = new UnsafeByteArrayOutputStream();
 
-            String usdtHex = "6a146f6d6e69" + String.format("%016x", 31) + String.format("%016x", amount);
-            TransactionOutput usdtOutput = new TransactionOutput(this.network, null, Coin.valueOf(0L), new Script(Utils.HEX.decode(usdtHex)).getProgram());
-            usdtOutput.bitcoinSerialize(stream);
-
-            TransactionOutput targetOutput = new TransactionOutput(this.network, null, Coin.valueOf(needAmount), toAddress);
-            targetOutput.bitcoinSerialize(stream);
 
             if (changeAmount >= DUST_THRESHOLD) {
                 hasChange = true;
                 TransactionOutput changeOutput = new TransactionOutput(this.network, null, Coin.valueOf(changeAmount), changeAddress);
                 changeOutput.bitcoinSerialize(stream);
             }
+
+            String usdtHex = "6a146f6d6e69" + String.format("%016x", 31) + String.format("%016x", amount);
+            TransactionOutput usdtOutput = new TransactionOutput(this.network, null, Coin.valueOf(0L), new Script(Utils.HEX.decode(usdtHex)).getProgram());
+            usdtOutput.bitcoinSerialize(stream);
+
+            TransactionOutput targetOutput = new TransactionOutput(this.network, null, Coin.valueOf(needAmount), toAddress);
+            targetOutput.bitcoinSerialize(stream);
 
 //
 //      Utils.uint64ToByteStreamLE(BigInteger.valueOf(amount), stream);
