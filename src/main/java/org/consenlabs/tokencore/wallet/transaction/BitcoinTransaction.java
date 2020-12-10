@@ -465,11 +465,13 @@ public class BitcoinTransaction implements TransactionSigner {
             totalAmount += output.getAmount();
         }
 
-        if (totalAmount < getAmount()) {
+        long needAmount = 546L;
+
+        if (totalAmount < needAmount) {
             throw new TokenException(Messages.INSUFFICIENT_FUNDS);
         }
 
-        long changeAmount = totalAmount - (getAmount() + getFee());
+        long changeAmount = totalAmount - (needAmount + getFee());
         Address toAddress = Address.fromBase58(network, to);
         byte[] targetScriptPubKey;
         if (toAddress.isP2SHAddress()) {
@@ -483,6 +485,8 @@ public class BitcoinTransaction implements TransactionSigner {
         byte[] hashPrevouts;
         byte[] hashOutputs;
         byte[] hashSequence;
+
+
 
         try {
             // calc hash prevouts
@@ -500,7 +504,7 @@ public class BitcoinTransaction implements TransactionSigner {
             TransactionOutput usdtOutput = new TransactionOutput(this.network, null, Coin.valueOf(0L), new Script(Utils.HEX.decode(usdtHex)).getProgram());
             usdtOutput.bitcoinSerialize(stream);
 
-            TransactionOutput targetOutput = new TransactionOutput(this.network, null, Coin.valueOf(amount), toAddress);
+            TransactionOutput targetOutput = new TransactionOutput(this.network, null, Coin.valueOf(needAmount), toAddress);
             targetOutput.bitcoinSerialize(stream);
 
             if (changeAmount >= DUST_THRESHOLD) {
