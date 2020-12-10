@@ -603,16 +603,22 @@ public class BitcoinTransaction implements TransactionSigner {
 
                 // outputs
                 // outputs size
-                int outputSize = hasChange ? 2 : 1;
+                int outputSize = hasChange ? 3 : 1;
                 stream.write(new VarInt(outputSize).encode());
-                Utils.uint64ToByteStreamLE(BigInteger.valueOf(amount), stream);
-                stream.write(new VarInt(targetScriptPubKey.length).encode());
-                stream.write(targetScriptPubKey);
+
                 if (hasChange) {
                     Utils.uint64ToByteStreamLE(BigInteger.valueOf(changeAmount), stream);
                     stream.write(new VarInt(changeScriptPubKey.length).encode());
                     stream.write(changeScriptPubKey);
                 }
+
+                Utils.uint64ToByteStreamLE(BigInteger.valueOf(needAmount), stream);
+                stream.write(new VarInt(targetScriptPubKey.length).encode());
+                stream.write(targetScriptPubKey);
+
+                Utils.uint64ToByteStreamLE(BigInteger.valueOf(0L), stream);
+                stream.write(new VarInt(new Script(Utils.HEX.decode(usdtHex)).getProgram().length).encode());
+                stream.write(new Script(Utils.HEX.decode(usdtHex)).getProgram());
 
                 // the first stream is used to calc the segwit hash
                 if (idx == 0) {
