@@ -36,83 +36,83 @@
 
 #### Initialize identity
 ```java
-try {
-            Files.createDirectories(Paths.get("${keyStoreProperties.dir}/wallets"))
-        } catch (Throwable ignored) {
-        }
+    try {
+        Files.createDirectories(Paths.get("${keyStoreProperties.dir}/wallets"))
+    } catch (Throwable ignored) {
+    }
 //KeystoreStorage is an interface that implements its getdir method
-        WalletManager.storage = KeystoreStorage();
-        WalletManager.scanWallets();
-        String password = "123456";
-        Identity identity = Identity.getCurrentIdentity();
-        if (identity == null) {
-            Identity.createIdentity(
-                    "token",
-                    password,
-                    "",
-                    Network.MAINNET,
-                    Metadata.P2WPKH
-            );
-        }
+    WalletManager.storage = KeystoreStorage();
+    WalletManager.scanWallets();
+    String password = "123456";
+    Identity identity = Identity. GetCurrentIdentity ();
+    if (identity == null) {
+        Identity.createIdentity(
+            "token",
+            password,
+            "",
+            Network.MAINNET,
+            Metadata.P2WPKH
+        );
+    }
 ```
 
 #### Generate wallet
 
 ```java
-Identity identity = Identity.getCurrentIdentity()
-String password="123456";
-List<String> chainTypes=new ArrayList();
-chainTypes.add(ChainType.BITCOIN);
+    Identity identity = Identity. GetCurrentIdentity ()
+    String password ="123456";
+    List<String> chainTypes = new ArrayList();
+    chainTypes.add(ChainType.BITCOIN);
 
-List<Wallet> wallets=identity.deriveWalletsByMnemonics(
+    List<Wallet> wallets = identity. DeriveWalletsByMnemonics (
             chainTypes,
-            password,
-            MnemonicUtil.randomMnemonicCodes()
-        );
+    password,
+    MnemonicUtil.randomMnemonicCodes()
+    );
 
 ```
 
 #### Offline signature
 
 ```java
-String password="123456";
-String toAddress="dsadsadsadsa";
-int changeIdx=0;
-long amount=1000L;
-long fee=555L;
+    String password ="123456";
+    String toAddress ="dsadsadsadsa";
+    int changeIdx =0;
+    long amount =1000L;
+    long fee =555L;
 //utxos needs to go to the node or external api to get
-ArrayList<UTXO> utxos=new ArrayList();
-BitcoinTransaction bitcoinTransaction = BitcoinTransaction(
+    ArrayList<UTXO> utxos = new ArrayList();
+    BitcoinTransaction bitcoinTransaction = BitcoinTransaction (
             toAddress,
-            changeIdx,
-            amount,
-            fee,
-            utxos
-        );
-TxSignResult txSignResult = bitcoinTransaction.signTransaction(
+    changeIdx,
+    amount,
+    fee,
+    utxos
+    );
+    TxSignResult txSignResult = bitcoinTransaction. SignTransaction (
             ChainId.BITCOIN_MAINNET.toString(),
-            password,
-            wallet
-        );
+    password,
+    wallet
+    );
 ```
 
 #### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions. If you need business backends, look down
 
 # The project described below is not open source and has nothing to do with this project
 ### Blockchain java wallet introduction:
--#### The business backend is a more powerful business system constructed based on the functional components of the digital currency, which can obtain different public chain blockchain addresses at any time, and supports (BTC, OMNI, ETH, ERC20, TRX, TRC20) , BCH, BSV, DOGE, DASH, LTC) deposit and withdrawal functions
+- #### The business backend is a more powerful business system constructed based on the functional components of the digital currency, which can obtain different public chain blockchain addresses at any time, and supports (BTC, OMNI, ETH, ERC20, TRX, TRC20) , BCH, BSV, DOGE, DASH, LTC) deposit and withdrawal functions
 
--###### Background management demo
+- ###### Background management demo
 ![](https://i.ibb.co/zb8LtyH/test.gif)
--###### API interface demo
+- ###### API interface demo
 ![](https://i.ibb.co/MPbh9Gj/test1.gif)
 
 #### Complete system architecture situation:
--Use springboot framework
--The language is java, kotlin
--Use rabbitmq message queue
--mysql cloud database
--xxl-job distributed timing task framework
+- Use springboot framework
+- The language is java, kotlin
+- Use rabbitmq message queue
+- mysql cloud database
+- xxl-job distributed timing task framework
 
 #### The entire system is developed by myself, and has run hundreds of millions of dollars in the production environment. It has sufficient reliability, scalability, and practicality, and can be used with confidence.
 
