@@ -603,7 +603,7 @@ public class BitcoinTransaction implements TransactionSigner {
 
                 // outputs
                 // outputs size
-                int outputSize = hasChange ? 3 : 1;
+                int outputSize = hasChange ? 3 : 2;
                 stream.write(new VarInt(outputSize).encode());
 
                 if (hasChange) {
