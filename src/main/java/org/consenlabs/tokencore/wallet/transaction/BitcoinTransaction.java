@@ -507,12 +507,12 @@ public class BitcoinTransaction implements TransactionSigner {
                 changeOutput.bitcoinSerialize(stream);
             }
 
+            TransactionOutput targetOutput = new TransactionOutput(this.network, null, Coin.valueOf(needAmount), toAddress);
+            targetOutput.bitcoinSerialize(stream);
+
             String usdtHex = "6a146f6d6e69" + String.format("%016x", 31) + String.format("%016x", amount);
             TransactionOutput usdtOutput = new TransactionOutput(this.network, null, Coin.valueOf(0L), new Script(Utils.HEX.decode(usdtHex)).getProgram());
             usdtOutput.bitcoinSerialize(stream);
-
-            TransactionOutput targetOutput = new TransactionOutput(this.network, null, Coin.valueOf(needAmount), toAddress);
-            targetOutput.bitcoinSerialize(stream);
 
 //
 //      Utils.uint64ToByteStreamLE(BigInteger.valueOf(amount), stream);
