@@ -34,6 +34,19 @@
 
 # tokencore usage
 
+
+#### Introducing this library
+gradle way
+In your build.gradle
+```
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+   dependencies {
+        compile 'com.github.pai01234:tokencore:1.0.8.3'
+    }
+```
+
 #### Initialize identity
 ```java
     try {

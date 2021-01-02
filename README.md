@@ -22,7 +22,7 @@
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/pai01234/tokencore.svg">
   </a>
-  
+
 </p>
 
 - en [English](README_en.md)
@@ -34,41 +34,53 @@
 
 # tokencore使用方式
 
+#### 引入本库
+gradle方式
+在你的build.gradle里面
+```
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+   dependencies {
+        compile 'com.github.pai01234:tokencore:1.0.8.3'
+    }
+```
+
 #### 初始化身份
 ```java
     try {
         Files.createDirectories(Paths.get("${keyStoreProperties.dir}/wallets"))
-    } catch (Throwable ignored) {
-    }
+        } catch (Throwable ignored) {
+        }
 //KeystoreStorage是接口，实现它的getdir方法
-    WalletManager.storage = KeystoreStorage();
-    WalletManager.scanWallets();
-    String password = "123456";
-    Identity identity = Identity . getCurrentIdentity ();
-    if (identity == null) {
+        WalletManager.storage = KeystoreStorage();
+        WalletManager.scanWallets();
+        String password = "123456";
+        Identity identity = Identity . getCurrentIdentity ();
+        if (identity == null) {
         Identity.createIdentity(
-            "token",
-            password,
-            "",
-            Network.MAINNET,
-            Metadata.P2WPKH
+        "token",
+        password,
+        "",
+        Network.MAINNET,
+        Metadata.P2WPKH
         );
-    }
+        }
 ```
 
 #### 生成钱包
 
 ```java
     Identity identity = Identity . getCurrentIdentity ()
-    String password ="123456";
-    List<String> chainTypes = new ArrayList();
-    chainTypes.add(ChainType.BITCOIN);
+        String password ="123456";
+        List<String> chainTypes = new ArrayList();
+        chainTypes.add(ChainType.BITCOIN);
 
-    List<Wallet> wallets = identity . deriveWalletsByMnemonics (
-            chainTypes,
-    password,
-    MnemonicUtil.randomMnemonicCodes()
-    );
+        List<Wallet> wallets = identity . deriveWalletsByMnemonics (
+        chainTypes,
+        password,
+        MnemonicUtil.randomMnemonicCodes()
+        );
 
 ```
 
@@ -76,24 +88,24 @@
 
 ```java
     String password ="123456";
-    String toAddress ="dsadsadsadsa";
-    int changeIdx =0;
-    long amount =1000L;
-    long fee =555L;
+        String toAddress ="dsadsadsadsa";
+        int changeIdx =0;
+        long amount =1000L;
+        long fee =555L;
 //utxos需要去节点或者外部api获取
-    ArrayList<UTXO> utxos = new ArrayList();
-    BitcoinTransaction bitcoinTransaction = BitcoinTransaction (
-            toAddress,
-    changeIdx,
-    amount,
-    fee,
-    utxos
-    );
-    TxSignResult txSignResult = bitcoinTransaction . signTransaction (
-            ChainId.BITCOIN_MAINNET.toString(),
-    password,
-    wallet
-    );
+        ArrayList<UTXO> utxos = new ArrayList();
+        BitcoinTransaction bitcoinTransaction = BitcoinTransaction (
+        toAddress,
+        changeIdx,
+        amount,
+        fee,
+        utxos
+        );
+        TxSignResult txSignResult = bitcoinTransaction . signTransaction (
+        ChainId.BITCOIN_MAINNET.toString(),
+        password,
+        wallet
+        );
 ```
 
 #### 注意：这只是一个数字货币的功能组件！！！只供学习使用，不提供完整的区块链业务功能，如果需要业务后台的往下看
