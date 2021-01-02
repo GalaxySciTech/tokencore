@@ -41,7 +41,7 @@ gradle方式
     repositories {
         maven { url 'https://jitpack.io' }
     }
-   dependencies {
+    dependencies {
         compile 'com.github.pai01234:tokencore:1.0.8.3'
     }
 ```
