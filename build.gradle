@@ -25,6 +25,7 @@ buildscript {
 }
 
 dependencies {
+    compile fileTree(dir:'lib',includes:['*jar'])
     compile 'io.github.qyvlik:io.eblock.eos-eos4j:1.0.1'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
     compile 'org.bitcoinj:bitcoinj-core:0.14.7'
@@ -37,4 +38,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
+}
+
+processResources {
+    from('src/main/java/resources') {
+        include '**'
+    }
 }

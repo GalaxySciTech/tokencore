@@ -431,7 +431,7 @@ public class WalletManager {
                         keystoreMap.put(keystore.getId(), keystore);
                     }
                 } catch (Exception ex) {
-                    log.info(LOG_TAG, "Can't loaded " + file.getName() + " file", ex);
+//                    log.info(LOG_TAG, "Can't loaded " + file.getName() + " file", ex);
                 }
             }
         }

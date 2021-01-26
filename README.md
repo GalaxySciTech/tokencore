@@ -113,6 +113,7 @@ gradle方式
 # 以下介绍的项目不开源，并与本项目无关
 ### 区块链java wallet介绍：
 - #### 业务后台是依据该数字货币的功能组件所构建出来的更强大的业务系统，可以随时获取不同公链区块链地址,并支持(BTC,OMNI,ETH,ERC20,TRX,TRC20,BCH,BSV,DOGE,DASH,LTC)的充归提功能
+注：程序员对接时主要对接api接口就行了
 
 - ###### 后台管理演示
 ![](https://i.ibb.co/zb8LtyH/test.gif)
