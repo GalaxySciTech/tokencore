@@ -111,26 +111,3 @@ In your build.gradle
 
 #### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions. If you need business backends, look down
 
-# The project described below is not open source and has nothing to do with this project
-### Blockchain java wallet introduction:
-- #### The business backend is a more powerful business system constructed based on the functional components of the digital currency, which can obtain different public chain blockchain addresses at any time, and supports (BTC, OMNI, ETH, ERC20, TRX, TRC20) , BCH, BSV, DOGE, DASH, LTC) deposit and withdrawal functions
-
-- ###### Background management demo
-![](https://i.ibb.co/zb8LtyH/test.gif)
-- ###### API interface demo
-![](https://i.ibb.co/MPbh9Gj/test1.gif)
-
-#### Complete system architecture situation:
-- Use springboot framework
-- The language is java, kotlin
-- Use rabbitmq message queue
-- mysql cloud database
-- xxl-job distributed timing task framework
-
-#### The entire system is developed by myself, and has run hundreds of millions of dollars in the production environment. It has sufficient reliability, scalability, and practicality, and can be used with confidence.
-
-
-### Cooperation contact WeChat: pai01234
-
-## pay attention
-Anyone who uses this source code to engage in commercial activities and causes losses to others and yourself, I am not responsible for it!
