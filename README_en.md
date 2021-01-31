@@ -109,5 +109,5 @@ In your build.gradle
     );
 ```
 
-#### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions. If you need business backends, look down
+#### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions.
 
