@@ -41,9 +41,25 @@ gradle方式
     repositories {
         maven { url 'https://jitpack.io' }
     }
+    
     dependencies {
         compile 'com.github.paipaipaipai:tokencore:1.1.0'
     }
+```
+maven方式
+```
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	
+	<dependency>
+	    <groupId>com.github.paipaipaipai</groupId>
+	    <artifactId>tokencore</artifactId>
+	    <version>1.1.0</version>
+	</dependency>
 ```
 
 #### 初始化身份
