@@ -42,7 +42,7 @@ gradle方式
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        compile 'com.github.paipaipaipai:tokencore:1.0.8.3'
+        compile 'com.github.paipaipaipai:tokencore:1.1.0'
     }
 ```
 
