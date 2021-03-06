@@ -2,8 +2,8 @@ apply plugin: 'java'
 apply plugin: 'com.github.dcendents.android-maven'
 
 
-group 'com.github.pai01234'
-version '0.0.20'
+group 'com.github.paipaipaipai'
+version '1.1.0'
 
 sourceCompatibility = 1.8
 
