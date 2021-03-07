@@ -72,7 +72,7 @@ maven way
     WalletManager.storage = KeystoreStorage();
     WalletManager.scanWallets();
     String password = "123456";
-    Identity identity = Identity. GetCurrentIdentity ();
+    Identity identity = Identity.GetCurrentIdentity ();
     if (identity == null) {
         Identity.createIdentity(
             "token",
@@ -87,12 +87,12 @@ maven way
 #### Generate wallet
 
 ```java
-    Identity identity = Identity. GetCurrentIdentity ()
+    Identity identity = Identity.GetCurrentIdentity ()
     String password ="123456";
     List<String> chainTypes = new ArrayList();
     chainTypes.add(ChainType.BITCOIN);
 
-    List<Wallet> wallets = identity. DeriveWalletsByMnemonics (
+    List<Wallet> wallets = identity.DeriveWalletsByMnemonics (
             chainTypes,
     password,
     MnemonicUtil.randomMnemonicCodes()
@@ -117,7 +117,7 @@ maven way
     fee,
     utxos
     );
-    TxSignResult txSignResult = bitcoinTransaction. SignTransaction (
+    TxSignResult txSignResult = bitcoinTransaction.SignTransaction (
             ChainId.BITCOIN_MAINNET.toString(),
     password,
     wallet
