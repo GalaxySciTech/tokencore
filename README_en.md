@@ -3,24 +3,24 @@
 </h1>
 <p align="center">
 
-  <a href="https://travis-ci.org/pai01234/tokencore">
-    <img src="https://travis-ci.org/pai01234/tokencore.svg?branch=master">
+  <a href="https://travis-ci.org/paipaipaipai/tokencore">
+    <img src="https://travis-ci.org/paipaipaipai/tokencore.svg?branch=master">
   </a>
 
-  <a href="https://github.com/pai01234/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/pai01234/tokencore.svg">
+  <a href="https://github.com/paipaipaipai/tokencore/issues">
+    <img src="https://img.shields.io/github/issues/paipaipaipai/tokencore.svg">
   </a>
 
-  <a href="https://github.com/pai01234/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/pai01234/tokencore.svg">
+  <a href="https://github.com/paipaipaipai/tokencore/pulls">
+    <img src="https://img.shields.io/github/issues-pr/paipaipaipai/tokencore.svg">
   </a>
 
-  <a href="https://github.com/pai01234/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/pai01234/tokencore.svg">
+  <a href="https://github.com/paipaipaipai/tokencore/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/paipaipaipai/tokencore.svg">
   </a>
 
   <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/pai01234/tokencore.svg">
+    <img src="https://img.shields.io/github/license/paipaipaipai/tokencore.svg">
   </a>
   
 </p>
