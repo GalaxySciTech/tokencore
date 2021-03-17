@@ -102,26 +102,54 @@ maven way
 
 #### Offline signature
 
+btc
+
 ```java
-    String password ="123456";
-    String toAddress ="dsadsadsadsa";
-    int changeIdx =0;
-    long amount =1000L;
-    long fee =555L;
-//utxos needs to go to the node or external api to get
-    ArrayList<UTXO> utxos = new ArrayList();
-    BitcoinTransaction bitcoinTransaction = BitcoinTransaction (
-            toAddress,
-    changeIdx,
-    amount,
-    fee,
-    utxos
-    );
-    TxSignResult txSignResult = bitcoinTransaction.SignTransaction (
-            ChainId.BITCOIN_MAINNET.toString(),
-    password,
-    wallet
-    );
+        String password="123456";
+        String toAddress="33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
+        int changeIdx=0;
+        long amount=1000L;
+        long fee=555L;
+        //utxos needs to go to the node or external api to get
+        ArrayList<UTXO> utxos=new ArrayList();
+        BitcoinTransaction bitcoinTransaction=BitcoinTransaction(
+        toAddress,
+        changeIdx,
+        amount,
+        fee,
+        utxos
+        );
+        TxSignResult txSignResult=bitcoinTransaction.signTransaction(
+        ChainId.BITCOIN_MAINNET.toString(),
+        password,
+        wallet
+        );
+
+
+        //Online broadcast
+        rpc.sendRawTransaction(txSignResult.getSignedTx());
+```
+
+tron
+
+```java
+        String from="TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
+        String to="TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
+        long amount=1;
+        String password="123456";
+
+        TronTransaction transaction=new TronTransaction(from,to,amount);
+        //Offline signature, it is not recommended to sign and broadcast together
+        TxSignResult txSignResult=transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET),password,wallet);
+
+
+
+        //Online broadcast
+        ObjectMapper obj=new ObjectMapper();
+
+        TronClient client=TronClient.ofMainnet("3333333333333333333333333333333333333333333333333333333333333333");
+
+        client.blockingStub.broadcastTransaction(obj.readValue(txSignResult.getSignedTx(),Transaction.class));  
 ```
 
 #### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions.

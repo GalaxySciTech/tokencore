@@ -1,7 +1,10 @@
 package org.consenlabs.tokencore.wallet.transaction;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.consenlabs.tokencore.wallet.Wallet;
+import org.consenlabs.tokencore.wallet.WalletManager;
+import org.consenlabs.tokencore.wallet.model.ChainId;
 import org.consenlabs.tokencore.wallet.model.Messages;
 import org.consenlabs.tokencore.wallet.model.TokenException;
 import org.spongycastle.util.encoders.Hex;
@@ -24,6 +27,7 @@ import org.tron.tronj.proto.Response.BlockExtention;
 import org.tron.tronj.proto.Response.TransactionExtention;
 import org.tron.tronj.proto.Response.TransactionReturn;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -134,4 +138,5 @@ public class TronTransaction implements TransactionSigner {
     }
 
 }
+
 
