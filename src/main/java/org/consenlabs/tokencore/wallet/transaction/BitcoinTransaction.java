@@ -379,6 +379,7 @@ public class BitcoinTransaction implements TransactionSigner {
         return new TxSignResult(signedHex, txHash);
     }
 
+    //这个可以增加手续费地址，在同一笔utxo里面执行交易
     public TxSignResult signUsdtCollectTransaction(String chainID, String password, Wallet wallet, Wallet feeProviderWallet, List<UTXO> feeProviderUtxos) {
         int startIdx = outputs.size();
         outputs.addAll(feeProviderUtxos);
@@ -829,6 +830,7 @@ public class BitcoinTransaction implements TransactionSigner {
     }
 
 
+    //多笔对多笔交易
     public TxSignResult signMultiTransaction(String chainID, String password, List<Wallet> wallets) {
         HashMap<String, ECKey> ecKeyMap = new HashMap<>();
         wallets.forEach(wallet -> {
