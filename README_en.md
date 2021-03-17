@@ -43,7 +43,7 @@ In your build.gradle
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        compile 'com.github.paipaipaipai:tokencore:1.1.0'
+        compile 'com.github.paipaipaipai:tokencore:1.1.1'
     }
 ```
 
@@ -59,7 +59,7 @@ maven way
 	<dependency>
 	    <groupId>com.github.paipaipaipai</groupId>
 	    <artifactId>tokencore</artifactId>
-	    <version>1.1.0</version>
+	    <version>1.1.1</version>
 	</dependency>
 ```
 #### Initialize identity

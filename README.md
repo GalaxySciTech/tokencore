@@ -44,7 +44,7 @@ gradle方式 在你的build.gradle里面
     }
     
     dependencies {
-        compile 'com.github.paipaipaipai:tokencore:1.1.0'
+        compile 'com.github.paipaipaipai:tokencore:1.1.1'
     }
 ```
 
@@ -61,7 +61,7 @@ maven方式
 	<dependency>
 	    <groupId>com.github.paipaipaipai</groupId>
 	    <artifactId>tokencore</artifactId>
-	    <version>1.1.0</version>
+	    <version>1.1.1</version>
 	</dependency>
 ```
 
