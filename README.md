@@ -26,8 +26,10 @@
 </p>
 
 # 联系方式
-- [Telegram Group](https://t.me/joinchat/86DsbzWMvoFjMTA9) / @Telegram tokencore讨论群
-- [Telegram](https://t.me/pai_tokencore) / @Telegram 如需要 [java-wallet](https://github.com/paipaipaipai/java-wallet) 钱包后台源码或者搭建，可以直接加我私聊
+- [Tokencore讨论群](https://t.me/joinchat/86DsbzWMvoFjMTA9) / @Telegram
+- [我的Telegram](https://t.me/pai_tokencore) / @Telegram 
+
+如需要 [java-wallet](https://github.com/paipaipaipai/java-wallet) 钱包后台源码或者搭建，可以直接加我私聊
 
 # 语言选择
 - en [English](README_en.md)

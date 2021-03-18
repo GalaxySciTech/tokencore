@@ -26,8 +26,10 @@
 </p>
 
 # contact details
-- [Telegram Group](https://t.me/joinchat/86DsbzWMvoFjMTA9) / @Telegram tokencore discussion group
-- [Telegram](https://t.me/pai_tokencore) / @Telegram If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) wallet backend source code or build, you can directly add me to a private chat
+- [Tokencore Discussion Group](https://t.me/joinchat/86DsbzWMvoFjMTA9) / @Telegram
+- [My Telegram](https://t.me/pai_tokencore) / @Telegram
+  
+If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) wallet backend source code or build, you can directly add me to a private chat
 
 # language selection
 
