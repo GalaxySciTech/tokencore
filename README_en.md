@@ -25,8 +25,13 @@
   
 </p>
 
--en [English](README_en.md)
--zh_CN [Simplified Chinese](README.md)
+# contact details
+- [Telegram Group](https://t.me/java-wallet) / @java-wallet discussion group, if you need a wallet background, join the tg private chat group owner
+
+# language selection
+
+- en [English](README_en.md)
+- zh_CN [Simplified Chinese](README.md)
 
 # tokencore introduction
 

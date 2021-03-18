@@ -25,6 +25,10 @@
 
 </p>
 
+# 联系方式
+- [Telegram Group](https://t.me/java-wallet) / @java-wallet 讨论群，如需要钱包后台，加入tg私聊群主
+
+# 语言选择
 - en [English](README_en.md)
 - zh_CN [简体中文](README.md)
 
@@ -156,6 +160,3 @@ maven方式
 
 #### 注意：这只是一个数字货币的功能组件！！！只供学习使用，不提供完整的区块链业务功能
 
-本人不提供联系方式，有问题提交issue
-
-注:我有意向开tg群，讨论有想法的可以加入了解
