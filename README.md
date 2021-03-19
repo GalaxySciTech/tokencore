@@ -47,6 +47,7 @@ gradle方式 在你的build.gradle里面
 
 ```
     repositories {
+        maven { url "https://dl.bintray.com/tronj/tronj" }
         maven { url 'https://jitpack.io' }
     }
     
@@ -59,6 +60,10 @@ maven方式
 
 ```
 	<repositories>
+		<repository>
+		    <id>bintray</id>
+		    <url>https://dl.bintray.com/tronj/tronj</url>
+		</repository>
 		<repository>
 		    <id>jitpack.io</id>
 		    <url>https://jitpack.io</url>

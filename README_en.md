@@ -48,6 +48,7 @@ gradle way
 In your build.gradle
 ```
     repositories {
+        maven { url "https://dl.bintray.com/tronj/tronj" }
         maven { url 'https://jitpack.io' }
     }
     dependencies {
@@ -58,6 +59,10 @@ In your build.gradle
 maven way
 ```
 	<repositories>
+		<repository>
+		    <id>tronj</id>
+		    <url>https://dl.bintray.com/tronj/tronj</url>
+		</repository>
 		<repository>
 		    <id>jitpack.io</id>
 		    <url>https://jitpack.io</url>
