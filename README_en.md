@@ -51,7 +51,7 @@ In your build.gradle
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        compile 'com.github.paipaipaipai:tokencore:1.2.0'
+        compile 'com.github.paipaipaipai:tokencore:1.2.1'
     }
 ```
 

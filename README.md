@@ -51,7 +51,7 @@ gradle方式 在你的build.gradle里面
     }
     
     dependencies {
-        compile 'com.github.paipaipaipai:tokencore:1.2.0'
+        compile 'com.github.paipaipaipai:tokencore:1.2.1'
     }
 ```
 
