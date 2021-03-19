@@ -20,6 +20,9 @@ allprojects {
 
 
 buildscript {
+    repositories {
+        jcenter()
+    }
     dependencies {
         //添加jitpack依赖
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
