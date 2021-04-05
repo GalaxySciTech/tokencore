@@ -43,7 +43,7 @@
 
 #### 引入本库
 
-gradle方式 在你的build.gradle里面
+- gradle方式 在你的build.gradle里面
 
 ```
     repositories {
@@ -56,7 +56,7 @@ gradle方式 在你的build.gradle里面
     }
 ```
 
-maven方式
+- maven方式
 
 ```
 	<repositories>
@@ -76,7 +76,8 @@ maven方式
 	    <version>1.1.1</version>
 	</dependency>
 ```
-
+#### 测试样例
+[https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
 #### 初始化身份
 
 ```java
@@ -116,7 +117,7 @@ maven方式
 
 #### 离线签名
 
-比特币
+- 比特币
 
 ```java
         String password = "123456";
@@ -142,7 +143,7 @@ maven方式
         System.out.println(txSignResult);
 ```
 
-波场
+- 波场
 
 ```java
         String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";

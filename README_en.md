@@ -44,7 +44,7 @@ If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) walle
 
 
 #### Introducing this library
-gradle way
+- gradle way
 In your build.gradle
 ```
     repositories {
@@ -56,7 +56,7 @@ In your build.gradle
     }
 ```
 
-maven way
+- maven way
 ```
 	<repositories>
 		<repository>
@@ -75,95 +75,86 @@ maven way
 	    <version>1.1.1</version>
 	</dependency>
 ```
+#### Test sample
+[https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/ src/test/java/org/consenlabs/tokencore/Test.java)
 #### Initialize identity
+
 ```java
-    try {
+    try{
         Files.createDirectories(Paths.get("${keyStoreProperties.dir}/wallets"))
-    } catch (Throwable ignored) {
-    }
-//KeystoreStorage is an interface that implements its getdir method
-    WalletManager.storage = KeystoreStorage();
-    WalletManager.scanWallets();
-    String password = "123456";
-    Identity identity = Identity.GetCurrentIdentity ();
-    if (identity == null) {
+        }catch(Throwable ignored){
+        }
+        //KeystoreStorage is an interface that implements its getdir method
+        WalletManager.storage=KeystoreStorage();
+        WalletManager.scanWallets();
+        String password="123456";
+        Identity identity=Identity.getCurrentIdentity();
+        if(identity==null){
         Identity.createIdentity(
-            "token",
-            password,
-            "",
-            Network.MAINNET,
-            Metadata.P2WPKH
+        "token",
+        password,
+        "",
+        Network.MAINNET,
+        Metadata.P2WPKH
         );
-    }
+        }
 ```
 
 #### Generate wallet
 
 ```java
-    Identity identity = Identity.GetCurrentIdentity ()
-    String password ="123456";
-    List<String> chainTypes = new ArrayList();
-    chainTypes.add(ChainType.BITCOIN);
-
-    List<Wallet> wallets = identity.DeriveWalletsByMnemonics (
-            chainTypes,
-    password,
-    MnemonicUtil.randomMnemonicCodes()
-    );
+        Identity identity = Identity.getCurrentIdentity();
+        String password = "123456";
+        Wallet wallet = identity.deriveWalletByMnemonics(
+        ChainType.BITCOIN,
+        password,
+        MnemonicUtil.randomMnemonicCodes()
+        );
+        System.out.println(wallet.getAddress());
 
 ```
 
 #### Offline signature
 
-btc
+- Bitcoin
 
 ```java
-        String password="123456";
-        String toAddress="33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
-        int changeIdx=0;
-        long amount=1000L;
-        long fee=555L;
+        String password = "123456";
+        String toAddress = "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
+        int changeIdx = 0;
+        long amount = 1000L;
+        long fee = 555L;
         //utxos needs to go to the node or external api to get
-        ArrayList<UTXO> utxos=new ArrayList();
-        BitcoinTransaction bitcoinTransaction=BitcoinTransaction(
+        ArrayList<BitcoinTransaction.UTXO> utxos = new ArrayList();
+        BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(
         toAddress,
         changeIdx,
         amount,
         fee,
         utxos
         );
-        TxSignResult txSignResult=bitcoinTransaction.signTransaction(
-        ChainId.BITCOIN_MAINNET.toString(),
+        Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9");
+        TxSignResult txSignResult = bitcoinTransaction.signTransaction(
+        String.valueOf(ChainId.BITCOIN_MAINNET),
         password,
         wallet
         );
-
-
-        //Online broadcast
-        rpc.sendRawTransaction(txSignResult.getSignedTx());
+        System.out.println(txSignResult);
 ```
 
-tron
+- TRON
 
 ```java
-        String from="TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
-        String to="TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
-        long amount=1;
-        String password="123456";
-
-        TronTransaction transaction=new TronTransaction(from,to,amount);
+        String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
+        String to = "TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
+        long amount = 1;
+        String password = "123456";
+        Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8");
+        TronTransaction transaction = new TronTransaction(from, to, amount);
         //Offline signature, it is not recommended to sign and broadcast together
-        TxSignResult txSignResult=transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET),password,wallet);
+        TxSignResult txSignResult = transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
 
-
-
-        //Online broadcast
-        ObjectMapper obj=new ObjectMapper();
-
-        TronClient client=TronClient.ofMainnet("3333333333333333333333333333333333333333333333333333333333333333");
-
-        client.blockingStub.broadcastTransaction(obj.readValue(txSignResult.getSignedTx(),Transaction.class));  
+        System.out.println(txSignResult);
 ```
 
-#### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions.
-
+#### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions
