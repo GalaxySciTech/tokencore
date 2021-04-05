@@ -40,6 +40,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     compileOnly 'org.projectlombok:lombok:1.18.2'
 
+    compile 'com.github.paipaipaipai:FilecoinJ:0.0.1'
     compile 'com.google.protobuf:protobuf-java:3.11.0'
     compile 'org.tron.tronj:abi:0.1.2'
     compile 'org.tron.tronj:client:0.1.2'

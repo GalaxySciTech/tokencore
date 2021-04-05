@@ -14,6 +14,8 @@ public class AddressCreatorManager {
     public static AddressCreator getInstance(String type, boolean isMainnet, String segWit) {
         if (ChainType.ETHEREUM.equals(type)) {
             return new EthereumAddressCreator();
+        }else if (ChainType.FILECOIN.equals(type)) {
+            return new FilecoinAddressCreator();
         } else if (ChainType.TRON.equals(type)) {
             return new TronAddressCreator();
         } else if (ChainType.LITECOIN.equals(type)) {
@@ -32,7 +34,6 @@ public class AddressCreatorManager {
             NetworkParameters network = BitcoinCashMainNetParams.get();
             return new BitcoinAddressCreator(network);
         } else if (ChainType.BITCOIN.equals(type)) {
-
             NetworkParameters network = isMainnet ? MainNetParams.get() : TestNet3Params.get();
             if (Metadata.P2WPKH.equals(segWit)) {
                 return new SegWitBitcoinAddressCreator(network);

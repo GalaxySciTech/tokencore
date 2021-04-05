@@ -194,6 +194,9 @@ public class Identity {
                 case ChainType.TRON:
                     wallet = deriveTronWallet(mnemonics, password);
                     break;
+                case ChainType.FILECOIN:
+                    wallet = deriveTronWallet(mnemonics, password);
+                    break;
                 default:
                     throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
             }
@@ -330,6 +333,16 @@ public class Identity {
         walletMetadata.setSource(this.getMetadata().getSource());
         walletMetadata.setName("TRX");
         IMTKeystore keystore = V3MnemonicKeystore.create(walletMetadata, password, mnemonics, BIP44Util.TRON_PATH);
+        return WalletManager.createWallet(keystore);
+    }
+
+    private Wallet deriveFilecoinWallet(List<String> mnemonics, String password) {
+        Metadata walletMetadata = new Metadata();
+        walletMetadata.setChainType(ChainType.FILECOIN);
+        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
+        walletMetadata.setSource(this.getMetadata().getSource());
+        walletMetadata.setName("Filecoin");
+        IMTKeystore keystore = V3MnemonicKeystore.create(walletMetadata, password, mnemonics, BIP44Util.FILECOIN_PATH);
         return WalletManager.createWallet(keystore);
     }
 
