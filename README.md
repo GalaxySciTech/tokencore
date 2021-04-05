@@ -103,16 +103,14 @@ maven方式
 #### 生成钱包
 
 ```java
-        Identity identity=Identity.getCurrentIdentity()
-        String password="123456";
-        List<String> chainTypes=new ArrayList();
-        chainTypes.add(ChainType.BITCOIN);
-
-        List<Wallet> wallets=identity.deriveWalletsByMnemonics(
-        chainTypes,
+        Identity identity = Identity.getCurrentIdentity();
+        String password = "123456";
+        Wallet wallet = identity.deriveWalletByMnemonics(
+        ChainType.BITCOIN,
         password,
         MnemonicUtil.randomMnemonicCodes()
         );
+        System.out.println(wallet.getAddress());
 
 ```
 
@@ -121,49 +119,42 @@ maven方式
 比特币
 
 ```java
-        String password="123456";
-        String toAddress="33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
-        int changeIdx=0;
-        long amount=1000L;
-        long fee=555L;
+        String password = "123456";
+        String toAddress = "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
+        int changeIdx = 0;
+        long amount = 1000L;
+        long fee = 555L;
         //utxos需要去节点或者外部api获取
-        ArrayList<UTXO> utxos=new ArrayList();
-        BitcoinTransaction bitcoinTransaction=BitcoinTransaction(
+        ArrayList<BitcoinTransaction.UTXO> utxos = new ArrayList();
+        BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(
         toAddress,
         changeIdx,
         amount,
         fee,
         utxos
         );
-        TxSignResult txSignResult=bitcoinTransaction.signTransaction(
-        ChainId.BITCOIN_MAINNET.toString(),
+        Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9");
+        TxSignResult txSignResult = bitcoinTransaction.signTransaction(
+        String.valueOf(ChainId.BITCOIN_MAINNET),
         password,
         wallet
         );
-
-        //在线广播
-        rpc.sendRawTransaction(txSignResult.getSignedTx());
+        System.out.println(txSignResult);
 ```
 
 波场
 
 ```java
-        String from="TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
-        String to="TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
-        long amount=1;
-        String password="123456";
-
-        TronTransaction transaction=new TronTransaction(from,to,amount);
+        String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
+        String to = "TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
+        long amount = 1;
+        String password = "123456";
+        Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8");
+        TronTransaction transaction = new TronTransaction(from, to, amount);
         //离线签名，不建议签名和广播放一块
-        TxSignResult txSignResult=transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET),password,wallet);
+        TxSignResult txSignResult = transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
 
-
-        //在线广播
-        ObjectMapper obj=new ObjectMapper();
-
-        TronClient client=TronClient.ofMainnet("3333333333333333333333333333333333333333333333333333333333333333");
-
-        client.blockingStub.broadcastTransaction(obj.readValue(txSignResult.getSignedTx(),Transaction.class));  
+        System.out.println(txSignResult);
 ```
 
 #### 注意：这只是一个数字货币的功能组件！！！只供学习使用，不提供完整的区块链业务功能
