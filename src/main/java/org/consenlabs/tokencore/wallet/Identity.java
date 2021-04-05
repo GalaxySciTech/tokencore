@@ -144,48 +144,22 @@ public class Identity {
         flush();
     }
 
-    public List<Wallet> deriveWallets(List<String> chainTypes, String password) {
-        List<Wallet> wallets = new ArrayList<>();
+    public Wallet deriveWallet(String chainType, String password) {
         String mnemonic = exportIdentity(password);
         List<String> mnemonics = Arrays.asList(mnemonic.split(" "));
-        for (String chainType : chainTypes) {
-            Wallet wallet;
-            switch (chainType) {
-                case ChainType.BITCOIN:
-                    wallet = deriveBitcoinWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.ETHEREUM:
-                    wallet = deriveEthereumWallet(mnemonics, password);
-                    break;
-                case ChainType.LITECOIN:
-                    wallet = deriveLitecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.DOGECOIN:
-                    wallet = deriveDogecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.DASH:
-                    wallet = deriveDashWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.BITCOINSV:
-                    wallet = deriveBitcoinSVWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.BITCOINCASH:
-                    wallet = deriveBitcoinCASHWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.EOS:
-                    wallet = deriveEOSWallet(mnemonics, password);
-                    break;
-                case ChainType.TRON:
-                    wallet = deriveTronWallet(mnemonics, password);
-                    break;
-                default:
-                    throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
-            }
-            addWallet(wallet);
-            wallets.add(wallet);
-        }
+        return deriveWalletByMnemonics(chainType,password,mnemonics);
+    }
 
-        return wallets;
+    public Wallet deriveWalletByMnemonics(String chainType, String password, List<String> mnemonics) {
+        List<String> chainTypes = new ArrayList<>();
+        chainTypes.add(chainType);
+        return deriveWalletsByMnemonics(chainTypes, password, mnemonics).get(0);
+    }
+
+    public List<Wallet> deriveWallets(List<String> chainTypes, String password) {
+        String mnemonic = exportIdentity(password);
+        List<String> mnemonics = Arrays.asList(mnemonic.split(" "));
+        return deriveWalletsByMnemonics(chainTypes, password, mnemonics);
     }
 
     public List<Wallet> deriveWalletsByMnemonics(List<String> chainTypes, String password, List<String> mnemonics) {
