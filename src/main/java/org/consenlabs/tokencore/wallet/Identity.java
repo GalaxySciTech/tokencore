@@ -195,7 +195,7 @@ public class Identity {
                     wallet = deriveTronWallet(mnemonics, password);
                     break;
                 case ChainType.FILECOIN:
-                    wallet = deriveTronWallet(mnemonics, password);
+                    wallet = deriveFilecoinWallet(mnemonics, password);
                     break;
                 default:
                     throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));

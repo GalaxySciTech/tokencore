@@ -38,7 +38,7 @@ If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) walle
 
 # tokencore introduction
 
-##### The core components of the blockchain wallet backend, support BTC, OMNI, ETH, ERC20, TRX, TRC20, BCH, BSV, DOGE, DASH, LTC
+##### The core components of the blockchain wallet backend, support BTC, OMNI, ETH, ERC20, TRX, TRC20, BCH, BSV, DOGE, DASH, LTC,FILECOIN
 
 # tokencore usage
 

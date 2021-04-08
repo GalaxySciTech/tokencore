@@ -21,14 +21,14 @@ import java.util.ArrayList;
 
 public class Test implements KeystoreStorage {
 
-    static String path = "/temp";
+    static String path = "/tmp";
 
     @Override
     public File getKeystoreDir() {
         return new File(path);
     }
 
-    static {
+    static public void init() {
         try {
             Files.createDirectories(Paths.get(path + "/wallets"));
         } catch (Throwable ignored) {
@@ -50,7 +50,8 @@ public class Test implements KeystoreStorage {
     }
 
 
-    static public void genWallet() {
+    static public void genBitcoinWallet() {
+        init();
         Identity identity = Identity.getCurrentIdentity();
         String password = "123456";
         Wallet wallet = identity.deriveWalletByMnemonics(
@@ -61,7 +62,22 @@ public class Test implements KeystoreStorage {
         System.out.println(wallet.getAddress());
     }
 
+    static public void genFilecoinWallet() {
+        init();
+        Identity identity = Identity.getCurrentIdentity();
+        String password = "123456";
+        Wallet wallet = identity.deriveWalletByMnemonics(
+                ChainType.FILECOIN,
+                password,
+                MnemonicUtil.randomMnemonicCodes()
+        );
+        System.out.println(wallet.getAddress());
+        String privateKey=wallet.exportPrivateKey("123456");
+        System.out.println(privateKey);
+    }
+
     static public void signBitcoinTx() {
+        init();
         String password = "123456";
         String toAddress = "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
         int changeIdx = 0;
@@ -86,6 +102,7 @@ public class Test implements KeystoreStorage {
     }
 
     static public void signTrxTx() {
+        init();
         String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
         String to = "TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
         long amount = 1;
@@ -97,6 +114,13 @@ public class Test implements KeystoreStorage {
 
         System.out.println(txSignResult);
     }
+
+
+
+    public static void main(String[] args) {
+        genFilecoinWallet();
+    }
+
 
 
 }

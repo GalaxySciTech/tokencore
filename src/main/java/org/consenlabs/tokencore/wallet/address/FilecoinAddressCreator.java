@@ -2,7 +2,7 @@ package org.consenlabs.tokencore.wallet.address;
 
 import cn.hutool.core.codec.Base32;
 import cn.hutool.core.util.HexUtil;
-import org.bitcoinj.core.ECKey;
+import com.filecoinj.crypto.ECKey;
 import org.consenlabs.tokencore.foundation.utils.NumericUtil;
 import ove.crypto.digest.Blake2b;
 
@@ -29,13 +29,13 @@ public class FilecoinAddressCreator  implements AddressCreator{
 
     @Override
     public String fromPrivateKey(String prvKeyHex) {
-        ECKey key = ECKey.fromPrivate(NumericUtil.hexToBytes(prvKeyHex), false);
+        ECKey key = ECKey.fromPrivate(NumericUtil.hexToBytes(prvKeyHex));
         return fromECKey(key);
     }
 
     @Override
     public String fromPrivateKey(byte[] prvKeyBytes) {
-        ECKey key = ECKey.fromPrivate(prvKeyBytes, false);
+        ECKey key = ECKey.fromPrivate(prvKeyBytes);
         return fromECKey(key);
     }
 }
