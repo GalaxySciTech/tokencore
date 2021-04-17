@@ -68,7 +68,7 @@ public class TronTransaction implements TransactionSigner {
 
     private String contractAddress;
 
-    TronClient client = TronClient.ofMainnet("3333333333333333333333333333333333333333333333333333333333333333");
+    TronClient client = TronClient.ofMainnet("");
 
     @Override
     public TxSignResult signTransaction(String chainId, String password, Wallet wallet) {
