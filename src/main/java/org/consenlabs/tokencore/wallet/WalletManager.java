@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.io.CharSource;
 import com.google.common.io.Files;
-import lombok.extern.slf4j.Slf4j;
 import org.bitcoinj.crypto.DeterministicKey;
 import org.bitcoinj.wallet.DeterministicKeyChain;
 import org.bitcoinj.wallet.DeterministicSeed;
@@ -28,7 +27,6 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
-@Slf4j
 public class WalletManager {
     private static Hashtable<String, IMTKeystore> keystoreMap = new Hashtable<>();
     private static final String LOG_TAG = WalletManager.class.getSimpleName();
