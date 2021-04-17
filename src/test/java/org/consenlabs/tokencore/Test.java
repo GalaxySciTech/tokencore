@@ -118,16 +118,4 @@ public class Test implements KeystoreStorage {
         System.out.println(txSignResult);
     }
 
-
-
-    public static void main(String[] args) throws Exception {
-        TronClient client = TronClient.ofMainnet("");
-        Response.TransactionInfo info=client.getTransactionInfoById("85a0cef2a03ba5f8119c36f10c19aed08a7c93c294187aa20a54a531f3267a25");
-        Chain.Transaction tx=client.getTransactionById("85a0cef2a03ba5f8119c36f10c19aed08a7c93c294187aa20a54a531f3267a25");
-        System.out.println(info);
-        System.out.println(tx);
-    }
-
-
-
 }
