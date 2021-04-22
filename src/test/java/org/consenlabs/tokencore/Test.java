@@ -1,5 +1,6 @@
 package org.consenlabs.tokencore;
 
+import cn.hutool.core.codec.Base64;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.consenlabs.tokencore.foundation.utils.MnemonicUtil;
 import org.consenlabs.tokencore.wallet.Identity;
@@ -116,6 +117,11 @@ public class Test implements KeystoreStorage {
         TxSignResult txSignResult = transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
 
         System.out.println(txSignResult);
+    }
+
+    public static void main(String[] args) {
+
+        genFilecoinWallet();
     }
 
 }

@@ -24,7 +24,7 @@ public class FilecoinAddressCreator  implements AddressCreator{
 
     private String fromECKey(ECKey key) {
         byte[] pubKeyBytes = key.getPubKey();
-        return publicKeyToAddress(Arrays.copyOfRange(pubKeyBytes, 1, pubKeyBytes.length));
+        return publicKeyToAddress(pubKeyBytes);
     }
 
     @Override
