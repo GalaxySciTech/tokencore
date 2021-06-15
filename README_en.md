@@ -27,7 +27,7 @@
 
 # contact details
 
-- [My Telegram](https://t.me/pai_tokencore) / @Telegram
+- [My Telegram](https://t.me/lailaibtc) / @Telegram
   
 If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) wallet backend source code or build, you can directly add me to a private chat
 
