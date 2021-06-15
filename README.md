@@ -27,7 +27,7 @@
 
 # 联系方式
 
-- [我的Telegram](https://t.me/pai_tokencore) / @Telegram 
+- [我的Telegram](https://t.me/lailaibtc) / @Telegram 
 
 如需要 [java-wallet](https://github.com/paipaipaipai/java-wallet) 钱包后台源码或者搭建，可以直接加我私聊
 
