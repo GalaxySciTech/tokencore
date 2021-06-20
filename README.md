@@ -22,46 +22,44 @@
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/paipaipaipai/tokencore.svg">
   </a>
-
+  
 </p>
 
-# 联系方式
+# contact details
 
-- [我的Telegram](https://t.me/lailaibtc) / @Telegram 
+- [My Telegram](https://t.me/lailaibtc) / @Telegram
+  
+If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) wallet backend source code or build, you can directly add me to a private chat
 
-如需要 [java-wallet](https://github.com/paipaipaipai/java-wallet) 钱包后台源码或者搭建，可以直接加我私聊
+# language selection
 
-# 语言选择
 - en [English](README_en.md)
-- zh_CN [简体中文](README.md)
+- zh_CN [Simplified Chinese](README.md)
 
-# tokencore介绍
+# tokencore introduction
 
-##### 区块链钱包后台核心组件，支持BTC,OMNI,ETH,ERC20,TRX,TRC20,BCH,BSV,DOGE,DASH,LTC,FILECOIN
+##### The core components of the blockchain wallet backend, support BTC, OMNI, ETH, ERC20, TRX, TRC20, BCH, BSV, DOGE, DASH, LTC,FILECOIN
 
-# tokencore使用方式
+# tokencore usage
 
-#### 引入本库
 
-- gradle方式 在你的build.gradle里面
-
+#### Introducing this library
+- gradle way
+In your build.gradle
 ```
     repositories {
-        maven { url "https://dl.bintray.com/tronj/tronj" }
         maven { url 'https://jitpack.io' }
     }
-    
     dependencies {
         compile 'com.github.lailaibtc:tokencore:1.2.1'
     }
 ```
 
-- maven方式
-
+- maven way
 ```
 	<repositories>
 		<repository>
-		    <id>bintray</id>
+		    <id>tronj</id>
 		    <url>https://dl.bintray.com/tronj/tronj</url>
 		</repository>
 		<repository>
@@ -76,16 +74,16 @@
 	    <version>1.1.1</version>
 	</dependency>
 ```
-#### 测试样例
-[https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
-#### 初始化身份
+#### Test sample
+[https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/ src/test/java/org/consenlabs/tokencore/Test.java)
+#### Initialize identity
 
 ```java
     try{
         Files.createDirectories(Paths.get("${keyStoreProperties.dir}/wallets"))
         }catch(Throwable ignored){
         }
-        //KeystoreStorage是接口，实现它的getdir方法
+        //KeystoreStorage is an interface that implements its getdir method
         WalletManager.storage=KeystoreStorage();
         WalletManager.scanWallets();
         String password="123456";
@@ -101,7 +99,7 @@
         }
 ```
 
-#### 生成钱包
+#### Generate wallet
 
 ```java
         Identity identity = Identity.getCurrentIdentity();
@@ -115,9 +113,9 @@
 
 ```
 
-#### 离线签名
+#### Offline signature
 
-- 比特币
+- Bitcoin
 
 ```java
         String password = "123456";
@@ -125,7 +123,7 @@
         int changeIdx = 0;
         long amount = 1000L;
         long fee = 555L;
-        //utxos需要去节点或者外部api获取
+        //utxos needs to go to the node or external api to get
         ArrayList<BitcoinTransaction.UTXO> utxos = new ArrayList();
         BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(
         toAddress,
@@ -143,7 +141,7 @@
         System.out.println(txSignResult);
 ```
 
-- 波场
+- TRON
 
 ```java
         String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
@@ -152,11 +150,10 @@
         String password = "123456";
         Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8");
         TronTransaction transaction = new TronTransaction(from, to, amount);
-        //离线签名，不建议签名和广播放一块
+        //Offline signature, it is not recommended to sign and broadcast together
         TxSignResult txSignResult = transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
 
         System.out.println(txSignResult);
 ```
 
-#### 注意：这只是一个数字货币的功能组件！！！只供学习使用，不提供完整的区块链业务功能
-
+#### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions

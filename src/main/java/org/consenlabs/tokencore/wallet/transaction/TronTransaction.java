@@ -5,21 +5,20 @@ import org.consenlabs.tokencore.wallet.Wallet;
 import org.consenlabs.tokencore.wallet.model.Messages;
 import org.consenlabs.tokencore.wallet.model.TokenException;
 import org.spongycastle.util.encoders.Hex;
-import org.tron.tronj.client.TronClient;
-import org.tron.tronj.client.exceptions.IllegalException;
-import org.tron.tronj.crypto.SECP256K1;
-import org.tron.tronj.crypto.tuweniTypes.Bytes32;
-import org.tron.tronj.proto.Chain;
-import org.tron.tronj.proto.Response;
-import org.tron.tronj.abi.FunctionEncoder;
-import org.tron.tronj.abi.TypeReference;
-import org.tron.tronj.abi.datatypes.Address;
-import org.tron.tronj.abi.datatypes.Bool;
-import org.tron.tronj.abi.datatypes.Function;
-import org.tron.tronj.abi.datatypes.generated.Uint256;
-import org.tron.tronj.proto.Chain.Transaction;
-import org.tron.tronj.proto.Contract.TriggerSmartContract;
-import org.tron.tronj.proto.Response.TransactionExtention;
+import org.tron.trident.abi.FunctionEncoder;
+import org.tron.trident.abi.TypeReference;
+import org.tron.trident.abi.datatypes.Address;
+import org.tron.trident.abi.datatypes.Bool;
+import org.tron.trident.abi.datatypes.Function;
+import org.tron.trident.abi.datatypes.generated.Uint256;
+import org.tron.trident.core.ApiWrapper;
+import org.tron.trident.core.exceptions.IllegalException;
+import org.tron.trident.crypto.SECP256K1;
+import org.tron.trident.crypto.tuwenitypes.Bytes32;
+import org.tron.trident.proto.Chain;
+import org.tron.trident.proto.Contract;
+import org.tron.trident.proto.Response;
+
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,7 +67,7 @@ public class TronTransaction implements TransactionSigner {
 
     private String contractAddress;
 
-    TronClient client = TronClient.ofMainnet("");
+    ApiWrapper client = ApiWrapper.ofMainnet("");
 
     @Override
     public TxSignResult signTransaction(String chainId, String password, Wallet wallet) {
@@ -114,17 +113,17 @@ public class TronTransaction implements TransactionSigner {
 
         String encodedHex = FunctionEncoder.encode(trc20Transfer);
 
-        TriggerSmartContract trigger =
-                TriggerSmartContract.newBuilder()
-                        .setOwnerAddress(TronClient.parseAddress(from))
-                        .setContractAddress(TronClient.parseAddress(contractAddress))
-                        .setData(TronClient.parseHex(encodedHex))
+        Contract.TriggerSmartContract trigger =
+                Contract.TriggerSmartContract.newBuilder()
+                        .setOwnerAddress(ApiWrapper.parseAddress(from))
+                        .setContractAddress(ApiWrapper.parseAddress(contractAddress))
+                        .setData(ApiWrapper.parseHex(encodedHex))
                         .build();
 
-        TransactionExtention txnExt = client.blockingStub.triggerContract(trigger);
+        Response.TransactionExtention txnExt = client.blockingStub.triggerContract(trigger);
         String txid = Hex.toHexString(txnExt.getTxid().toByteArray());
 
-        Transaction signedTxn = client.signTransaction(txnExt, keyPair);
+        Chain.Transaction signedTxn = client.signTransaction(txnExt, keyPair);
 
         return new TxSignResult(signedTxn.toString(), txid);
     }
