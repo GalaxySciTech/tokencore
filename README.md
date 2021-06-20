@@ -3,24 +3,24 @@
 </h1>
 <p align="center">
 
-  <a href="https://travis-ci.org/paipaipaipai/tokencore">
-    <img src="https://travis-ci.org/paipaipaipai/tokencore.svg?branch=master">
+  <a href="https://travis-ci.org/lailaibtc/tokencore">
+    <img src="https://travis-ci.org/lailaibtc/tokencore.svg?branch=master">
   </a>
 
-  <a href="https://github.com/paipaipaipai/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/paipaipaipai/tokencore.svg">
+  <a href="https://github.com/lailaibtc/tokencore/issues">
+    <img src="https://img.shields.io/github/issues/lailaibtc/tokencore.svg">
   </a>
 
-  <a href="https://github.com/paipaipaipai/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/paipaipaipai/tokencore.svg">
+  <a href="https://github.com/lailaibtc/tokencore/pulls">
+    <img src="https://img.shields.io/github/issues-pr/lailaibtc/tokencore.svg">
   </a>
 
-  <a href="https://github.com/paipaipaipai/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/paipaipaipai/tokencore.svg">
+  <a href="https://github.com/lailaibtc/tokencore/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/lailaibtc/tokencore.svg">
   </a>
 
   <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/paipaipaipai/tokencore.svg">
+    <img src="https://img.shields.io/github/license/lailaibtc/tokencore.svg">
   </a>
   
 </p>
