@@ -123,6 +123,7 @@ public class Test implements KeystoreStorage {
 
         ApiWrapper tronClient= ApiWrapper.ofMainnet("");
         Response.TransactionInfo tx=tronClient.getTransactionInfoById("f3a54e8418edb5a91772e3fe6768a7a4e55fc6c33f212641c239589d8a453a58");
+        System.out.println(tx);
     }
 
 }

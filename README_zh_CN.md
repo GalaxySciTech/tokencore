@@ -51,7 +51,7 @@
     }
     
     dependencies {
-        compile 'com.github.lailaibtc:tokencore:1.2.1'
+        compile 'com.github.lailaibtc:tokencore:1.2.7'
     }
 ```
 
@@ -72,7 +72,7 @@
 	<dependency>
 	    <groupId>com.github.lailaibtc</groupId>
 	    <artifactId>tokencore</artifactId>
-	    <version>1.1.1</version>
+	    <version>1.2.7</version>
 	</dependency>
 ```
 #### 测试样例

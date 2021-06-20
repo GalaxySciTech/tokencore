@@ -33,8 +33,8 @@ If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) walle
 
 # language selection
 
-- en [English](README_en.md)
-- zh_CN [Simplified Chinese](README.md)
+- en [English](README.md)
+- zh_CN [简体中文](README_zh_CN.md)
 
 # tokencore introduction
 
@@ -51,7 +51,7 @@ In your build.gradle
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        compile 'com.github.lailaibtc:tokencore:1.2.1'
+        compile 'com.github.lailaibtc:tokencore:1.2.7'
     }
 ```
 
@@ -71,7 +71,7 @@ In your build.gradle
 	<dependency>
 	    <groupId>com.github.lailaibtc</groupId>
 	    <artifactId>tokencore</artifactId>
-	    <version>1.1.1</version>
+	    <version>1.2.7</version>
 	</dependency>
 ```
 #### Test sample
