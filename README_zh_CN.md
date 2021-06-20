@@ -3,8 +3,8 @@
 </h1>
 <p align="center">
 
-  <a href="https://travis-ci.org/lailaibtc/tokencore">
-    <img src="https://travis-ci.org/lailaibtc/tokencore.svg?branch=master">
+  <a href="https://travis-ci.com/lailaibtc/tokencore">
+    <img src="https://travis-ci.com/lailaibtc/tokencore.svg?branch=master">
   </a>
 
   <a href="https://github.com/lailaibtc/tokencore/issues">
