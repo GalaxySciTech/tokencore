@@ -75,7 +75,7 @@ In your build.gradle
 	</dependency>
 ```
 #### Test sample
-[https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/ src/test/java/org/consenlabs/tokencore/Test.java)
+[https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
 #### Initialize identity
 
 ```java
