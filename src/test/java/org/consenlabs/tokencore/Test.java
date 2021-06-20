@@ -15,6 +15,7 @@ import org.consenlabs.tokencore.wallet.transaction.BitcoinTransaction;
 import org.consenlabs.tokencore.wallet.transaction.TronTransaction;
 import org.consenlabs.tokencore.wallet.transaction.TxSignResult;
 import org.tron.tronj.client.TronClient;
+import org.tron.tronj.client.exceptions.IllegalException;
 import org.tron.tronj.proto.Chain;
 import org.tron.tronj.proto.Response;
 
@@ -119,9 +120,10 @@ public class Test implements KeystoreStorage {
         System.out.println(txSignResult);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalException {
 
-        genFilecoinWallet();
+        TronClient tronClient=TronClient.ofMainnet("");
+        Response.TransactionInfo tx=tronClient.getTransactionInfoById("f3a54e8418edb5a91772e3fe6768a7a4e55fc6c33f212641c239589d8a453a58");
     }
 
 }

@@ -52,7 +52,7 @@ In your build.gradle
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        compile 'com.github.paipaipaipai:tokencore:1.2.1'
+        compile 'com.github.lailaibtc:tokencore:1.2.1'
     }
 ```
 
@@ -70,7 +70,7 @@ In your build.gradle
 	</repositories>
 	
 	<dependency>
-	    <groupId>com.github.paipaipaipai</groupId>
+	    <groupId>com.github.lailaibtc</groupId>
 	    <artifactId>tokencore</artifactId>
 	    <version>1.1.1</version>
 	</dependency>
