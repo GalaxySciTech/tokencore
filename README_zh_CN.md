@@ -3,20 +3,20 @@
 </h1>
 <p align="center">
 
-  <a href="https://travis-ci.com/lailaibtc/tokencore">
-    <img src="https://travis-ci.com/lailaibtc/tokencore.svg?branch=master">
+  <a href="https://travis-ci.com/galaxyzxcv/tokencore">
+    <img src="https://travis-ci.com/galaxyzxcv/tokencore.svg?branch=master">
   </a>
 
-  <a href="https://github.com/lailaibtc/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/lailaibtc/tokencore.svg">
+  <a href="https://github.com/galaxyzxcv/tokencore/issues">
+    <img src="https://img.shields.io/github/issues/galaxyzxcv/tokencore.svg">
   </a>
 
-  <a href="https://github.com/lailaibtc/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/lailaibtc/tokencore.svg">
+  <a href="https://github.com/galaxyzxcv/tokencore/pulls">
+    <img src="https://img.shields.io/github/issues-pr/galaxyzxcv/tokencore.svg">
   </a>
 
-  <a href="https://github.com/lailaibtc/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/lailaibtc/tokencore.svg">
+  <a href="https://github.com/galaxyzxcv/tokencore/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/galaxyzxcv/tokencore.svg">
   </a>
 
   <a href="LICENSE">
@@ -27,13 +27,15 @@
 
 # 联系方式
 
-- [我的Telegram](https://t.me/lailaibtc) / @Telegram 
-
-如需要 [java-wallet](https://github.com/paipaipaipai/java-wallet) 钱包后台源码或者搭建，可以直接加我私聊
+- [我的Telegram](https://t.me/xzadcx) / @Telegram
 
 # 语言选择
 - en [English](README_en.md)
 - zh_CN [简体中文](README.md)
+
+# 使用案例
+
+交易所钱包后台 https://github.com/galaxyzxcv/java-wallet
 
 # tokencore介绍
 
@@ -51,7 +53,7 @@
     }
     
     dependencies {
-        compile 'com.github.lailaibtc:tokencore:1.2.7'
+        compile 'com.github.galaxyzxcv:tokencore:1.2.7'
     }
 ```
 
@@ -70,7 +72,7 @@
 	</repositories>
 	
 	<dependency>
-	    <groupId>com.github.lailaibtc</groupId>
+	    <groupId>com.github.galaxyzxcv</groupId>
 	    <artifactId>tokencore</artifactId>
 	    <version>1.2.7</version>
 	</dependency>
@@ -158,4 +160,8 @@
 ```
 
 #### 注意：这只是一个数字货币的功能组件！！！只供学习使用，不提供完整的区块链业务功能
+
+
+
+
 

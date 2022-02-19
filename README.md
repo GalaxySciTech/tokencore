@@ -3,38 +3,40 @@
 </h1>
 <p align="center">
 
-  <a href="https://travis-ci.com/lailaibtc/tokencore">
-    <img src="https://travis-ci.com/lailaibtc/tokencore.svg?branch=master">
+  <a href="https://travis-ci.com/galaxyzxcv/tokencore">
+    <img src="https://travis-ci.com/galaxyzxcv/tokencore.svg?branch=master">
   </a>
 
-  <a href="https://github.com/lailaibtc/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/lailaibtc/tokencore.svg">
+  <a href="https://github.com/galaxyzxcv/tokencore/issues">
+    <img src="https://img.shields.io/github/issues/galaxyzxcv/tokencore.svg">
   </a>
 
-  <a href="https://github.com/lailaibtc/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/lailaibtc/tokencore.svg">
+  <a href="https://github.com/galaxyzxcv/tokencore/pulls">
+    <img src="https://img.shields.io/github/issues-pr/galaxyzxcv/tokencore.svg">
   </a>
 
-  <a href="https://github.com/lailaibtc/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/lailaibtc/tokencore.svg">
+  <a href="https://github.com/galaxyzxcv/tokencore/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/galaxyzxcv/tokencore.svg">
   </a>
 
   <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/lailaibtc/tokencore.svg">
+    <img src="https://img.shields.io/github/license/galaxyzxcv/tokencore.svg">
   </a>
-  
+
 </p>
 
-# contact details
+# Contact information
 
-- [My Telegram](https://t.me/lailaibtc) / @Telegram
-  
-If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) wallet backend source code or build, you can directly add me to a private chat
+- [My Telegram](https://t.me/xzadcx) / @Telegram
 
-# language selection
+# Language
 
-- en [English](README.md)
-- zh_CN [简体中文](README_zh_CN.md)
+- en [English](README_en.md)
+- zh_CN [Simplified Chinese](README.md)
+
+# Use Cases
+
+Exchange wallet backend https://github.com/galaxyzxcv/java-wallet
 
 # tokencore introduction
 
@@ -42,20 +44,21 @@ If you need the [java-wallet](https://github.com/paipaipaipai/java-wallet) walle
 
 # tokencore usage
 
-
 #### Introducing this library
-- gradle way
-In your build.gradle
+
+- gradle way In your build.gradle
+
 ```
     repositories {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        compile 'com.github.lailaibtc:tokencore:1.2.7'
+        compile 'com.github.galaxyzxcv:tokencore:1.2.7'
     }
 ```
 
 - maven way
+
 ```
 	<repositories>
 		<repository>
@@ -69,13 +72,16 @@ In your build.gradle
 	</repositories>
 	
 	<dependency>
-	    <groupId>com.github.lailaibtc</groupId>
+	    <groupId>com.github.galaxyzxcv</groupId>
 	    <artifactId>tokencore</artifactId>
 	    <version>1.2.7</version>
 	</dependency>
 ```
+
 #### Test sample
+
 [https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
+
 #### Initialize identity
 
 ```java
