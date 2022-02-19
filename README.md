@@ -31,8 +31,8 @@
 
 # Language
 
-- en [English](README_en.md)
-- zh_CN [Simplified Chinese](README.md)
+- en [English](README.md)
+- zh_CN [Simplified Chinese](README_zh_CN.md)
 
 # Use Cases
 
