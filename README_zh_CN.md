@@ -31,8 +31,8 @@
 - [我的Telegram](https://t.me/xzadcx) / @Telegram
 
 # 语言选择
-- en [English](README_en.md)
-- zh_CN [简体中文](README.md)
+- en [English](README.md)
+- zh_CN [简体中文](README_zh_CN.md)
 
 # 使用案例
 
