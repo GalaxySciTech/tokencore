@@ -79,7 +79,7 @@
 	</dependency>
 ```
 #### 测试样例
-[https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
+[https://github.com/tradergalax/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/tradergalax/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
 #### 初始化身份
 
 ```java
