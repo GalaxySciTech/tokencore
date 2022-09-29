@@ -3,31 +3,31 @@
 </h1>
 <p align="center">
 
-  <a href="https://travis-ci.com/galaxyzxcv/tokencore">
-    <img src="https://travis-ci.com/galaxyzxcv/tokencore.svg?branch=master">
+  <a href="https://travis-ci.com/tradergalax/tokencore">
+    <img src="https://travis-ci.com/tradergalax/tokencore.svg?branch=master">
   </a>
 
-  <a href="https://github.com/galaxyzxcv/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/galaxyzxcv/tokencore.svg">
+  <a href="https://github.com/tradergalax/tokencore/issues">
+    <img src="https://img.shields.io/github/issues/tradergalax/tokencore.svg">
   </a>
 
-  <a href="https://github.com/galaxyzxcv/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/galaxyzxcv/tokencore.svg">
+  <a href="https://github.com/tradergalax/tokencore/pulls">
+    <img src="https://img.shields.io/github/issues-pr/tradergalax/tokencore.svg">
   </a>
 
-  <a href="https://github.com/galaxyzxcv/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/galaxyzxcv/tokencore.svg">
+  <a href="https://github.com/tradergalax/tokencore/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/tradergalax/tokencore.svg">
   </a>
 
   <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/galaxyzxcv/tokencore.svg">
+    <img src="https://img.shields.io/github/license/tradergalax/tokencore.svg">
   </a>
 
 </p>
 
 # Contact information
 
-- [My Telegram](https://t.me/xzadcx) / @Telegram
+- [My Website](https://tradergalax.xyz) / @Website
 
 # Language
 
@@ -53,7 +53,7 @@ Exchange wallet backend https://github.com/galaxyzxcv/java-wallet
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        compile 'com.github.galaxyzxcv:tokencore:1.2.7'
+        compile 'com.github.tradergalax:tokencore:1.2.7'
     }
 ```
 
@@ -80,7 +80,7 @@ Exchange wallet backend https://github.com/galaxyzxcv/java-wallet
 
 #### Test sample
 
-[https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/paipaipaipai/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
+[https://github.com/tradergalax/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/tradergalax/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
 
 #### Initialize identity
 
