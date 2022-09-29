@@ -36,7 +36,7 @@
 
 # Use Cases
 
-Exchange wallet backend https://github.com/galaxyzxcv/java-wallet
+Exchange wallet backend https://github.com/tradergalax/java-wallet
 
 # tokencore introduction
 
