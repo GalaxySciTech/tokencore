@@ -35,7 +35,7 @@ dependencies {
     compile 'org.bitcoinj:bitcoinj-core:0.16.2'
 //    compile group: 'com.google.protobuf', name: 'protobuf-lite', version: '3.0.1'
 //    compile 'com.google.protobuf:protobuf-java:3.5.1'
-    compile 'org.json:json:20170516'
+    compile 'org.json:json:20230618'
 
     compile 'com.github.paipaipaipai:FilecoinJ:0.1.1'
     compile 'com.google.protobuf:protobuf-java:3.11.0'
