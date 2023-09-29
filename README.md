@@ -25,7 +25,6 @@
 ## Languages
 
 - English: [README](README.md)
-- Simplified Chinese: [README_zh_CN](README_zh_CN.md)
 
 ## Use Cases
 
