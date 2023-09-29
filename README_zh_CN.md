@@ -3,24 +3,24 @@
 </h1>
 <p align="center">
 
-  <a href="https://travis-ci.com/tradergalax/tokencore">
-    <img src="https://travis-ci.com/tradergalax/tokencore.svg?branch=master">
+  <a href="https://travis-ci.com/galaxyscitech/tokencore">
+    <img src="https://travis-ci.com/galaxyscitech/tokencore.svg?branch=master">
   </a>
 
-  <a href="https://github.com/tradergalax/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/tradergalax/tokencore.svg">
+  <a href="https://github.com/galaxyscitech/tokencore/issues">
+    <img src="https://img.shields.io/github/issues/galaxyscitech/tokencore.svg">
   </a>
 
-  <a href="https://github.com/tradergalax/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/tradergalax/tokencore.svg">
+  <a href="https://github.com/galaxyscitech/tokencore/pulls">
+    <img src="https://img.shields.io/github/issues-pr/galaxyscitech/tokencore.svg">
   </a>
 
-  <a href="https://github.com/tradergalax/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/tradergalax/tokencore.svg">
+  <a href="https://github.com/galaxyscitech/tokencore/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/galaxyscitech/tokencore.svg">
   </a>
 
   <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/tradergalax/tokencore.svg">
+    <img src="https://img.shields.io/github/license/galaxyscitech/tokencore.svg">
   </a>
 
 </p>
@@ -28,7 +28,7 @@
 
 # 联系方式
 
-- [我的个人页面](https://tradergalax.xyz) / @Website
+- [我的个人页面](https://galaxy.doctor) / @Website
 
 # 语言选择
 - en [English](README.md)
@@ -36,7 +36,7 @@
 
 # 使用案例
 
-交易所钱包后台 https://github.com/tradergalax/java-wallet
+交易所钱包后台 https://github.com/galaxyscitech/java-wallet
 
 # tokencore介绍
 
@@ -54,7 +54,7 @@
     }
     
     dependencies {
-        compile 'com.github.tradergalax:tokencore:1.2.7'
+        compile 'com.github.galaxyscitech:tokencore:1.2.7'
     }
 ```
 
@@ -79,7 +79,7 @@
 	</dependency>
 ```
 #### 测试样例
-[https://github.com/tradergalax/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/tradergalax/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
+[https://github.com/galaxyscitech/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/galaxyscitech/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
 #### 初始化身份
 
 ```java
