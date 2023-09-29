@@ -22,10 +22,6 @@
 
 - [GalaxySciTech](https://galaxy.doctor) - Official Website
 
-## Languages
-
-- English: [README](README.md)
-
 ## Use Cases
 
 This serves as the exchange wallet backend. For more details, check out [java-wallet](https://github.com/galaxyscitech/java-wallet).
