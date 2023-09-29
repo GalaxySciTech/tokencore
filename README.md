@@ -20,7 +20,7 @@
 
 ## Contact
 
-- [GalaxySciTech](https://galaxyscitech.xyz) - Official Website
+- [GalaxySciTech](https://galaxy.doctor) - Official Website
 
 ## Languages
 
