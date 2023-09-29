@@ -1,165 +1,171 @@
-<h1 align="center">
-  tokencore
-</h1>
+<h1 align="center">Tokencore</h1>
+
 <p align="center">
-
-  <a href="https://travis-ci.com/tradergalax/tokencore">
-    <img src="https://travis-ci.com/tradergalax/tokencore.svg?branch=master">
+  <a href="https://travis-ci.com/galaxyscitech/tokencore">
+    <img src="https://travis-ci.com/galaxyscitech/tokencore.svg?branch=master" alt="Build Status">
   </a>
-
-  <a href="https://github.com/tradergalax/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/tradergalax/tokencore.svg">
+  <a href="https://github.com/galaxyscitech/tokencore/issues">
+    <img src="https://img.shields.io/github/issues/galaxyscitech/tokencore.svg" alt="Issues">
   </a>
-
-  <a href="https://github.com/tradergalax/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/tradergalax/tokencore.svg">
+  <a href="https://github.com/galaxyscitech/tokencore/pulls">
+    <img src="https://img.shields.io/github/issues-pr/galaxyscitech/tokencore.svg" alt="Pull Requests">
   </a>
-
-  <a href="https://github.com/tradergalax/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/tradergalax/tokencore.svg">
+  <a href="https://github.com/galaxyscitech/tokencore/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/galaxyscitech/tokencore.svg" alt="Contributors">
   </a>
-
   <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/tradergalax/tokencore.svg">
+    <img src="https://img.shields.io/github/license/galaxyscitech/tokencore.svg" alt="License">
   </a>
-
 </p>
 
-# Contact information
+## Contact
 
-- [My Website](https://tradergalax.xyz) / @Website
+- [GalaxySciTech](https://galaxyscitech.xyz) - Official Website
 
-# Language
+## Languages
 
-- en [English](README.md)
-- zh_CN [Simplified Chinese](README_zh_CN.md)
+- English: [README](README.md)
+- Simplified Chinese: [README_zh_CN](README_zh_CN.md)
 
-# Use Cases
+## Use Cases
 
-Exchange wallet backend https://github.com/tradergalax/java-wallet
+This serves as the exchange wallet backend. For more details, check out [java-wallet](https://github.com/galaxyscitech/java-wallet).
 
-# tokencore introduction
+## Introduction
 
-##### The core components of the blockchain wallet backend, support BTC, OMNI, ETH, ERC20, TRX, TRC20, BCH, BSV, DOGE, DASH, LTC,FILECOIN
+Tokencore is a central component for blockchain wallet backends. It currently supports the following:
 
-# tokencore usage
+- BTC, OMNI, ETH, ERC20
+- TRX, TRC20, BCH, BSV
+- DOGE, DASH, LTC, FILECOIN
 
-#### Introducing this library
+## Integration
 
-- gradle way In your build.gradle
+### Gradle
 
-```
-    repositories {
-        maven { url 'https://jitpack.io' }
-    }
-    dependencies {
-        compile 'com.github.tradergalax:tokencore:1.2.7'
-    }
-```
-
-- maven way
-
-```
-	<repositories>
-		<repository>
-		    <id>tronj</id>
-		    <url>https://dl.bintray.com/tronj/tronj</url>
-		</repository>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
-	
-	<dependency>
-	    <groupId>com.github.galaxyzxcv</groupId>
-	    <artifactId>tokencore</artifactId>
-	    <version>1.2.7</version>
-	</dependency>
+```gradle
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+dependencies {
+    compile 'com.github.galaxyscitech:tokencore:1.2.7'
+}
 ```
 
-#### Test sample
+### Maven
 
-[https://github.com/tradergalax/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java](https://github.com/tradergalax/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java)
+```xml
+<repositories>
+    <repository>
+        <id>tronj</id>
+        <url>https://dl.bintray.com/tronj/tronj</url>
+    </repository>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
 
-#### Initialize identity
+<dependency>
+    <groupId>com.github.galaxyzxcv</groupId>
+    <artifactId>tokencore</artifactId>
+    <version>1.2.7</version>
+</dependency>
+```
+
+## Sample Test
+
+View a sample test at [Tokencore Test Sample](https://github.com/galaxyscitech/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java).
+
+## Usage Guide
+
+### Initialize Identity
 
 ```java
-    try{
-        Files.createDirectories(Paths.get("${keyStoreProperties.dir}/wallets"))
-        }catch(Throwable ignored){
-        }
-        //KeystoreStorage is an interface that implements its getdir method
-        WalletManager.storage=KeystoreStorage();
-        WalletManager.scanWallets();
-        String password="123456";
-        Identity identity=Identity.getCurrentIdentity();
-        if(identity==null){
-        Identity.createIdentity(
-        "token",
-        password,
-        "",
-        Network.MAINNET,
-        Metadata.P2WPKH
-        );
-        }
+try {
+    Files.createDirectories(Paths.get("${keyStoreProperties.dir}/wallets"));
+} catch(Throwable ignored) {}
+
+WalletManager.storage = new KeystoreStorage();
+WalletManager.scanWallets();
+String password = "123456";
+Identity identity = Identity.getCurrentIdentity();
+
+if(identity == null) {
+    Identity.createIdentity("token", password, "", Network.MAINNET, Metadata.P2WPKH);
+}
 ```
 
-#### Generate wallet
+### Generate Wallet
 
 ```java
-        Identity identity = Identity.getCurrentIdentity();
-        String password = "123456";
-        Wallet wallet = identity.deriveWalletByMnemonics(
-        ChainType.BITCOIN,
-        password,
-        MnemonicUtil.randomMnemonicCodes()
-        );
-        System.out.println(wallet.getAddress());
-
+Identity identity = Identity.getCurrentIdentity();
+String password = "123456";
+Wallet wallet = identity.deriveWalletByMnemonics(ChainType.BITCOIN, password, MnemonicUtil.randomMnemonicCodes());
+System.out.println(wallet.getAddress());
 ```
 
-#### Offline signature
+## Offline Signature
 
-- Bitcoin
+Offline signing refers to the process of creating a digital signature for a transaction without connecting to the internet. This method enhances security by ensuring private keys never come in contact with an online environment. Here's how you can create an offline signature with Tokencore for Bitcoin and TRON:
 
-```java
-        String password = "123456";
-        String toAddress = "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
-        int changeIdx = 0;
-        long amount = 1000L;
-        long fee = 555L;
-        //utxos needs to go to the node or external api to get
-        ArrayList<BitcoinTransaction.UTXO> utxos = new ArrayList();
-        BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(
-        toAddress,
-        changeIdx,
-        amount,
-        fee,
-        utxos
-        );
-        Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9");
-        TxSignResult txSignResult = bitcoinTransaction.signTransaction(
-        String.valueOf(ChainId.BITCOIN_MAINNET),
-        password,
-        wallet
-        );
-        System.out.println(txSignResult);
-```
+### Bitcoin
 
-- TRON
+1. **Set Up Transaction Details**
 
-```java
-        String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
-        String to = "TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
-        long amount = 1;
-        String password = "123456";
-        Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8");
-        TronTransaction transaction = new TronTransaction(from, to, amount);
-        //Offline signature, it is not recommended to sign and broadcast together
-        TxSignResult txSignResult = transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
+   Define the details of your Bitcoin transaction, including recipient's address, change index, amount to be transferred, and the fee.
 
-        System.out.println(txSignResult);
-```
+   ```java
+   String password = "123456";
+   String toAddress = "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
+   int changeIdx = 0;
+   long amount = 1000L;
+   long fee = 555L;
+   ```
 
-#### Note: This is just a functional component of a digital currency! ! ! It is only for learning and does not provide complete blockchain business functions
+2. **Fetch UTXOs**
+
+   You'll need UTXOs (Unspent Transaction Outputs) for the transaction. Usually, these are fetched from a node or an external API.
+
+   ```java
+   ArrayList<BitcoinTransaction.UTXO> utxos = new ArrayList<>();
+   ```
+
+3. **Initialize Transaction & Sign**
+
+   With all the details in place, initialize the Bitcoin transaction and sign it offline.
+
+   ```java
+   BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(toAddress, changeIdx, amount, fee, utxos);
+   Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9");
+   TxSignResult txSignResult = bitcoinTransaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
+   System.out.println(txSignResult);
+   ```
+
+### TRON
+
+1. **Set Up Transaction Details**
+
+   Define your TRON transaction details, including the sender's address, recipient's address, and amount.
+
+   ```java
+   String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
+   String to = "TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
+   long amount = 1;
+   String password = "123456";
+   ```
+
+2. **Initialize Transaction & Sign**
+
+   Once you have the transaction details, initialize the TRON transaction and sign it offline.
+
+   ```java
+   TronTransaction transaction = new TronTransaction(from, to, amount);
+   Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8");
+   TxSignResult txSignResult = transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
+   System.out.println(txSignResult);
+   ```
+
+Remember, offline signing enhances security but requires a thorough understanding of transaction construction to avoid errors.
+
+> **Note**: Tokencore is a functional component for digital currency. It's primarily for learning purposes and doesn't offer a complete blockchain business suite.
