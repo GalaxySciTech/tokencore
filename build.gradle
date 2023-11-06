@@ -38,7 +38,7 @@ dependencies {
     compile 'org.json:json:20230618'
 
     compile 'com.github.paipaipaipai:FilecoinJ:0.1.1'
-    compile 'com.google.protobuf:protobuf-java:3.24.3'
+    compile 'com.google.protobuf:protobuf-java:3.25.0'
 
     compile 'com.github.lailaibtc:trident:0.0.3'
 
