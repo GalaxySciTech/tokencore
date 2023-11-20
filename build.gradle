@@ -31,7 +31,7 @@ buildscript {
 
 dependencies {
     compile 'io.github.qyvlik:io.eblock.eos-eos4j:1.0.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
     compile 'org.bitcoinj:bitcoinj-core:0.16.2'
 //    compile group: 'com.google.protobuf', name: 'protobuf-lite', version: '3.0.1'
 //    compile 'com.google.protobuf:protobuf-java:3.5.1'
