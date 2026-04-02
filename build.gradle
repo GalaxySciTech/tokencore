@@ -30,7 +30,7 @@ javadoc {
 dependencies {
     implementation 'io.github.qyvlik:io.eblock.eos-eos4j:1.0.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    implementation 'org.bitcoinj:bitcoinj-core:0.16.2'
+    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
     implementation 'org.json:json:20230618'
 
     implementation 'com.github.paipaipaipai:FilecoinJ:0.1.1'
