@@ -1,6 +1,5 @@
 package org.consenlabs.tokencore.wallet;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -212,8 +211,8 @@ public class Identity {
         try {
             File file = new File(WalletManager.getDefaultKeyDirectory(), FILE_NAME);
             ObjectMapper mapper = new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
             IdentityKeystore keystore = mapper.readValue(file, IdentityKeystore.class);
             return new Identity(keystore);
         } catch (IOException ignored) {
@@ -224,9 +223,7 @@ public class Identity {
     private void flush() {
         try {
             File file = new File(WalletManager.getDefaultKeyDirectory(), FILE_NAME);
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.writeValue(file, this.keystore);
+            WalletManager.getWriteMapper().writeValue(file, this.keystore);
         } catch (IOException ex) {
             throw new TokenException(Messages.WALLET_STORE_FAIL, ex);
         }

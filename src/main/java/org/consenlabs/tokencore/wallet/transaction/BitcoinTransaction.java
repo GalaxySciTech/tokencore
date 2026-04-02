@@ -1,6 +1,5 @@
 package org.consenlabs.tokencore.wallet.transaction;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.*;
 import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.crypto.DeterministicKey;

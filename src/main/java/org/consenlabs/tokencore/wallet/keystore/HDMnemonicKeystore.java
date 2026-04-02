@@ -156,11 +156,10 @@ public final class HDMnemonicKeystore extends IMTKeystore implements EncMnemonic
 
 
   public static class Info {
-    private String curve = "spec256k1";
-    private String purpuse = "sign";
+    private String curve = "secp256k1";
+    private String purpose = "sign";
 
     public Info() {
-
     }
 
     public String getCurve() {
@@ -171,12 +170,22 @@ public final class HDMnemonicKeystore extends IMTKeystore implements EncMnemonic
       this.curve = curve;
     }
 
-    public String getPurpuse() {
-      return purpuse;
+    public String getPurpose() {
+      return purpose;
     }
 
+    public void setPurpose(String purpose) {
+      this.purpose = purpose;
+    }
+
+    @Deprecated
+    public String getPurpuse() {
+      return purpose;
+    }
+
+    @Deprecated
     public void setPurpuse(String purpuse) {
-      this.purpuse = purpuse;
+      this.purpose = purpuse;
     }
   }
 }
