@@ -55,11 +55,10 @@ public class FileTransaction implements TransactionSigner {
 
             String cid = HexUtil.encodeHexStr(cidHash);
             ECKey ecKey = ECKey.fromPrivate(HexUtil.decodeHex(hexPrivateKey));
-            String sing = Base64.encode(ecKey.sign(cidHash).toByteArray());
-            System.out.println("cidHash: " + HexUtil.encodeHexStr(cidHash));
-            return new TxSignResult(sing, cid);
+            String sign = Base64.encode(ecKey.sign(cidHash).toByteArray());
+            return new TxSignResult(sign, cid);
         } catch (Exception e) {
-            throw new TokenException("签名失败 原因", e);
+            throw new TokenException("Filecoin sign failed", e);
         }
     }
 }

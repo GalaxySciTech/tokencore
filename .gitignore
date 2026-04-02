@@ -1,13 +1,30 @@
+# Gradle
 .gradle/
 build/
+/build
+/*/build/
+
+# IDE
 .settings/
 .project
 .classpath
-*.class
-.idea
+.idea/
 *.iml
-/local.properties
-.DS_Store
-/build
+*.ipr
+*.iws
+.vscode/
+
+# Compiled
+*.class
 /*/out/
-out
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Properties
+/local.properties
+
+# Test output
+bin/

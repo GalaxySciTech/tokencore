@@ -1,7 +1,6 @@
 package org.consenlabs.tokencore.wallet;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.util.HexUtil;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bitcoinj.crypto.ChildNumber;
@@ -13,7 +12,6 @@ import org.consenlabs.tokencore.wallet.keystore.*;
 import org.consenlabs.tokencore.wallet.model.*;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +61,12 @@ public class Wallet {
         return null;
     }
 
+    private static final ObjectMapper EXPORT_MAPPER = new ObjectMapper();
+
+    static {
+        EXPORT_MAPPER.addMixIn(IMTKeystore.class, V3Ignore.class);
+    }
+
     String exportKeystore(String password) {
         if (keystore instanceof ExportableKeystore) {
             if (!keystore.verifyPassword(password)) {
@@ -70,9 +74,7 @@ public class Wallet {
             }
 
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.addMixIn(IMTKeystore.class, V3Ignore.class);
-                return mapper.writeValueAsString(keystore);
+                return EXPORT_MAPPER.writeValueAsString(keystore);
             } catch (Exception ex) {
                 throw new TokenException(Messages.WALLET_INVALID, ex);
             }

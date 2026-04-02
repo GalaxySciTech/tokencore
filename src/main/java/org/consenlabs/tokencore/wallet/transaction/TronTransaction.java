@@ -67,44 +67,57 @@ public class TronTransaction implements TransactionSigner {
 
     private String contractAddress;
 
-    ApiWrapper client = ApiWrapper.ofMainnet("");
+    private volatile ApiWrapper client;
+
+    public TronTransaction setClient(ApiWrapper client) {
+        this.client = client;
+        return this;
+    }
+
+    private ApiWrapper getClient() {
+        if (client == null) {
+            synchronized (this) {
+                if (client == null) {
+                    client = ApiWrapper.ofMainnet("");
+                }
+            }
+        }
+        return client;
+    }
 
     @Override
     public TxSignResult signTransaction(String chainId, String password, Wallet wallet) {
-
         String hexPrivateKey = wallet.exportPrivateKey(password);
         SECP256K1.KeyPair keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
-        Response.TransactionExtention txnExt;
         try {
-
-            txnExt = client.transfer(from, to, amount);
-            Chain.Transaction signedTransaction = client.signTransaction(txnExt, keyPair);
+            ApiWrapper api = getClient();
+            Response.TransactionExtention txnExt = api.transfer(from, to, amount);
+            Chain.Transaction signedTransaction = api.signTransaction(txnExt, keyPair);
             String txid = Hex.toHexString(txnExt.getTxid().toByteArray());
             return new TxSignResult(signedTransaction.toString(), txid);
         } catch (IllegalException e) {
-            throw new TokenException("签名失败 原因", e);
+            throw new TokenException("Tron sign failed", e);
         }
     }
 
     public TxSignResult signTrc10Transaction(String chainId, String password, Wallet wallet) {
         String hexPrivateKey = wallet.exportPrivateKey(password);
         SECP256K1.KeyPair keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
-        Response.TransactionExtention txnExt;
         try {
-            txnExt = client.transferTrc10(from, to, tokenId, amount);
-            Chain.Transaction signedTransaction = client.signTransaction(txnExt, keyPair);
+            ApiWrapper api = getClient();
+            Response.TransactionExtention txnExt = api.transferTrc10(from, to, tokenId, amount);
+            Chain.Transaction signedTransaction = api.signTransaction(txnExt, keyPair);
             String txid = Hex.toHexString(txnExt.getTxid().toByteArray());
             return new TxSignResult(signedTransaction.toString(), txid);
         } catch (IllegalException e) {
-            throw new TokenException("签名失败 原因", e);
+            throw new TokenException("Tron TRC10 sign failed", e);
         }
     }
-
 
     public TxSignResult signTrc20Transaction(String chainId, String password, Wallet wallet) {
         String hexPrivateKey = wallet.exportPrivateKey(password);
         SECP256K1.KeyPair keyPair = SECP256K1.KeyPair.create(SECP256K1.PrivateKey.create(Bytes32.fromHexString(hexPrivateKey)));
-        // transfer(address,uint256) returns (bool)
+
         Function trc20Transfer = new Function("transfer",
                 Arrays.asList(new Address(to),
                         new Uint256(BigInteger.valueOf(amount))),
@@ -120,10 +133,10 @@ public class TronTransaction implements TransactionSigner {
                         .setData(ApiWrapper.parseHex(encodedHex))
                         .build();
 
-        Response.TransactionExtention txnExt = client.blockingStub.triggerContract(trigger);
+        ApiWrapper api = getClient();
+        Response.TransactionExtention txnExt = api.blockingStub.triggerContract(trigger);
         String txid = Hex.toHexString(txnExt.getTxid().toByteArray());
-
-        Chain.Transaction signedTxn = client.signTransaction(txnExt, keyPair);
+        Chain.Transaction signedTxn = api.signTransaction(txnExt, keyPair);
 
         return new TxSignResult(signedTxn.toString(), txid);
     }

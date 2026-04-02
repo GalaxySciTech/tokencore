@@ -24,21 +24,27 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WalletManager {
-    private static Hashtable<String, IMTKeystore> keystoreMap = new Hashtable<>();
-    private static final String LOG_TAG = WalletManager.class.getSimpleName();
+    private static final ConcurrentHashMap<String, IMTKeystore> keystoreMap = new ConcurrentHashMap<>();
+
+    private static final ObjectMapper WRITE_MAPPER = new ObjectMapper();
+    private static final ObjectMapper READ_MAPPER = new ObjectMapper();
+
+    static {
+        WRITE_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        READ_MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+        READ_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        READ_MAPPER.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
+    }
 
     public static KeystoreStorage storage;
-//
-//  static {
-//    try {ø
-//      scanWallets();
-//    } catch (IOException ignored) {
-//    }
-//  }
+
+    static ObjectMapper getWriteMapper() {
+        return WRITE_MAPPER;
+    }
 
     static Wallet createWallet(IMTKeystore keystore) {
         File file = generateWalletFile(keystore.getId());
@@ -47,7 +53,7 @@ public class WalletManager {
         return new Wallet(keystore);
     }
 
-    public static Hashtable<String, IMTKeystore> getKeyMap(){
+    public static ConcurrentHashMap<String, IMTKeystore> getKeyMap(){
         return keystoreMap;
     }
 
@@ -161,16 +167,23 @@ public class WalletManager {
         MnemonicUtil.validateMnemonics(mnemonicCodes);
         switch (metadata.getChainType()) {
             case ChainType.ETHEREUM:
+            case ChainType.TRON:
+            case ChainType.FILECOIN:
                 keystore = V3MnemonicKeystore.create(metadata, password, mnemonicCodes, path);
                 break;
             case ChainType.BITCOIN:
-                keystore = HDMnemonicKeystore.create(metadata, password, mnemonicCodes, path);
-                break;
             case ChainType.LITECOIN:
+            case ChainType.DASH:
+            case ChainType.DOGECOIN:
+            case ChainType.BITCOINCASH:
+            case ChainType.BITCOINSV:
                 keystore = HDMnemonicKeystore.create(metadata, password, mnemonicCodes, path);
                 break;
             case ChainType.EOS:
                 keystore = EOSKeystore.create(metadata, password, accountName, mnemonicCodes, path, permissions);
+                break;
+            default:
+                throw new TokenException(String.format("Mnemonic import not supported for chain: %s", metadata.getChainType()));
         }
 
         return persistWallet(keystore, overwrite);
@@ -334,9 +347,7 @@ public class WalletManager {
 
     private static void writeToFile(Keystore keyStore, File destination) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.writeValue(destination, keyStore);
+            WRITE_MAPPER.writeValue(destination, keyStore);
         } catch (IOException ex) {
             throw new TokenException(Messages.WALLET_STORE_FAIL, ex);
         }
@@ -345,10 +356,11 @@ public class WalletManager {
     private static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
-            for (String child : children) {
-                boolean success = deleteDir(new File(dir, child));
-                if (!success) {
-                    return false;
+            if (children != null) {
+                for (String child : children) {
+                    if (!deleteDir(new File(dir, child))) {
+                        return false;
+                    }
                 }
             }
         }
@@ -384,24 +396,22 @@ public class WalletManager {
     }
 
     private static <T extends WalletKeystore> T unmarshalKeystore(String keystoreContent, Class<T> clazz) {
-        T importedKeystore;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            mapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
-            importedKeystore = mapper.readValue(keystoreContent, clazz);
+            return READ_MAPPER.readValue(keystoreContent, clazz);
         } catch (IOException ex) {
             throw new TokenException(Messages.WALLET_INVALID_KEYSTORE, ex);
         }
-        return importedKeystore;
     }
 
     public static void scanWallets() {
         File directory = getDefaultKeyDirectory();
 
         keystoreMap.clear();
-        for (File file : directory.listFiles()) {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
             if (!file.getName().startsWith("identity")) {
                 try {
                     IMTKeystore keystore = null;
@@ -428,8 +438,7 @@ public class WalletManager {
                     if (keystore != null) {
                         keystoreMap.put(keystore.getId(), keystore);
                     }
-                } catch (Exception ex) {
-//                    log.info(LOG_TAG, "Can't loaded " + file.getName() + " file", ex);
+                } catch (Exception ignored) {
                 }
             }
         }

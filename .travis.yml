@@ -1,9 +1,0 @@
-matrix:
-  include:
-    - name: build
-      script:
-        - "./gradlew build"
-
-skip_build:
-  - README.md：
-  - LICENSE
