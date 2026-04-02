@@ -1,8 +1,8 @@
 <h1 align="center">Tokencore</h1>
 
 <p align="center">
-  <a href="https://travis-ci.com/galaxyscitech/tokencore">
-    <img src="https://travis-ci.com/galaxyscitech/tokencore.svg?branch=master" alt="Build Status">
+  <a href="https://github.com/galaxyscitech/tokencore/actions">
+    <img src="https://github.com/galaxyscitech/tokencore/actions/workflows/ci.yml/badge.svg" alt="Build Status">
   </a>
   <a href="https://github.com/galaxyscitech/tokencore/issues">
     <img src="https://img.shields.io/github/issues/galaxyscitech/tokencore.svg" alt="Issues">
@@ -34,6 +34,11 @@ Tokencore is a central component for blockchain wallet backends. It currently su
 - TRX, TRC20, BCH, BSV
 - DOGE, DASH, LTC, FILECOIN
 
+## Requirements
+
+- Java 8+
+- Gradle 8.5+ (included via wrapper)
+
 ## Integration
 
 ### Gradle
@@ -43,7 +48,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compile 'com.github.galaxyscitech:tokencore:1.2.7'
+    implementation 'com.github.galaxyscitech:tokencore:1.3.0'
 }
 ```
 
@@ -52,27 +57,19 @@ dependencies {
 ```xml
 <repositories>
     <repository>
-        <id>tronj</id>
-        <url>https://dl.bintray.com/tronj/tronj</url>
-    </repository>
-    <repository>
         <id>jitpack.io</id>
         <url>https://jitpack.io</url>
     </repository>
 </repositories>
 
 <dependency>
-    <groupId>com.github.galaxyzxcv</groupId>
+    <groupId>com.github.galaxyscitech</groupId>
     <artifactId>tokencore</artifactId>
-    <version>1.2.7</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
-## Sample Test
-
-View a sample test at [Tokencore Test Sample](https://github.com/galaxyscitech/tokencore/blob/master/src/test/java/org/consenlabs/tokencore/Test.java).
-
-## Usage Guide
+## Quick Start
 
 ### Initialize Identity
 
@@ -81,12 +78,17 @@ try {
     Files.createDirectories(Paths.get("${keyStoreProperties.dir}/wallets"));
 } catch(Throwable ignored) {}
 
-WalletManager.storage = new KeystoreStorage();
+WalletManager.storage = new KeystoreStorage() {
+    @Override
+    public File getKeystoreDir() {
+        return new File("/path/to/keystore");
+    }
+};
 WalletManager.scanWallets();
-String password = "123456";
+String password = "your_password";
 Identity identity = Identity.getCurrentIdentity();
 
-if(identity == null) {
+if (identity == null) {
     Identity.createIdentity("token", password, "", Network.MAINNET, Metadata.P2WPKH);
 }
 ```
@@ -95,23 +97,22 @@ if(identity == null) {
 
 ```java
 Identity identity = Identity.getCurrentIdentity();
-String password = "123456";
-Wallet wallet = identity.deriveWalletByMnemonics(ChainType.BITCOIN, password, MnemonicUtil.randomMnemonicCodes());
+String password = "your_password";
+Wallet wallet = identity.deriveWalletByMnemonics(
+    ChainType.BITCOIN, password, MnemonicUtil.randomMnemonicCodes());
 System.out.println(wallet.getAddress());
 ```
 
 ## Offline Signature
 
-Offline signing refers to the process of creating a digital signature for a transaction without connecting to the internet. This method enhances security by ensuring private keys never come in contact with an online environment. Here's how you can create an offline signature with Tokencore for Bitcoin and TRON:
+Offline signing refers to the process of creating a digital signature for a transaction without connecting to the internet. This method enhances security by ensuring private keys never come in contact with an online environment.
 
 ### Bitcoin
 
 1. **Set Up Transaction Details**
 
-   Define the details of your Bitcoin transaction, including recipient's address, change index, amount to be transferred, and the fee.
-
    ```java
-   String password = "123456";
+   String password = "your_password";
    String toAddress = "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
    int changeIdx = 0;
    long amount = 1000L;
@@ -128,39 +129,67 @@ Offline signing refers to the process of creating a digital signature for a tran
 
 3. **Initialize Transaction & Sign**
 
-   With all the details in place, initialize the Bitcoin transaction and sign it offline.
-
    ```java
-   BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(toAddress, changeIdx, amount, fee, utxos);
-   Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9");
-   TxSignResult txSignResult = bitcoinTransaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
-   System.out.println(txSignResult);
+   BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(
+       toAddress, changeIdx, amount, fee, utxos);
+   Wallet wallet = WalletManager.findWalletByAddress(
+       ChainType.BITCOIN, "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9");
+   TxSignResult txSignResult = bitcoinTransaction.signTransaction(
+       String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
+   System.out.println(txSignResult.getSignedTx());
    ```
 
 ### TRON
 
 1. **Set Up Transaction Details**
 
-   Define your TRON transaction details, including the sender's address, recipient's address, and amount.
-
    ```java
    String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
    String to = "TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
    long amount = 1;
-   String password = "123456";
+   String password = "your_password";
    ```
 
 2. **Initialize Transaction & Sign**
 
-   Once you have the transaction details, initialize the TRON transaction and sign it offline.
-
    ```java
    TronTransaction transaction = new TronTransaction(from, to, amount);
-   Wallet wallet = WalletManager.findWalletByAddress(ChainType.BITCOIN, "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8");
-   TxSignResult txSignResult = transaction.signTransaction(String.valueOf(ChainId.BITCOIN_MAINNET), password, wallet);
-   System.out.println(txSignResult);
+   Wallet wallet = WalletManager.findWalletByAddress(
+       ChainType.TRON, "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8");
+   TxSignResult txSignResult = transaction.signTransaction(
+       "mainnet", password, wallet);
+   System.out.println(txSignResult.getSignedTx());
    ```
 
-Remember, offline signing enhances security but requires a thorough understanding of transaction construction to avoid errors.
+### Ethereum
+
+```java
+EthereumTransaction tx = new EthereumTransaction(
+    BigInteger.ZERO,                          // nonce
+    BigInteger.valueOf(20_000_000_000L),      // gasPrice
+    BigInteger.valueOf(21000),                // gasLimit
+    "0xRecipientAddress",                     // to
+    BigInteger.valueOf(1_000_000_000_000_000_000L), // value (1 ETH)
+    ""                                         // data
+);
+
+Wallet wallet = WalletManager.findWalletByAddress(
+    ChainType.ETHEREUM, "0xYourAddress");
+TxSignResult result = tx.signTransaction(
+    String.valueOf(ChainId.ETHEREUM_MAINNET), password, wallet);
+System.out.println(result.getSignedTx());
+```
+
+## Running Tests
+
+```bash
+./gradlew test
+```
+
+## Building
+
+```bash
+./gradlew build
+```
 
 > **Note**: Tokencore is a functional component for digital currency. It's primarily for learning purposes and doesn't offer a complete blockchain business suite.
