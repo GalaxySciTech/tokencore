@@ -167,16 +167,23 @@ public class WalletManager {
         MnemonicUtil.validateMnemonics(mnemonicCodes);
         switch (metadata.getChainType()) {
             case ChainType.ETHEREUM:
+            case ChainType.TRON:
+            case ChainType.FILECOIN:
                 keystore = V3MnemonicKeystore.create(metadata, password, mnemonicCodes, path);
                 break;
             case ChainType.BITCOIN:
-                keystore = HDMnemonicKeystore.create(metadata, password, mnemonicCodes, path);
-                break;
             case ChainType.LITECOIN:
+            case ChainType.DASH:
+            case ChainType.DOGECOIN:
+            case ChainType.BITCOINCASH:
+            case ChainType.BITCOINSV:
                 keystore = HDMnemonicKeystore.create(metadata, password, mnemonicCodes, path);
                 break;
             case ChainType.EOS:
                 keystore = EOSKeystore.create(metadata, password, accountName, mnemonicCodes, path, permissions);
+                break;
+            default:
+                throw new TokenException(String.format("Mnemonic import not supported for chain: %s", metadata.getChainType()));
         }
 
         return persistWallet(keystore, overwrite);

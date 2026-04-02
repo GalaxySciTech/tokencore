@@ -5,10 +5,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.consenlabs.tokencore.foundation.crypto.Crypto;
 import org.consenlabs.tokencore.foundation.utils.MetaUtil;
 import org.consenlabs.tokencore.foundation.utils.NumericUtil;
-import org.consenlabs.tokencore.wallet.address.BitcoinAddressCreator;
-import org.consenlabs.tokencore.wallet.address.EthereumAddressCreator;
-import org.consenlabs.tokencore.wallet.address.SegWitBitcoinAddressCreator;
-import org.consenlabs.tokencore.wallet.address.TronAddressCreator;
+import org.consenlabs.tokencore.wallet.address.*;
 import org.consenlabs.tokencore.wallet.model.ChainType;
 import org.consenlabs.tokencore.wallet.model.Metadata;
 import org.consenlabs.tokencore.wallet.model.TokenException;
@@ -55,8 +52,12 @@ public class V3Keystore extends IMTKeystore implements ExportableKeystore {
             prvKeyBytes = NumericUtil.hexToBytes(prvKeyHex);
             new PrivateKeyValidator(prvKeyHex).validate();
             this.address = new TronAddressCreator().fromPrivateKey(prvKeyBytes);
-        }else {
-            throw new TokenException("Can't init eos keystore in this constructor");
+        } else if (metadata.getChainType().equals(ChainType.FILECOIN)) {
+            prvKeyBytes = NumericUtil.hexToBytes(prvKeyHex);
+            new PrivateKeyValidator(prvKeyHex).validate();
+            this.address = new FilecoinAddressCreator().fromPrivateKey(prvKeyBytes);
+        } else {
+            throw new TokenException(String.format("Unsupported chain type for V3Keystore: %s", metadata.getChainType()));
         }
         this.crypto = Crypto.createPBKDF2Crypto(password, prvKeyBytes);
         metadata.setWalletType(Metadata.V3);
