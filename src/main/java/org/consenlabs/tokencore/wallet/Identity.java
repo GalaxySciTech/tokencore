@@ -97,7 +97,7 @@ public class Identity {
 
     public static Identity recoverIdentity(String mnemonic, String name, String password,
                                            String passwordHit, String network, String segWit) {
-        List<String> mnemonicCodes = Arrays.asList(mnemonic.split(" "));
+        List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonic);
         Metadata metadata = new Metadata();
         metadata.setName(name);
         metadata.setPasswordHint(passwordHit);
@@ -145,7 +145,7 @@ public class Identity {
 
     public Wallet deriveWallet(String chainType, String password) {
         String mnemonic = exportIdentity(password);
-        List<String> mnemonics = Arrays.asList(mnemonic.split(" "));
+        List<String> mnemonics = MnemonicUtil.toMnemonicCodes(mnemonic);
         return deriveWalletByMnemonics(chainType,password,mnemonics);
     }
 
@@ -157,7 +157,7 @@ public class Identity {
 
     public List<Wallet> deriveWallets(List<String> chainTypes, String password) {
         String mnemonic = exportIdentity(password);
-        List<String> mnemonics = Arrays.asList(mnemonic.split(" "));
+        List<String> mnemonics = MnemonicUtil.toMnemonicCodes(mnemonic);
         return deriveWalletsByMnemonics(chainTypes, password, mnemonics);
     }
 

@@ -1,84 +1,29 @@
-<h1 align="center">Tokencore</h1>
+# Tokencore
 
-<p align="center">
-  <strong>Multi-chain cryptocurrency wallet core library for Java</strong>
-</p>
+Tokencore is a Java multi-chain wallet core library for exchange backends, custody systems, and wallet services.
 
-<p align="center">
-  <a href="https://github.com/galaxyscitech/tokencore/actions">
-    <img src="https://github.com/galaxyscitech/tokencore/actions/workflows/ci.yml/badge.svg" alt="Build Status">
-  </a>
-  <a href="https://jitpack.io/#galaxyscitech/tokencore">
-    <img src="https://jitpack.io/v/galaxyscitech/tokencore.svg" alt="JitPack">
-  </a>
-</p>
+## What Tokencore provides
 
-<p align="center">
-  <a href="#quick-start-30-seconds">Quick Start (30s)</a> &nbsp;&bull;&nbsp;
-  <a href="#integration">Integration</a> &nbsp;&bull;&nbsp;
-  <a href="#core-features-recommended-minimum">Recommended Minimum</a> &nbsp;&bull;&nbsp;
-  <a href="#supported-chains">Supported Chains</a>
-</p>
+- Multi-chain address generation
+- HD wallet derivation and mnemonic workflows
+- Encrypted keystore management
+- Offline transaction signing for major chain families
+
+Supported chains include:
+- **EVM**: Ethereum
+- **Bitcoin family**: Bitcoin, Litecoin, Dogecoin, Dash, Bitcoin Cash, Bitcoin SV
+- **Others**: TRON, Filecoin, EOS
 
 ---
 
-## Introduction
-
-Tokencore is a lightweight Java library for wallet fundamentals: HD derivation, encrypted keystore management, and offline signing.
-
-If your goal is "install and use immediately", start with the 30-second quick start below and only enable additional chains/features later.
-
-## Quick Start (30 seconds)
-
-### 1) Add dependency
-
-```gradle
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-dependencies {
-    implementation 'com.github.galaxyscitech:tokencore:1.3.0'
-}
-```
-
-### 2) Copy this minimal bootstrap code
-
-```java
-WalletManager.storage = () -> new File("./keystore");
-WalletManager.scanWallets();
-
-String password = "change_me";
-Identity identity = Identity.getCurrentIdentity();
-if (identity == null) {
-    identity = Identity.createIdentity("default", password, "", Network.MAINNET, Metadata.P2WPKH);
-}
-
-Wallet wallet = identity.deriveWalletByMnemonics(
-    ChainType.ETHEREUM,
-    password,
-    MnemonicUtil.randomMnemonicCodes());
-
-System.out.println("Address = " + wallet.getAddress());
-```
-
-### 3) Verify locally
-
-```bash
-./gradlew test
-```
-
 ## Core Features (Recommended Minimum)
 
-For new integrators, keep the initial rollout small:
+- Java 8+
+- Gradle wrapper included (`./gradlew`)
 
-1. **Identity + keystore only** (account generation + secure storage)
-2. **Single chain first** (recommend: ETH or BTC)
-3. **Offline signing only** (avoid online key usage)
-4. **No multi-chain abstraction in v1 API surface**
+---
 
-This reduces integration complexity and speeds up first successful deployment.
-
-## Integration
+## Install
 
 ### Gradle
 
@@ -86,6 +31,7 @@ This reduces integration complexity and speeds up first successful deployment.
 repositories {
     maven { url 'https://jitpack.io' }
 }
+
 dependencies {
     implementation 'com.github.galaxyscitech:tokencore:1.3.0'
 }
@@ -95,40 +41,144 @@ dependencies {
 
 ```xml
 <repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
 </repositories>
 
 <dependency>
-    <groupId>com.github.galaxyscitech</groupId>
-    <artifactId>tokencore</artifactId>
-    <version>1.3.0</version>
+  <groupId>com.github.galaxyscitech</groupId>
+  <artifactId>tokencore</artifactId>
+  <version>1.3.0</version>
 </dependency>
 ```
 
-## Supported Chains
+---
 
-| Chain | Token Standards | Features |
-|-------|----------------|----------|
-| **Bitcoin** | BTC, OMNI | UTXO management, SegWit (P2WPKH) |
-| **Ethereum** | ETH, ERC-20 | Offline signing, nonce management |
-| **TRON** | TRX, TRC-20 | Transaction signing |
-| **Bitcoin Cash** | BCH | CashAddr format |
-| **Bitcoin SV** | BSV | Transaction signing |
-| **Litecoin** | LTC | Transaction signing |
-| **Dogecoin** | DOGE | Transaction signing |
-| **Dash** | DASH | Transaction signing |
-| **Filecoin** | FIL | Transaction signing |
+## Quick start (runnable)
 
-## Build & Test
+```java
+import org.consenlabs.tokencore.foundation.utils.MnemonicUtil;
+import org.consenlabs.tokencore.wallet.*;
+import org.consenlabs.tokencore.wallet.model.*;
 
-```bash
-./gradlew build
-./gradlew test
+import java.io.File;
+
+public class QuickStart {
+  public static void main(String[] args) {
+    WalletManager.storage = () -> new File("./keystore");
+    WalletManager.scanWallets();
+
+    String password = "UseAStrongPassword_123";
+    Identity identity = Identity.getCurrentIdentity();
+    if (identity == null) {
+      identity = Identity.createIdentity("main", password, "", Network.MAINNET, Metadata.P2WPKH);
+    }
+
+    Wallet ethWallet = identity.deriveWalletByMnemonics(
+      ChainType.ETHEREUM,
+      password,
+      MnemonicUtil.randomMnemonicCodes()
+    );
+
+    Wallet btcWallet = identity.deriveWalletByMnemonics(
+      ChainType.BITCOIN,
+      password,
+      MnemonicUtil.randomMnemonicCodes()
+    );
+
+    System.out.println("ETH address: " + ethWallet.getAddress());
+    System.out.println("BTC address: " + btcWallet.getAddress());
+  }
+}
 ```
 
-## License
+---
 
-This project is licensed under the [GNU General Public License v3.0](LICENSE).
+## Common usage
+
+### 1) Import wallet from private key
+
+```java
+Metadata metadata = new Metadata();
+metadata.setChainType(ChainType.ETHEREUM);
+metadata.setSource(Metadata.FROM_PRIVATE);
+metadata.setNetwork(Network.MAINNET);
+
+Wallet wallet = WalletManager.importWalletFromPrivateKey(
+  metadata,
+  "4c0883a69102937d6231471b5dbb6204fe512961708279f14a15c89a7e5a5c3c",
+  "password123",
+  true
+);
+```
+
+### 2) Import wallet from mnemonic
+
+```java
+Metadata metadata = new Metadata();
+metadata.setChainType(ChainType.DOGECOIN);
+metadata.setSource(Metadata.FROM_MNEMONIC);
+metadata.setNetwork(Network.MAINNET);
+metadata.setSegWit(Metadata.NONE);
+
+Wallet wallet = WalletManager.importWalletFromMnemonic(
+  metadata,
+  "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+  BIP44Util.DOGECOIN_MAINNET_PATH,
+  "password123",
+  true
+);
+```
+
+### 3) Find wallet by mnemonic (BTC-family friendly)
+
+```java
+Wallet wallet = WalletManager.findWalletByMnemonic(
+  ChainType.DOGECOIN,
+  Network.MAINNET,
+  "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+  BIP44Util.DOGECOIN_MAINNET_PATH,
+  Metadata.NONE
+);
+```
+
+### 4) Export keystore and recover by keystore
+
+```java
+String keystoreJson = WalletManager.exportKeystore(wallet.getId(), "password123");
+Wallet found = WalletManager.findWalletByKeystore(ChainType.ETHEREUM, keystoreJson, "password123");
+```
+
+---
+
+## Security recommendations
+
+- Never log or print private keys, mnemonics, or decrypted keystore payloads.
+- Keep signing in isolated/offline environments whenever possible.
+- Use strong passwords and avoid hardcoded secrets.
+- Consider HSM/KMS for production secret governance.
+- Enforce strict access controls around keystore files.
+
+---
+
+## Typical errors
+
+- `password_incorrect`
+- `mnemonic_length_invalid`
+- `mnemonic_word_invalid`
+- `invalid_mnemonic_path`
+- `unsupported_chain`
+- `private_key_address_not_match`
+
+---
+
+## Build and test
+
+```bash
+./gradlew test
+./gradlew build
+```
+
+CI runs on Java 8/11/17 via GitHub Actions.
