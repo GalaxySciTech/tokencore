@@ -16,7 +16,7 @@ Supported chains include:
 
 ---
 
-## Requirements
+## Core Features (Recommended Minimum)
 
 - Java 8+
 - Gradle wrapper included (`./gradlew`)
