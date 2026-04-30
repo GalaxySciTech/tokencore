@@ -163,7 +163,7 @@ public class WalletManager {
         if (metadata.getSource() == null)
             metadata.setSource(Metadata.FROM_MNEMONIC);
         IMTKeystore keystore = null;
-        List<String> mnemonicCodes = Arrays.asList(mnemonic.split(" "));
+        List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonic);
         MnemonicUtil.validateMnemonics(mnemonicCodes);
         switch (metadata.getChainType()) {
             case ChainType.ETHEREUM:
@@ -211,7 +211,7 @@ public class WalletManager {
     }
 
     public static Wallet findWalletByMnemonic(String chainType, String network, String mnemonic, String path, String segWit) {
-        List<String> mnemonicCodes = Arrays.asList(mnemonic.split(" "));
+        List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonic);
         MnemonicUtil.validateMnemonics(mnemonicCodes);
         DeterministicSeed seed = new DeterministicSeed(mnemonicCodes, null, "", 0L);
         DeterministicKeyChain keyChain = DeterministicKeyChain.builder().seed(seed).build();
@@ -233,7 +233,7 @@ public class WalletManager {
         Wallet wallet = mustFindWalletById(id);
         // !!! Warning !!! You must verify password before you write content to keystore
         if (!wallet.getMetadata().getChainType().equalsIgnoreCase(ChainType.BITCOIN))
-            throw new TokenException("Ethereum wallet can't switch mode");
+            throw new TokenException("Only Bitcoin wallets can switch SegWit mode");
         Metadata metadata = wallet.getMetadata().clone();
         if (metadata.getSegWit().equalsIgnoreCase(model)) {
             return wallet;
@@ -245,7 +245,7 @@ public class WalletManager {
 
             MnemonicAndPath mnemonicAndPath = wallet.exportMnemonic(password);
             String path = BIP44Util.getBTCMnemonicPath(model, metadata.isMainNet());
-            List<String> mnemonicCodes = Arrays.asList(mnemonicAndPath.getMnemonic().split(" "));
+            List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonicAndPath.getMnemonic());
             keystore = new HDMnemonicKeystore(metadata, password, mnemonicCodes, path, wallet.getId());
         } else {
             String prvKey = wallet.exportPrivateKey(password);

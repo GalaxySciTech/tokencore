@@ -80,7 +80,7 @@ public class V3MnemonicKeystore extends IMTKeystore implements EncMnemonicKeysto
   @Override
   public Keystore changePassword(String oldPassword, String newPassword) {
     String mnemonic = new String(getCrypto().decryptEncPair(oldPassword, this.getEncMnemonic()));
-    List<String> mnemonicCodes = Arrays.asList(mnemonic.split(" "));
+    List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonic);
     return new V3MnemonicKeystore(this.metadata, newPassword, mnemonicCodes, this.mnemonicPath, this.id);
   }
 }

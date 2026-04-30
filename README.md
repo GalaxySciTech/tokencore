@@ -1,69 +1,16 @@
-<h1 align="center">Tokencore</h1>
+# Tokencore
 
-<p align="center">
-  <strong>Multi-chain cryptocurrency wallet core library for Java</strong>
-</p>
+Java 多链钱包核心库，面向交易所、托管钱包、钱包后端服务。
 
-<p align="center">
-  <a href="https://github.com/galaxyscitech/tokencore/actions">
-    <img src="https://github.com/galaxyscitech/tokencore/actions/workflows/ci.yml/badge.svg" alt="Build Status">
-  </a>
-  <a href="https://jitpack.io/#galaxyscitech/tokencore">
-    <img src="https://jitpack.io/v/galaxyscitech/tokencore.svg" alt="JitPack">
-  </a>
-  <a href="https://github.com/galaxyscitech/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/galaxyscitech/tokencore.svg" alt="Issues">
-  </a>
-  <a href="https://github.com/galaxyscitech/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/galaxyscitech/tokencore.svg" alt="Pull Requests">
-  </a>
-  <a href="https://github.com/galaxyscitech/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/galaxyscitech/tokencore.svg" alt="Contributors">
-  </a>
-  <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/galaxyscitech/tokencore.svg" alt="License">
-  </a>
-</p>
+## 核心能力
+- 多链地址生成（BTC / ETH / TRON / BCH / BSV / LTC / DOGE / DASH / FIL）
+- HD Wallet / Mnemonic 导入导出
+- Keystore 加密管理
+- 多链离线签名（避免在线明文私钥）
 
-<p align="center">
-  <a href="#supported-chains">Supported Chains</a> &nbsp;&bull;&nbsp;
-  <a href="#quick-start">Quick Start</a> &nbsp;&bull;&nbsp;
-  <a href="#integration">Integration</a> &nbsp;&bull;&nbsp;
-  <a href="#offline-signing">Offline Signing</a> &nbsp;&bull;&nbsp;
-  <a href="#contact">Contact</a>
-</p>
+## 快速开始（可直接跑通）
 
----
-
-## Introduction
-
-Tokencore is a lightweight Java library that provides core wallet functionality for multiple blockchains. It handles HD wallet derivation, encrypted keystore management, and offline transaction signing — making it the ideal building block for exchange backends and custodial wallet services.
-
-For a complete exchange wallet backend built on top of Tokencore, see [java-wallet](https://github.com/galaxyscitech/java-wallet).
-
-## Supported Chains
-
-| Chain | Token Standards | Features |
-|-------|----------------|----------|
-| **Bitcoin** | BTC, OMNI | UTXO management, SegWit (P2WPKH) |
-| **Ethereum** | ETH, ERC-20 | Offline signing, nonce management |
-| **TRON** | TRX, TRC-20 | Transaction signing |
-| **Bitcoin Cash** | BCH | CashAddr format |
-| **Bitcoin SV** | BSV | Transaction signing |
-| **Litecoin** | LTC | Transaction signing |
-| **Dogecoin** | DOGE | Transaction signing |
-| **Dash** | DASH | Transaction signing |
-| **Filecoin** | FIL | Transaction signing |
-
-## Requirements
-
-- **Java** 8 or higher
-- **Gradle** 8.5+ (included via wrapper, no manual install needed)
-
-## Integration
-
-### Gradle
-
+### 1. 依赖
 ```gradle
 repositories {
     maven { url 'https://jitpack.io' }
@@ -73,152 +20,57 @@ dependencies {
 }
 ```
 
-### Maven
-
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-
-<dependency>
-    <groupId>com.github.galaxyscitech</groupId>
-    <artifactId>tokencore</artifactId>
-    <version>1.3.0</version>
-</dependency>
-```
-
-## Quick Start
-
-### 1. Initialize Keystore & Identity
-
+### 2. 初始化并生成地址
 ```java
-WalletManager.storage = new KeystoreStorage() {
-    @Override
-    public File getKeystoreDir() {
-        return new File("/path/to/keystore");
-    }
-};
+WalletManager.storage = () -> new File("./keystore");
 WalletManager.scanWallets();
 
-String password = "your_password";
+String password = "UseAStrongPassword_123";
 Identity identity = Identity.getCurrentIdentity();
-
 if (identity == null) {
-    identity = Identity.createIdentity(
-        "token", password, "", Network.MAINNET, Metadata.P2WPKH);
+    identity = Identity.createIdentity("exchange-main", password, "", Network.MAINNET, Metadata.P2WPKH);
 }
+
+Wallet ethWallet = identity.deriveWalletByMnemonics(
+    ChainType.ETHEREUM, password, MnemonicUtil.randomMnemonicCodes());
+
+Wallet btcWallet = identity.deriveWalletByMnemonics(
+    ChainType.BITCOIN, password, MnemonicUtil.randomMnemonicCodes());
 ```
 
-### 2. Derive a Wallet
+## 链路示例
+- BTC: 使用 `BitcoinTransaction` 离线签名 UTXO 交易。
+- ETH: 使用 `EthereumTransaction` 构建并签名转账。
+- TRON: 使用 `TronTransaction` 构建并签名。
 
-```java
-Identity identity = Identity.getCurrentIdentity();
-Wallet wallet = identity.deriveWalletByMnemonics(
-    ChainType.BITCOIN, "your_password", MnemonicUtil.randomMnemonicCodes());
-System.out.println(wallet.getAddress());
-```
+> 可参考 `src/test/java/.../EthereumTransactionTest.java` 与 `WalletManagerTest.java` 的可运行样例。
 
-## Offline Signing
+## 安全注意事项（强制建议）
+1. 不要在日志中打印私钥、助记词、keystore 明文。
+2. 不要把密码硬编码到仓库。
+3. 生产环境建议 HSM / KMS 托管密码和主密钥。
+4. 私钥相关变量使用后尽快释放引用，避免长生命周期缓存。
+5. 所有签名应在离线或受控环境执行。
 
-Offline signing creates a digital signature without ever exposing private keys to an online environment.
+## 常见错误
+- `password_incorrect`: 密码错误。
+- `mnemonic_length_invalid`: 助记词长度非法（应为 BIP39 合法长度）。
+- `mnemonic_word_invalid`: 助记词单词非法。
+- `invalid_mnemonic_path`: 派生路径非法。
+- `unsupported_chain`: 链类型未支持。
 
-### Bitcoin
+## Exchange Wallet Backend 集成建议
+1. 先单链上线（ETH 或 BTC），跑通充值/归集/提现。
+2. 统一地址管理与签名审计日志（不含私钥明文）。
+3. 分层隔离：API 层、业务层、签名层。
+4. 多链按插件方式逐步启用，避免一次性复杂度爆炸。
 
-```java
-// 1. Define transaction parameters
-String toAddress = "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
-int changeIdx = 0;
-long amount = 1000L;
-long fee = 555L;
-
-// 2. Collect UTXOs (from your node or a third-party API)
-ArrayList<BitcoinTransaction.UTXO> utxos = new ArrayList<>();
-
-// 3. Build and sign
-BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(
-    toAddress, changeIdx, amount, fee, utxos);
-Wallet wallet = WalletManager.findWalletByAddress(
-    ChainType.BITCOIN, "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9");
-TxSignResult txSignResult = bitcoinTransaction.signTransaction(
-    String.valueOf(ChainId.BITCOIN_MAINNET), "your_password", wallet);
-System.out.println(txSignResult.getSignedTx());
-```
-
-### Ethereum
-
-```java
-EthereumTransaction tx = new EthereumTransaction(
-    BigInteger.ZERO,                                    // nonce
-    BigInteger.valueOf(20_000_000_000L),                // gasPrice
-    BigInteger.valueOf(21_000),                         // gasLimit
-    "0xRecipientAddress",                               // to
-    BigInteger.valueOf(1_000_000_000_000_000_000L),     // value (1 ETH)
-    ""                                                  // data
-);
-
-Wallet wallet = WalletManager.findWalletByAddress(
-    ChainType.ETHEREUM, "0xYourAddress");
-TxSignResult result = tx.signTransaction(
-    String.valueOf(ChainId.ETHEREUM_MAINNET), "your_password", wallet);
-System.out.println(result.getSignedTx());
-```
-
-### TRON
-
-```java
-String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
-String to   = "TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
-
-TronTransaction transaction = new TronTransaction(from, to, 1L);
-Wallet wallet = WalletManager.findWalletByAddress(ChainType.TRON, from);
-TxSignResult result = transaction.signTransaction(
-    "mainnet", "your_password", wallet);
-System.out.println(result.getSignedTx());
-```
-
-## Build & Test
-
+## 开发与测试
 ```bash
-# Build the library
-./gradlew build
-
-# Run the test suite
 ./gradlew test
+./gradlew build
 ```
 
-## Project Structure
-
-```
-src/main/java/org/consenlabs/tokencore/
-├── wallet/
-│   ├── Identity.java          # HD identity management
-│   ├── Wallet.java            # Wallet abstraction
-│   ├── WalletManager.java     # Wallet lifecycle & discovery
-│   ├── address/               # Chain-specific address generation
-│   ├── keystore/              # Encrypted keystore implementations
-│   ├── model/                 # ChainType, ChainId, Metadata, etc.
-│   ├── network/               # Bitcoin-fork network parameters
-│   ├── transaction/           # Offline signing per chain
-│   └── validators/            # Address & key validation
-└── foundation/
-    ├── crypto/                # AES, KDF, hashing primitives
-    ├── utils/                 # Mnemonic, numeric, byte helpers
-    └── rlp/                   # RLP encoding (Ethereum)
-```
-
-## License
-
-This project is licensed under the [GNU General Public License v3.0](LICENSE).
-
-## Contact
-
-- **Telegram**: [t.me/GalaxySciTech](https://t.me/GalaxySciTech)
-- **Website**: [galaxy.doctor](https://galaxy.doctor)
-- **GitHub Issues**: [Report a bug](https://github.com/galaxyscitech/tokencore/issues/new)
-
----
-
-> **Disclaimer**: Tokencore is a functional component for digital currency operations. It is intended primarily for learning and development purposes and does not provide a complete blockchain business solution. Use at your own risk.
+## CI / 发布说明
+- CI 覆盖 Java 8/11/17。
+- JitPack 依赖建议固定版本，不要使用动态版本。

@@ -58,6 +58,20 @@ class MnemonicUtilTest {
     }
 
     @Test
+    void toMnemonicCodes_string_shouldTrimAndNormalizeWhitespace() {
+        String raw = "  abandon   abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about  ";
+        List<String> codes = MnemonicUtil.toMnemonicCodes(raw);
+        assertEquals(12, codes.size());
+        assertEquals("abandon", codes.get(0));
+        assertEquals("about", codes.get(11));
+    }
+
+    @Test
+    void toMnemonicCodes_string_shouldRejectBlankInput() {
+        assertThrows(TokenException.class, () -> MnemonicUtil.toMnemonicCodes("   "));
+    }
+
+    @Test
     void toMnemonicCodes_shouldConvertEntropy() {
         byte[] entropy = new byte[16];
         List<String> codes = MnemonicUtil.toMnemonicCodes(entropy);
