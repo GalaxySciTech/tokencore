@@ -5,6 +5,7 @@ import org.bitcoinj.crypto.MnemonicCode;
 import org.consenlabs.tokencore.wallet.model.Messages;
 import org.consenlabs.tokencore.wallet.model.TokenException;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MnemonicUtil {
@@ -29,6 +30,21 @@ public class MnemonicUtil {
     return Joiner.on(" ").join(mnemonicCodes);
   }
 
+
+
+
+  public static List<String> toMnemonicCodes(String mnemonic) {
+    if (mnemonic == null) {
+      throw new TokenException(Messages.MNEMONIC_INVALID_LENGTH);
+    }
+
+    String normalized = mnemonic.trim().replaceAll("\\s+", " ");
+    if (normalized.isEmpty()) {
+      throw new TokenException(Messages.MNEMONIC_INVALID_LENGTH);
+    }
+
+    return Arrays.asList(normalized.split(" "));
+  }
 
   public static List<String> toMnemonicCodes(byte[] entropy) {
     try {

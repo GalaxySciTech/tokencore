@@ -99,7 +99,7 @@ public class WalletManager {
     }
 
     public static Wallet importWalletFromKeystore(Metadata metadata, String keystoreContent, String password, boolean overwrite) {
-        WalletKeystore importedKeystore = validateKeystore(keystoreContent, password);
+        WalletKeystore importedKeystore = validateKeystore(keystoreContent, password, metadata.getChainType());
 
         if (metadata.getSource() == null)
             metadata.setSource(Metadata.FROM_KEYSTORE);
@@ -163,7 +163,7 @@ public class WalletManager {
         if (metadata.getSource() == null)
             metadata.setSource(Metadata.FROM_MNEMONIC);
         IMTKeystore keystore = null;
-        List<String> mnemonicCodes = Arrays.asList(mnemonic.split(" "));
+        List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonic);
         MnemonicUtil.validateMnemonics(mnemonicCodes);
         switch (metadata.getChainType()) {
             case ChainType.ETHEREUM:
@@ -203,15 +203,16 @@ public class WalletManager {
     }
 
     public static Wallet findWalletByKeystore(String chainType, String keystoreContent, String password) {
-        WalletKeystore walletKeystore = validateKeystore(keystoreContent, password);
+        WalletKeystore walletKeystore = validateKeystore(keystoreContent, password, chainType);
 
         byte[] prvKeyBytes = walletKeystore.decryptCiphertext(password);
-        String address = new EthereumAddressCreator().fromPrivateKey(prvKeyBytes);
+        Metadata metadata = ((IMTKeystore) walletKeystore).getMetadata();
+        String address = deriveAddressByChain(chainType, metadata, prvKeyBytes);
         return findWalletByAddress(chainType, address);
     }
 
     public static Wallet findWalletByMnemonic(String chainType, String network, String mnemonic, String path, String segWit) {
-        List<String> mnemonicCodes = Arrays.asList(mnemonic.split(" "));
+        List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonic);
         MnemonicUtil.validateMnemonics(mnemonicCodes);
         DeterministicSeed seed = new DeterministicSeed(mnemonicCodes, null, "", 0L);
         DeterministicKeyChain keyChain = DeterministicKeyChain.builder().seed(seed).build();
@@ -219,7 +220,7 @@ public class WalletManager {
             throw new TokenException(Messages.INVALID_MNEMONIC_PATH);
         }
 
-        if (ChainType.BITCOIN.equalsIgnoreCase(chainType)||ChainType.LITECOIN.equalsIgnoreCase(chainType)) {
+        if (isBitcoinFamily(chainType)) {
             path += "/0/0";
         }
 
@@ -233,7 +234,7 @@ public class WalletManager {
         Wallet wallet = mustFindWalletById(id);
         // !!! Warning !!! You must verify password before you write content to keystore
         if (!wallet.getMetadata().getChainType().equalsIgnoreCase(ChainType.BITCOIN))
-            throw new TokenException("Ethereum wallet can't switch mode");
+            throw new TokenException("Only Bitcoin wallets can switch SegWit mode");
         Metadata metadata = wallet.getMetadata().clone();
         if (metadata.getSegWit().equalsIgnoreCase(model)) {
             return wallet;
@@ -245,7 +246,7 @@ public class WalletManager {
 
             MnemonicAndPath mnemonicAndPath = wallet.exportMnemonic(password);
             String path = BIP44Util.getBTCMnemonicPath(model, metadata.isMainNet());
-            List<String> mnemonicCodes = Arrays.asList(mnemonicAndPath.getMnemonic().split(" "));
+            List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonicAndPath.getMnemonic());
             keystore = new HDMnemonicKeystore(metadata, password, mnemonicCodes, path, wallet.getId());
         } else {
             String prvKey = wallet.exportPrivateKey(password);
@@ -367,7 +368,7 @@ public class WalletManager {
         return dir.delete();
     }
 
-    private static V3Keystore validateKeystore(String keystoreContent, String password) {
+    private static V3Keystore validateKeystore(String keystoreContent, String password, String chainType) {
         V3Keystore importedKeystore = unmarshalKeystore(keystoreContent, V3Keystore.class);
         if (Strings.isNullOrEmpty(importedKeystore.getAddress()) || importedKeystore.getCrypto() == null) {
             throw new TokenException(Messages.WALLET_INVALID_KEYSTORE);
@@ -379,11 +380,38 @@ public class WalletManager {
             throw new TokenException(Messages.MAC_UNMATCH);
 
         byte[] prvKey = importedKeystore.decryptCiphertext(password);
-        String address = new EthereumAddressCreator().fromPrivateKey(prvKey);
-        if (Strings.isNullOrEmpty(address) || !address.equalsIgnoreCase(importedKeystore.getAddress())) {
-            throw new TokenException(Messages.PRIVATE_KEY_ADDRESS_NOT_MATCH);
+        Metadata metadata = importedKeystore.getMetadata();
+        String derivedAddress = deriveAddressByChain(chainType, metadata, prvKey);
+        if (isEvmFamily(chainType)) {
+            if (Strings.isNullOrEmpty(derivedAddress) || !derivedAddress.equalsIgnoreCase(importedKeystore.getAddress())) {
+                throw new TokenException(Messages.PRIVATE_KEY_ADDRESS_NOT_MATCH);
+            }
         }
         return importedKeystore;
+    }
+
+    private static String deriveAddressByChain(String chainType, Metadata metadata, byte[] prvKey) {
+        boolean isMainnet = metadata != null && metadata.isMainNet();
+        String segWit = metadata == null ? Metadata.NONE : metadata.getSegWit();
+
+        if (isEvmFamily(chainType)) {
+            return new EthereumAddressCreator().fromPrivateKey(prvKey);
+        }
+
+        return AddressCreatorManager.getInstance(chainType, isMainnet, segWit).fromPrivateKey(prvKey);
+    }
+
+
+    private static boolean isBitcoinFamily(String chainType) {
+        return ChainType.BITCOIN.equalsIgnoreCase(chainType)
+                || ChainType.LITECOIN.equalsIgnoreCase(chainType)
+                || ChainType.DOGECOIN.equalsIgnoreCase(chainType)
+                || ChainType.DASH.equalsIgnoreCase(chainType)
+                || ChainType.BITCOINCASH.equalsIgnoreCase(chainType)
+                || ChainType.BITCOINSV.equalsIgnoreCase(chainType);
+    }
+    private static boolean isEvmFamily(String chainType) {
+        return ChainType.ETHEREUM.equalsIgnoreCase(chainType) || chainType.toUpperCase().contains("EVM");
     }
 
     private static IMTKeystore mustFindKeystoreById(String id) {

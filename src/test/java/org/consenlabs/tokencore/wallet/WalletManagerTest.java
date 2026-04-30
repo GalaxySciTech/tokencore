@@ -7,6 +7,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,6 +76,45 @@ class WalletManagerTest {
                 ChainType.ETHEREUM, ethWallet.getAddress());
         assertNotNull(found);
         assertEquals(ethWallet.getAddress(), found.getAddress());
+    }
+
+
+    @Test
+    void findWalletByKeystore_ethereum_shouldReturnWallet() {
+        Identity identity = Identity.createIdentity(
+                "test", "password123", "", Network.MAINNET, Metadata.P2WPKH);
+
+        Wallet ethWallet = identity.deriveWalletByMnemonics(
+                ChainType.ETHEREUM, "password123", MnemonicUtil.randomMnemonicCodes());
+
+        String keystore = WalletManager.exportKeystore(ethWallet.getId(), "password123");
+        Wallet found = WalletManager.findWalletByKeystore(ChainType.ETHEREUM, keystore, "password123");
+
+        assertNotNull(found);
+        assertEquals(ethWallet.getAddress(), found.getAddress());
+    }
+
+
+
+    @Test
+    void findWalletByMnemonic_dogecoin_shouldReturnWallet() {
+        Identity identity = Identity.createIdentity(
+                "test", "password123", "", Network.MAINNET, Metadata.NONE);
+
+        List<String> mnemonics = MnemonicUtil.randomMnemonicCodes();
+        Wallet dogeWallet = identity.deriveWalletByMnemonics(
+                ChainType.DOGECOIN, "password123", mnemonics);
+
+        String mnemonic = String.join(" ", mnemonics);
+        Wallet found = WalletManager.findWalletByMnemonic(
+                ChainType.DOGECOIN,
+                Network.MAINNET,
+                mnemonic,
+                BIP44Util.DOGECOIN_MAINNET_PATH,
+                Metadata.NONE);
+
+        assertNotNull(found);
+        assertEquals(dogeWallet.getAddress(), found.getAddress());
     }
 
     @Test

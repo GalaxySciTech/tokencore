@@ -123,7 +123,7 @@ public final class HDMnemonicKeystore extends IMTKeystore implements EncMnemonic
   @Override
   public Keystore changePassword(String oldPassword, String newPassword) {
     String mnemonic = new String(getCrypto().decryptEncPair(oldPassword, encMnemonic));
-    List<String> mnemonicCodes = Arrays.asList(mnemonic.split(" "));
+    List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonic);
     return new HDMnemonicKeystore(metadata, newPassword, mnemonicCodes, this.mnemonicPath, this.id);
   }
 

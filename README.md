@@ -1,66 +1,29 @@
-<h1 align="center">Tokencore</h1>
+# Tokencore
 
-<p align="center">
-  <strong>Multi-chain cryptocurrency wallet core library for Java</strong>
-</p>
+Tokencore is a Java multi-chain wallet core library for exchange backends, custody systems, and wallet services.
 
-<p align="center">
-  <a href="https://github.com/galaxyscitech/tokencore/actions">
-    <img src="https://github.com/galaxyscitech/tokencore/actions/workflows/ci.yml/badge.svg" alt="Build Status">
-  </a>
-  <a href="https://jitpack.io/#galaxyscitech/tokencore">
-    <img src="https://jitpack.io/v/galaxyscitech/tokencore.svg" alt="JitPack">
-  </a>
-  <a href="https://github.com/galaxyscitech/tokencore/issues">
-    <img src="https://img.shields.io/github/issues/galaxyscitech/tokencore.svg" alt="Issues">
-  </a>
-  <a href="https://github.com/galaxyscitech/tokencore/pulls">
-    <img src="https://img.shields.io/github/issues-pr/galaxyscitech/tokencore.svg" alt="Pull Requests">
-  </a>
-  <a href="https://github.com/galaxyscitech/tokencore/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/galaxyscitech/tokencore.svg" alt="Contributors">
-  </a>
-  <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/galaxyscitech/tokencore.svg" alt="License">
-  </a>
-</p>
+## What Tokencore provides
 
-<p align="center">
-  <a href="#supported-chains">Supported Chains</a> &nbsp;&bull;&nbsp;
-  <a href="#quick-start">Quick Start</a> &nbsp;&bull;&nbsp;
-  <a href="#integration">Integration</a> &nbsp;&bull;&nbsp;
-  <a href="#offline-signing">Offline Signing</a> &nbsp;&bull;&nbsp;
-  <a href="#contact">Contact</a>
-</p>
+- Multi-chain address generation
+- HD wallet derivation and mnemonic workflows
+- Encrypted keystore management
+- Offline transaction signing for major chain families
+
+Supported chains include:
+- **EVM**: Ethereum
+- **Bitcoin family**: Bitcoin, Litecoin, Dogecoin, Dash, Bitcoin Cash, Bitcoin SV
+- **Others**: TRON, Filecoin, EOS
 
 ---
 
-## Introduction
-
-Tokencore is a lightweight Java library that provides core wallet functionality for multiple blockchains. It handles HD wallet derivation, encrypted keystore management, and offline transaction signing — making it the ideal building block for exchange backends and custodial wallet services.
-
-For a complete exchange wallet backend built on top of Tokencore, see [java-wallet](https://github.com/galaxyscitech/java-wallet).
-
-## Supported Chains
-
-| Chain | Token Standards | Features |
-|-------|----------------|----------|
-| **Bitcoin** | BTC, OMNI | UTXO management, SegWit (P2WPKH) |
-| **Ethereum** | ETH, ERC-20 | Offline signing, nonce management |
-| **TRON** | TRX, TRC-20 | Transaction signing |
-| **Bitcoin Cash** | BCH | CashAddr format |
-| **Bitcoin SV** | BSV | Transaction signing |
-| **Litecoin** | LTC | Transaction signing |
-| **Dogecoin** | DOGE | Transaction signing |
-| **Dash** | DASH | Transaction signing |
-| **Filecoin** | FIL | Transaction signing |
-
 ## Requirements
 
-- **Java** 8 or higher
-- **Gradle** 8.5+ (included via wrapper, no manual install needed)
+- Java 8+
+- Gradle wrapper included (`./gradlew`)
 
-## Integration
+---
+
+## Install
 
 ### Gradle
 
@@ -68,6 +31,7 @@ For a complete exchange wallet backend built on top of Tokencore, see [java-wall
 repositories {
     maven { url 'https://jitpack.io' }
 }
+
 dependencies {
     implementation 'com.github.galaxyscitech:tokencore:1.3.0'
 }
@@ -77,148 +41,144 @@ dependencies {
 
 ```xml
 <repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
 </repositories>
 
 <dependency>
-    <groupId>com.github.galaxyscitech</groupId>
-    <artifactId>tokencore</artifactId>
-    <version>1.3.0</version>
+  <groupId>com.github.galaxyscitech</groupId>
+  <artifactId>tokencore</artifactId>
+  <version>1.3.0</version>
 </dependency>
 ```
 
-## Quick Start
+---
 
-### 1. Initialize Keystore & Identity
+## Quick start (runnable)
 
 ```java
-WalletManager.storage = new KeystoreStorage() {
-    @Override
-    public File getKeystoreDir() {
-        return new File("/path/to/keystore");
+import org.consenlabs.tokencore.foundation.utils.MnemonicUtil;
+import org.consenlabs.tokencore.wallet.*;
+import org.consenlabs.tokencore.wallet.model.*;
+
+import java.io.File;
+
+public class QuickStart {
+  public static void main(String[] args) {
+    WalletManager.storage = () -> new File("./keystore");
+    WalletManager.scanWallets();
+
+    String password = "UseAStrongPassword_123";
+    Identity identity = Identity.getCurrentIdentity();
+    if (identity == null) {
+      identity = Identity.createIdentity("main", password, "", Network.MAINNET, Metadata.P2WPKH);
     }
-};
-WalletManager.scanWallets();
 
-String password = "your_password";
-Identity identity = Identity.getCurrentIdentity();
+    Wallet ethWallet = identity.deriveWalletByMnemonics(
+      ChainType.ETHEREUM,
+      password,
+      MnemonicUtil.randomMnemonicCodes()
+    );
 
-if (identity == null) {
-    identity = Identity.createIdentity(
-        "token", password, "", Network.MAINNET, Metadata.P2WPKH);
+    Wallet btcWallet = identity.deriveWalletByMnemonics(
+      ChainType.BITCOIN,
+      password,
+      MnemonicUtil.randomMnemonicCodes()
+    );
+
+    System.out.println("ETH address: " + ethWallet.getAddress());
+    System.out.println("BTC address: " + btcWallet.getAddress());
+  }
 }
 ```
 
-### 2. Derive a Wallet
+---
+
+## Common usage
+
+### 1) Import wallet from private key
 
 ```java
-Identity identity = Identity.getCurrentIdentity();
-Wallet wallet = identity.deriveWalletByMnemonics(
-    ChainType.BITCOIN, "your_password", MnemonicUtil.randomMnemonicCodes());
-System.out.println(wallet.getAddress());
-```
+Metadata metadata = new Metadata();
+metadata.setChainType(ChainType.ETHEREUM);
+metadata.setSource(Metadata.FROM_PRIVATE);
+metadata.setNetwork(Network.MAINNET);
 
-## Offline Signing
-
-Offline signing creates a digital signature without ever exposing private keys to an online environment.
-
-### Bitcoin
-
-```java
-// 1. Define transaction parameters
-String toAddress = "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9";
-int changeIdx = 0;
-long amount = 1000L;
-long fee = 555L;
-
-// 2. Collect UTXOs (from your node or a third-party API)
-ArrayList<BitcoinTransaction.UTXO> utxos = new ArrayList<>();
-
-// 3. Build and sign
-BitcoinTransaction bitcoinTransaction = new BitcoinTransaction(
-    toAddress, changeIdx, amount, fee, utxos);
-Wallet wallet = WalletManager.findWalletByAddress(
-    ChainType.BITCOIN, "33sXfhCBPyHqeVsVthmyYonCBshw5XJZn9");
-TxSignResult txSignResult = bitcoinTransaction.signTransaction(
-    String.valueOf(ChainId.BITCOIN_MAINNET), "your_password", wallet);
-System.out.println(txSignResult.getSignedTx());
-```
-
-### Ethereum
-
-```java
-EthereumTransaction tx = new EthereumTransaction(
-    BigInteger.ZERO,                                    // nonce
-    BigInteger.valueOf(20_000_000_000L),                // gasPrice
-    BigInteger.valueOf(21_000),                         // gasLimit
-    "0xRecipientAddress",                               // to
-    BigInteger.valueOf(1_000_000_000_000_000_000L),     // value (1 ETH)
-    ""                                                  // data
+Wallet wallet = WalletManager.importWalletFromPrivateKey(
+  metadata,
+  "4c0883a69102937d6231471b5dbb6204fe512961708279f14a15c89a7e5a5c3c",
+  "password123",
+  true
 );
-
-Wallet wallet = WalletManager.findWalletByAddress(
-    ChainType.ETHEREUM, "0xYourAddress");
-TxSignResult result = tx.signTransaction(
-    String.valueOf(ChainId.ETHEREUM_MAINNET), "your_password", wallet);
-System.out.println(result.getSignedTx());
 ```
 
-### TRON
+### 2) Import wallet from mnemonic
 
 ```java
-String from = "TJRabPrwbZy45sbavfcjinPJC18kjpRTv8";
-String to   = "TF17BgPaZYbz8oxbjhriubPDsA7ArKoLX3";
+Metadata metadata = new Metadata();
+metadata.setChainType(ChainType.DOGECOIN);
+metadata.setSource(Metadata.FROM_MNEMONIC);
+metadata.setNetwork(Network.MAINNET);
+metadata.setSegWit(Metadata.NONE);
 
-TronTransaction transaction = new TronTransaction(from, to, 1L);
-Wallet wallet = WalletManager.findWalletByAddress(ChainType.TRON, from);
-TxSignResult result = transaction.signTransaction(
-    "mainnet", "your_password", wallet);
-System.out.println(result.getSignedTx());
+Wallet wallet = WalletManager.importWalletFromMnemonic(
+  metadata,
+  "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+  BIP44Util.DOGECOIN_MAINNET_PATH,
+  "password123",
+  true
+);
 ```
 
-## Build & Test
+### 3) Find wallet by mnemonic (BTC-family friendly)
 
-```bash
-# Build the library
-./gradlew build
-
-# Run the test suite
-./gradlew test
+```java
+Wallet wallet = WalletManager.findWalletByMnemonic(
+  ChainType.DOGECOIN,
+  Network.MAINNET,
+  "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+  BIP44Util.DOGECOIN_MAINNET_PATH,
+  Metadata.NONE
+);
 ```
 
-## Project Structure
+### 4) Export keystore and recover by keystore
 
+```java
+String keystoreJson = WalletManager.exportKeystore(wallet.getId(), "password123");
+Wallet found = WalletManager.findWalletByKeystore(ChainType.ETHEREUM, keystoreJson, "password123");
 ```
-src/main/java/org/consenlabs/tokencore/
-├── wallet/
-│   ├── Identity.java          # HD identity management
-│   ├── Wallet.java            # Wallet abstraction
-│   ├── WalletManager.java     # Wallet lifecycle & discovery
-│   ├── address/               # Chain-specific address generation
-│   ├── keystore/              # Encrypted keystore implementations
-│   ├── model/                 # ChainType, ChainId, Metadata, etc.
-│   ├── network/               # Bitcoin-fork network parameters
-│   ├── transaction/           # Offline signing per chain
-│   └── validators/            # Address & key validation
-└── foundation/
-    ├── crypto/                # AES, KDF, hashing primitives
-    ├── utils/                 # Mnemonic, numeric, byte helpers
-    └── rlp/                   # RLP encoding (Ethereum)
-```
-
-## License
-
-This project is licensed under the [GNU General Public License v3.0](LICENSE).
-
-## Contact
-
-- **Telegram**: [t.me/GalaxySciTech](https://t.me/GalaxySciTech)
-- **Website**: [galaxy.doctor](https://galaxy.doctor)
-- **GitHub Issues**: [Report a bug](https://github.com/galaxyscitech/tokencore/issues/new)
 
 ---
 
-> **Disclaimer**: Tokencore is a functional component for digital currency operations. It is intended primarily for learning and development purposes and does not provide a complete blockchain business solution. Use at your own risk.
+## Security recommendations
+
+- Never log or print private keys, mnemonics, or decrypted keystore payloads.
+- Keep signing in isolated/offline environments whenever possible.
+- Use strong passwords and avoid hardcoded secrets.
+- Consider HSM/KMS for production secret governance.
+- Enforce strict access controls around keystore files.
+
+---
+
+## Typical errors
+
+- `password_incorrect`
+- `mnemonic_length_invalid`
+- `mnemonic_word_invalid`
+- `invalid_mnemonic_path`
+- `unsupported_chain`
+- `private_key_address_not_match`
+
+---
+
+## Build and test
+
+```bash
+./gradlew test
+./gradlew build
+```
+
+CI runs on Java 8/11/17 via GitHub Actions.
