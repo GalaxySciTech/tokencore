@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.galaxyscitech:tokencore:1.3.0'
+    implementation 'com.github.galaxyscitech:tokencore:2.0.0'
 }
 ```
 
@@ -50,7 +50,7 @@ dependencies {
 <dependency>
   <groupId>com.github.galaxyscitech</groupId>
   <artifactId>tokencore</artifactId>
-  <version>1.3.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
