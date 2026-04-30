@@ -78,6 +78,7 @@ class WalletManagerTest {
     }
 
     @Test
+
     void findWalletByAddress_notFound_shouldReturnNull() {
         Identity.createIdentity(
                 "test", "password123", "", Network.MAINNET, Metadata.P2WPKH);
