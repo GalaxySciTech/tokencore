@@ -3,6 +3,8 @@ package org.consenlabs.tokencore.wallet.address;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
+import org.consenlabs.tokencore.wallet.chain.ChainRegistry;
+import org.consenlabs.tokencore.wallet.chain.UtxoChainRegistration;
 import org.consenlabs.tokencore.wallet.model.ChainType;
 import org.consenlabs.tokencore.wallet.model.Messages;
 import org.consenlabs.tokencore.wallet.model.Metadata;
@@ -12,7 +14,7 @@ import org.consenlabs.tokencore.wallet.network.*;
 public class AddressCreatorManager {
 
     public static AddressCreator getInstance(String type, boolean isMainnet, String segWit) {
-        if (ChainType.ETHEREUM.equals(type)) {
+        if (ChainType.ETHEREUM.equals(type) || ChainRegistry.getInstance().isRegisteredEvm(type)) {
             return new EthereumAddressCreator();
         }else if (ChainType.FILECOIN.equals(type)) {
             return new FilecoinAddressCreator();
@@ -40,6 +42,10 @@ public class AddressCreatorManager {
             }
             return new BitcoinAddressCreator(network);
         } else {
+            UtxoChainRegistration reg = ChainRegistry.getInstance().getUtxoRegistration(type);
+            if (reg != null) {
+                return new BitcoinAddressCreator(reg.getNetworkParameters());
+            }
             throw new TokenException(Messages.WALLET_INVALID_TYPE);
         }
     }

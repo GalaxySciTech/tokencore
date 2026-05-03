@@ -1,5 +1,7 @@
 package org.consenlabs.tokencore.wallet.model;
 
+import org.consenlabs.tokencore.wallet.chain.ChainRegistry;
+
 public class ChainType {
     public final static String ETHEREUM = "ETHEREUM";
     public final static String BITCOIN = "BITCOIN";
@@ -14,16 +16,7 @@ public class ChainType {
 
 
     public static void validate(String type) {
-        if (!ETHEREUM.equals(type) &&
-                !BITCOIN.equals(type) &&
-                !EOS.equals(type) &&
-                !LITECOIN.equals(type) &&
-                !DASH.equals(type) &&
-                !BITCOINSV.equals(type) &&
-                !BITCOINCASH.equals(type) &&
-                !DOGECOIN.equals(type) &&
-                !TRON.equals(type)&&
-                !FILECOIN.equals(type)) {
+        if (!ChainRegistry.getInstance().isSupportedChainType(type)) {
             throw new TokenException(Messages.WALLET_INVALID_TYPE);
         }
     }

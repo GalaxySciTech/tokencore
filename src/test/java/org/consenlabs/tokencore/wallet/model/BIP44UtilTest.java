@@ -68,4 +68,14 @@ class BIP44UtilTest {
         assertTrue(BIP44Util.DOGECOIN_MAINNET_PATH.startsWith("m/44'/3'"));
         assertTrue(BIP44Util.DASH_MAINNET_PATH.startsWith("m/44'/5'"));
     }
+
+    @Test
+    void defaultAccountZeroPath_matchesSlip44() {
+        assertEquals("m/44'/137'/0'", BIP44Util.defaultAccountZeroPath(137));
+    }
+
+    @Test
+    void defaultEvmAccountZeroPath_matchesSlip44() {
+        assertEquals("m/44'/60'/0'/0/0", BIP44Util.defaultEvmAccountZeroPath(60));
+    }
 }
