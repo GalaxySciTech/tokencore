@@ -10,9 +10,33 @@ Tokencore is a Java multi-chain wallet core library for exchange backends, custo
 - Offline transaction signing for major chain families
 
 Supported chains include:
-- **EVM**: Ethereum
-- **Bitcoin family**: Bitcoin, Litecoin, Dogecoin, Dash, Bitcoin Cash, Bitcoin SV
+- **EVM**: Ethereum (built-in), plus **any EVM chain** you register at runtime (`chainId`, default BIP44 path)
+- **Bitcoin family**: Bitcoin, Litecoin, Dogecoin, Dash, Bitcoin Cash, Bitcoin SV, plus **bitcoin-style UTXO chains** registered with address/BIP32 headers
 - **Others**: TRON, Filecoin, EOS
+
+### Global chain support (registry + catalog)
+
+Tokencore does not ship an authoritative list of every network in the world. Instead it provides:
+
+- **`ChainRegistry`**: register EVM chains (`EvmChainRegistration`) and bitcoin-style UTXO chains (`UtxoChainRegistration` + `CustomBitcoinStyleNetParams`).
+- **`ChainCatalogLoader`**: bulk-register from a JSON array (e.g. app-shipped file or data filtered from [chainlist](https://chainlist.org)).
+- **Wallet identity**: multiple EVM chains share the same address for the same key; wallets are keyed by **`(chainType, address)`** — use a **unique `chainType` string per chain** (e.g. `POLYGON`, `ARBITRUM_ONE`).
+
+```java
+import org.consenlabs.tokencore.wallet.chain.*;
+import org.consenlabs.tokencore.wallet.model.BIP44Util;
+
+// Single EVM L2
+ChainRegistry.getInstance().registerEvm(
+    new EvmChainRegistration("MYL2", 84532L, BIP44Util.defaultEvmAccountZeroPath(60)));
+
+// Bulk from JSON: [ { "chainType": "...", "family": "EVM", "chainId": 1, "slip44": 60 } ]
+ChainCatalogLoader.registerAllFromJson("[...]");
+```
+
+**EIP-1559 (type-2)**: use `org.consenlabs.tokencore.wallet.transaction.Eip1559Transaction` (raw tx = `0x02 || rlp(...)`).
+
+**EIP-712**: `Eip712Hasher.hashTypedDataV4(JsonNode)` and `TypedDataSigner.signTypedDataV4(JsonNode, privateKeyBytes)`.
 
 ---
 

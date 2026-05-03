@@ -66,6 +66,14 @@ public class EthereumSign {
     return messageBytes;
   }
 
+  /**
+   * Sign a pre-hashed 32-byte digest (used by EIP-712 and other callers).
+   */
+  public static SignatureData signDigest(byte[] digest32, byte[] prvKeyBytes) {
+    ECKey ecKey = ECKey.fromPrivate(prvKeyBytes);
+    return signAsRecoverable(digest32, ecKey);
+  }
+
   static SignatureData signMessage(byte[] message, byte[] prvKeyBytes) {
     ECKey ecKey = ECKey.fromPrivate(prvKeyBytes);
     byte[] messageHash = Hash.keccak256(message);

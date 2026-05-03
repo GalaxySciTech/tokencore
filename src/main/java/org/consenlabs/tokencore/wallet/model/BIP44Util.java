@@ -48,4 +48,18 @@ public class BIP44Util {
     }
   }
 
+  /**
+   * BIP44 account 0 default path for UTXO-style chains: {@code m/44'/coin'/0'}.
+   */
+  public static String defaultAccountZeroPath(int slip44CoinType) {
+    return "m/44'/" + slip44CoinType + "'/0'";
+  }
+
+  /**
+   * Default Ethereum-style path for registered EVM chains: {@code m/44'/coin'/0'/0/0}.
+   */
+  public static String defaultEvmAccountZeroPath(int slip44CoinType) {
+    return "m/44'/" + slip44CoinType + "'/0'/0/0";
+  }
+
 }

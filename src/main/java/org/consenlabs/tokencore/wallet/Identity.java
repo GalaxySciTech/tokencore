@@ -13,6 +13,10 @@ import org.consenlabs.tokencore.foundation.crypto.Multihash;
 import org.consenlabs.tokencore.foundation.utils.ByteUtil;
 import org.consenlabs.tokencore.foundation.utils.MnemonicUtil;
 import org.consenlabs.tokencore.foundation.utils.NumericUtil;
+import org.consenlabs.tokencore.wallet.chain.ChainFamily;
+import org.consenlabs.tokencore.wallet.chain.ChainRegistry;
+import org.consenlabs.tokencore.wallet.chain.EvmChainRegistration;
+import org.consenlabs.tokencore.wallet.chain.UtxoChainRegistration;
 import org.consenlabs.tokencore.wallet.keystore.*;
 import org.consenlabs.tokencore.wallet.model.*;
 import org.consenlabs.tokencore.wallet.transaction.EthereumSign;
@@ -165,35 +169,21 @@ public class Identity {
         List<Wallet> wallets = new ArrayList<>();
         for (String chainType : chainTypes) {
             Wallet wallet;
-            switch (chainType) {
-                case ChainType.BITCOIN:
-                    wallet = deriveBitcoinWallet(mnemonics, password, this.getMetadata().getSegWit());
+            ChainFamily family = ChainRegistry.getInstance().resolveFamily(chainType);
+            switch (family) {
+                case BITCOIN_STYLE_UTXO:
+                    wallet = deriveUtxoWalletByChainType(chainType, mnemonics, password, this.getMetadata().getSegWit());
                     break;
-                case ChainType.ETHEREUM:
-                    wallet = deriveEthereumWallet(mnemonics, password);
+                case EVM:
+                    wallet = deriveEvmWalletByChainType(chainType, mnemonics, password);
                     break;
-                case ChainType.LITECOIN:
-                    wallet = deriveLitecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.DOGECOIN:
-                    wallet = deriveDogecoinWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.DASH:
-                    wallet = deriveDashWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.BITCOINSV:
-                    wallet = deriveBitcoinSVWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.BITCOINCASH:
-                    wallet = deriveBitcoinCASHWallet(mnemonics, password, this.getMetadata().getSegWit());
-                    break;
-                case ChainType.EOS:
+                case EOS:
                     wallet = deriveEOSWallet(mnemonics, password);
                     break;
-                case ChainType.TRON:
+                case TRON:
                     wallet = deriveTronWallet(mnemonics, password);
                     break;
-                case ChainType.FILECOIN:
+                case FILECOIN:
                     wallet = deriveFilecoinWallet(mnemonics, password);
                     break;
                 default:
@@ -204,6 +194,54 @@ public class Identity {
         }
 
         return wallets;
+    }
+
+    private Wallet deriveEvmWalletByChainType(String chainType, List<String> mnemonics, String password) {
+        EvmChainRegistration reg = ChainRegistry.getInstance().getEvmRegistration(chainType);
+        if (reg == null) {
+            throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
+        }
+        Metadata walletMetadata = new Metadata();
+        walletMetadata.setChainType(reg.getChainType());
+        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
+        walletMetadata.setSource(this.getMetadata().getSource());
+        walletMetadata.setName(reg.getChainType());
+        IMTKeystore keystore = V3MnemonicKeystore.create(walletMetadata, password, mnemonics, reg.getDefaultMnemonicPath());
+        return WalletManager.createWallet(keystore);
+    }
+
+    private Wallet deriveUtxoWalletByChainType(String chainType, List<String> mnemonics, String password, String segWit) {
+        if (ChainType.BITCOIN.equalsIgnoreCase(chainType)) {
+            return deriveBitcoinWallet(mnemonics, password, segWit);
+        }
+        if (ChainType.LITECOIN.equalsIgnoreCase(chainType)) {
+            return deriveLitecoinWallet(mnemonics, password, segWit);
+        }
+        if (ChainType.DOGECOIN.equalsIgnoreCase(chainType)) {
+            return deriveDogecoinWallet(mnemonics, password, segWit);
+        }
+        if (ChainType.DASH.equalsIgnoreCase(chainType)) {
+            return deriveDashWallet(mnemonics, password, segWit);
+        }
+        if (ChainType.BITCOINSV.equalsIgnoreCase(chainType)) {
+            return deriveBitcoinSVWallet(mnemonics, password, segWit);
+        }
+        if (ChainType.BITCOINCASH.equalsIgnoreCase(chainType)) {
+            return deriveBitcoinCASHWallet(mnemonics, password, segWit);
+        }
+        UtxoChainRegistration reg = ChainRegistry.getInstance().getUtxoRegistration(chainType);
+        if (reg == null) {
+            throw new TokenException(String.format("Doesn't support deriving %s wallet", chainType));
+        }
+        Metadata walletMetadata = new Metadata();
+        walletMetadata.setChainType(reg.getChainType());
+        walletMetadata.setPasswordHint(this.getMetadata().getPasswordHint());
+        walletMetadata.setSource(this.getMetadata().getSource());
+        walletMetadata.setNetwork(this.getMetadata().getNetwork());
+        walletMetadata.setName(reg.getChainType());
+        walletMetadata.setSegWit(segWit);
+        IMTKeystore keystore = HDMnemonicKeystore.create(walletMetadata, password, mnemonics, reg.getDefaultMnemonicPath());
+        return WalletManager.createWallet(keystore);
     }
 
 

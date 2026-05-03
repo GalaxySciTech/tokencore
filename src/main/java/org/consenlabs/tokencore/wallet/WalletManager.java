@@ -14,6 +14,8 @@ import org.consenlabs.tokencore.foundation.utils.MnemonicUtil;
 import org.consenlabs.tokencore.foundation.utils.NumericUtil;
 import org.consenlabs.tokencore.wallet.address.AddressCreatorManager;
 import org.consenlabs.tokencore.wallet.address.EthereumAddressCreator;
+import org.consenlabs.tokencore.wallet.chain.ChainFamily;
+import org.consenlabs.tokencore.wallet.chain.ChainRegistry;
 import org.consenlabs.tokencore.wallet.keystore.*;
 import org.consenlabs.tokencore.wallet.model.*;
 import org.consenlabs.tokencore.wallet.validators.PrivateKeyValidator;
@@ -165,21 +167,17 @@ public class WalletManager {
         IMTKeystore keystore = null;
         List<String> mnemonicCodes = MnemonicUtil.toMnemonicCodes(mnemonic);
         MnemonicUtil.validateMnemonics(mnemonicCodes);
-        switch (metadata.getChainType()) {
-            case ChainType.ETHEREUM:
-            case ChainType.TRON:
-            case ChainType.FILECOIN:
+        ChainFamily family = ChainRegistry.getInstance().resolveFamily(metadata.getChainType());
+        switch (family) {
+            case EVM:
+            case TRON:
+            case FILECOIN:
                 keystore = V3MnemonicKeystore.create(metadata, password, mnemonicCodes, path);
                 break;
-            case ChainType.BITCOIN:
-            case ChainType.LITECOIN:
-            case ChainType.DASH:
-            case ChainType.DOGECOIN:
-            case ChainType.BITCOINCASH:
-            case ChainType.BITCOINSV:
+            case BITCOIN_STYLE_UTXO:
                 keystore = HDMnemonicKeystore.create(metadata, password, mnemonicCodes, path);
                 break;
-            case ChainType.EOS:
+            case EOS:
                 keystore = EOSKeystore.create(metadata, password, accountName, mnemonicCodes, path, permissions);
                 break;
             default:
@@ -194,7 +192,7 @@ public class WalletManager {
     }
 
     public static Wallet findWalletByPrivateKey(String chainType, String network, String privateKey, String segWit) {
-        if (ChainType.ETHEREUM.equals(chainType)) {
+        if (ChainRegistry.getInstance().isRegisteredEvm(chainType)) {
             new PrivateKeyValidator(privateKey).validate();
         }
         Network net = new Network(network);
@@ -403,15 +401,10 @@ public class WalletManager {
 
 
     private static boolean isBitcoinFamily(String chainType) {
-        return ChainType.BITCOIN.equalsIgnoreCase(chainType)
-                || ChainType.LITECOIN.equalsIgnoreCase(chainType)
-                || ChainType.DOGECOIN.equalsIgnoreCase(chainType)
-                || ChainType.DASH.equalsIgnoreCase(chainType)
-                || ChainType.BITCOINCASH.equalsIgnoreCase(chainType)
-                || ChainType.BITCOINSV.equalsIgnoreCase(chainType);
+        return ChainRegistry.getInstance().isRegisteredUtxo(chainType);
     }
     private static boolean isEvmFamily(String chainType) {
-        return ChainType.ETHEREUM.equalsIgnoreCase(chainType) || chainType.toUpperCase().contains("EVM");
+        return ChainRegistry.getInstance().isRegisteredEvm(chainType);
     }
 
     private static IMTKeystore mustFindKeystoreById(String id) {
